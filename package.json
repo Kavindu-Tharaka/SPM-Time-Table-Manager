@@ -15,9 +15,11 @@
     "concurrently": "^5.2.0",
     "electron-is-dev": "^1.2.0",
     "react": "^16.13.1",
+    "react-data-table-component": "^6.9.8",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "reactstrap": "^8.4.1",
+    "styled-components": "^5.1.1",
     "sweetalert2": "^9.10.6",
     "uuid": "^7.0.2",
     "wait-on": "^5.1.0"

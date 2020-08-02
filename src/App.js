@@ -1,9 +1,11 @@
 import React from 'react'
+import WorkingDaysInterface from './components/WorkingDays/WorkngDaysInterface'
+
 
 function App() {
     return (
         <div>
-            Electron-React Appg
+            <WorkingDaysInterface/>
         </div>
     )
 }
