@@ -1,0 +1,39 @@
+.snb-nav-container {
+	height: 100%;
+	width: 300px;
+	padding-left: 80px;
+	background: #ffffff;
+	box-shadow: 5px 0 5px -2px #e6e6e6;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.snb-nav-header {
+	height: 70px;
+	width: 100%;
+	background-color: #f7f7f7;
+}
+
+.snb-nav-header p {
+	font-size: 24px;
+	margin: 0;
+	padding: 15px 5px;
+	color: rgb(65, 65, 65);
+}
+
+.snb-nav-content p {
+	margin: 0;
+	padding: 8px 5px;
+	color: black;
+	cursor: pointer;
+}
+
+.snb-nav-content p:hover {
+	background: #f7f7f7;
+}
+
+.snb-nav-content-link-active {
+	background: #f7f7f7;
+}
