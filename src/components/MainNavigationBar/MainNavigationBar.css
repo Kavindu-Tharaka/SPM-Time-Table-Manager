@@ -3,8 +3,11 @@
     background: #205374;
     height: 100%;
     width: 80px;
-    float: left;
     overflow: hidden;
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .mnb-nav-link-container {
@@ -13,6 +16,10 @@
     height: 70px;
     padding: 10px 0;
     cursor: pointer;
+}
+
+.mnb-nav-link-container-active {
+    background: #1a415c;
 }
 
 .mnb-nav-link-container:hover {
