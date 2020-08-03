@@ -1,0 +1,26 @@
+.mnb-nav-container {
+    text-align: center;
+    background: #205374;
+    height: 100%;
+    width: 80px;
+    float: left;
+    overflow: hidden;
+}
+
+.mnb-nav-link-container {
+    text-align: center;
+    width: 80px;
+    height: 70px;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.mnb-nav-link-container:hover {
+    background: #1a415c;
+}
+
+.mnb-nav-link-text {
+    font-size: 10px;
+    margin-top: 5px;
+    color: #fff;
+}
