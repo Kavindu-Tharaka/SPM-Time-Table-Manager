@@ -12,9 +12,10 @@ function createWindow() {
 	mainWindow = new BrowserWindow({
 		x: 200,
 		y: 100,
-		width: 1366,
-		height: 768,
-		resizable: false,
+		minWidth: 1366,
+		minHeight: 768,
+		resizable: true,
+		center: true,
 	});
 	mainWindow.loadURL(
 		isDev
