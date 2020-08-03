@@ -1,11 +1,16 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+
+// Components
+import MainNavigationBar from './components/MainNavigationBar/MainNavigationBar';
+
 
 function App() {
-    return (
-        <div>
-            Electron-React Appg
-        </div>
-    )
+	return (
+		<BrowserRouter>
+			<MainNavigationBar />
+		</BrowserRouter>
+	);
 }
 
-export default App
+export default App;
