@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 // Components
 import MainNavigationBar from './components/MainNavigationBar/MainNavigationBar';
-
+import ApplicationContent from './components/ApplicationContent/ApplicationContent';
 
 function App() {
+	const [selectedMainLink, setSelectedMainLink] = useState('working-time');
+
 	return (
 		<BrowserRouter>
-			<MainNavigationBar />
+			<MainNavigationBar
+				selectedMainLink={selectedMainLink}
+				setSelectedMainLink={setSelectedMainLink}
+			/>
+			<ApplicationContent />
 		</BrowserRouter>
 	);
 }
