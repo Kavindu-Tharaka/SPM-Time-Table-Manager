@@ -7,6 +7,8 @@ import Statistics from '../../containers/Statistics/Statistics';
 import Locations from '../../containers/Locations/Locations';
 
 import './applicationContent.css';
+import Tags from '../../containers/Tags/Tags';
+import StudentGroups from '../../containers/StudentGroups/StudentGroups';
 
 const ApplicationContent = (props) => {
 	const [showSubMenu, setShowSubMenu] = useState(false);
@@ -30,6 +32,18 @@ const ApplicationContent = (props) => {
 					path='/statistics'
 					component={() => (
 						<Statistics setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
+					path='/tags'
+					component={() => (
+						<Tags setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
+					path='/student-groups'
+					component={() => (
+						<StudentGroups setShowSubMenu={setShowSubMenu} />
 					)}
 				/>
 			</Switch>
