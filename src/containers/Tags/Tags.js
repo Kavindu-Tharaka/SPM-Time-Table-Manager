@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
@@ -11,20 +11,37 @@ function Tags(props) {
     const [tagList, setTagList] = useState([]);
 
     useEffect(() => {
-        props.setShowSubMenu(false);
-    });
+        const CancelToken = axios.CancelToken;
+        const source = CancelToken.source();
 
-    useEffect(() => {
-        axios
-            .get('http://localhost:8000/api/v1/tags')
-            .then(function (response) {
-                console.log(response.data.data.tags);
-                setTagList(response.data.data.tags);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        props.setShowSubMenu(false);
+
+        const loadData = () => {
+            axios
+                .get('http://localhost:8000/api/v1/tags', {
+                    cancelToken: source.token,
+                })
+                .then(function (response) {
+                    // console.log(response.data.data.tags);
+                    setTagList(response.data.data.tags);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        };
+
+        loadData();
+
+        return () => {
+            source.cancel();
+        };
     }, []);
+
+    const handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            addTagName(e);
+        }
+    };
 
     const addTagName = (e) => {
         e.preventDefault();
@@ -60,11 +77,6 @@ function Tags(props) {
                 axios
                     .delete(`http://localhost:8000/api/v1/tags/${tagId}`)
                     .then((res) => {
-                        // Swal.fire(
-                        //     'Deleted!',
-                        //     'Tag has been deleted.',
-                        //     'success'
-                        // );
                         setTagList(
                             tagList.filter((item) => {
                                 return tagId !== item._id;
@@ -141,6 +153,7 @@ function Tags(props) {
                     className="form-control"
                     placeholder="Tag Name"
                     onChange={onInputChange}
+                    onKeyDown={handleKeyDown}
                     value={tagName}
                 />
                 <button
