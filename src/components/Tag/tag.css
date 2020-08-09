@@ -1,0 +1,7 @@
+.tag-border{
+    width: 210;
+    border-radius: 50;
+    border: 'solid 1px gainsboro';
+    box-shadow: '5px 5px 5px gainsboro';
+    padding: 10;
+}
