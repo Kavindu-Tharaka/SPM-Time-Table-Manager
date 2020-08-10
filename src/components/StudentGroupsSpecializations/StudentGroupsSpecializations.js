@@ -187,7 +187,6 @@ function StudentGroupsSpecializations(props) {
                                 tagName={tag.specializationname}
                             />
                         </div>
-                        <div className="col"></div>
                     </div>
                 ))}
             </div>
