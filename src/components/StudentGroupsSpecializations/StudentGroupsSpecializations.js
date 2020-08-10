@@ -138,7 +138,7 @@ function StudentGroupsSpecializations(props) {
                     position: 'fixed',
                     width: '30%',
                     textAlign: 'center',
-                    left: '50%',
+                    left: '60%',
                     padding: '20px',
                     transform: 'translate(-50%, 0)',
                 }}

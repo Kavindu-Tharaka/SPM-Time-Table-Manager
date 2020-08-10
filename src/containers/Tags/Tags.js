@@ -190,7 +190,6 @@ function Tags(props) {
                                 tagName={tag.tagname}
                             />
                         </div>
-                        <div className="col"></div>
                     </div>
                 ))}
             </div>
