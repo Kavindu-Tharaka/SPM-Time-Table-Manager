@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
 
 function StudentGroupsSpecializations(props) {
-
     const [specializationName, setSpecializationName] = useState('');
     const [specializationList, setSpecializationList] = useState([]);
 
@@ -51,7 +50,10 @@ function StudentGroupsSpecializations(props) {
                 })
                 .then(function (response) {
                     console.log(response.data.data.specialization);
-                    setSpecializationList([...specializationList, response.data.data.specialization]);
+                    setSpecializationList([
+                        ...specializationList,
+                        response.data.data.specialization,
+                    ]);
                     setSpecializationName('');
                 })
                 .catch(function (error) {
@@ -72,7 +74,9 @@ function StudentGroupsSpecializations(props) {
         }).then((result) => {
             if (result.value) {
                 axios
-                    .delete(`http://localhost:8000/api/v1/specializations/${specializationId}`)
+                    .delete(
+                        `http://localhost:8000/api/v1/specializations/${specializationId}`
+                    )
                     .then((res) => {
                         setSpecializationList(
                             specializationList.filter((item) => {
@@ -104,9 +108,12 @@ function StudentGroupsSpecializations(props) {
                     const editedSpecializationName = result.value[0];
                     if (specializationName !== editedSpecializationName) {
                         axios
-                            .patch(`http://localhost:8000/api/v1/specializations/${id}`, {
-                                specializationname: editedSpecializationName,
-                            })
+                            .patch(
+                                `http://localhost:8000/api/v1/specializations/${id}`,
+                                {
+                                    specializationname: editedSpecializationName,
+                                }
+                            )
                             .then((res) => {
                                 setSpecializationList((prevlist) =>
                                     prevlist.map((listItem) =>
@@ -191,7 +198,7 @@ function StudentGroupsSpecializations(props) {
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
-export default StudentGroupsSpecializations
+export default StudentGroupsSpecializations;
