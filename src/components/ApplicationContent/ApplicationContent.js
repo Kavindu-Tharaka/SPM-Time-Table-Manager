@@ -5,6 +5,9 @@ import { useState } from 'react';
 //components
 import Statistics from '../../containers/Statistics/Statistics';
 import Locations from '../../containers/Locations/Locations';
+import WorkingTime from '../../containers/WorkingTime/WorkingTime'
+
+
 
 import './applicationContent.css';
 import Tags from '../../containers/Tags/Tags';
@@ -46,6 +49,13 @@ const ApplicationContent = (props) => {
 						<StudentGroups setShowSubMenu={setShowSubMenu} />
 					)}
 				/>
+				<Route
+					path='/working-time'
+					component={() => (				
+						<WorkingTime  setShowSubMenu= {setShowSubMenu}/>
+					)}
+				/>
+
 			</Switch>
 		</div>
 	);
