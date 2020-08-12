@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -138,8 +139,7 @@ function StudentGroupsSpecializations(props) {
 
     return (
         <div className="container">
-            <h4>Specializations</h4>
-            <hr style={{ width: '100%' }} />
+            <ContentHeader header={'Specializations'} />
             <div
                 style={{
                     position: 'fixed',
