@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Label from '../Label/Label';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
@@ -40,23 +41,54 @@ function StudentGroupsYearsSemesters(props) {
         }
     };
 
-    const addYearSemester = (e) => {
+    const addYearSemester = async (e) => {
         e.preventDefault();
-        if (year === '' || semester === '') {
-            Swal.fire('Please Enter a Year and a Semster!');
+        if (year === '' && semester === '') {
+            Swal.fire('Please Enter Valid Year and Semester!');
+        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
+            Swal.fire('Year and Semster Should be Numbers!');
+            setYear('');
+            setSemester('');
+        } else if (year > 4 || year < 0) {
+            Swal.fire('Year Should be in Between 1 and 4!');
+            setYear('');
+            setSemester('');
+        } else if (semester > 2 || semester < 0) {
+            Swal.fire('Semester Should be 1 or 2!');
+            setYear('');
+            setSemester('');
         } else {
             axios
-                .post('http://localhost:8000/api/v1/yearsemesters', {
-                    yearsemestername: `Y${year}.S${semester}`,
-                })
+                .get(
+                    `http://localhost:8000/api/v1/yearsemesters/yearSemesterByName/?yearSemester=Y${year}.S${semester}`
+                )
                 .then(function (response) {
-                    console.log(response.data.data.yearsemester);
-                    setYearSemesterList([
-                        ...yearsemesterList,
-                        response.data.data.yearsemester,
-                    ]);
-                    setYear('');
-                    setSemester('');
+                    console.log(response.data.data.yearsemester.length);
+                    if (response.data.data.yearsemester.length > 0) {
+                        Swal.fire(
+                            'The Year and Semester Combination You Entered is Already Exist!'
+                        );
+                    } else if (response.data.data.yearsemester.length === 0) {
+                        axios
+                            .post(
+                                'http://localhost:8000/api/v1/yearsemesters',
+                                {
+                                    yearsemestername: `Y${year}.S${semester}`,
+                                }
+                            )
+                            .then(function (response) {
+                                console.log(response.data.data.yearsemester);
+                                setYearSemesterList([
+                                    ...yearsemesterList,
+                                    response.data.data.yearsemester,
+                                ]);
+                                setYear('');
+                                setSemester('');
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    }
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -108,27 +140,63 @@ function StudentGroupsYearsSemesters(props) {
             .then((result) => {
                 if (result.value) {
                     const editedYearSemester = result.value[0];
-                    if (`Y${year}.S${semester}` !== editedYearSemester) {
-                        axios
-                            .patch(
-                                `http://localhost:8000/api/v1/yearsemesters/${id}`,
-                                {
-                                    yearsemestername: editedYearSemester,
-                                }
-                            )
-                            .then((res) => {
-                                setYearSemesterList((prevlist) =>
-                                    prevlist.map((listItem) =>
-                                        id === listItem._id
-                                            ? {
-                                                  ...listItem,
-                                                  yearsemestername: editedYearSemester,
-                                              }
-                                            : listItem
-                                    )
-                                );
-                            })
-                            .catch((err) => console.log(err));
+                    if (inputText !== editedYearSemester) {
+                        if (
+                            editedYearSemester.length !== 5 ||
+                            !/(Y[1-4]\.S[1-2])/g.test(editedYearSemester)
+                        ) {
+                            Swal.fire(
+                                'Year Semester Text Pattern does not matched! \n\n Should be in Y1.S1 format!'
+                            );
+                        } else {
+                            axios
+                                .get(
+                                    `http://localhost:8000/api/v1/yearsemesters/yearSemesterByName/?yearSemester=${editedYearSemester}`
+                                )
+                                .then(function (response) {
+                                    console.log(
+                                        response.data.data.yearsemester.length
+                                    );
+                                    if (
+                                        response.data.data.yearsemester.length >
+                                        0
+                                    ) {
+                                        Swal.fire(
+                                            'The Year and Semester Combination You Entered is Already Exist!'
+                                        );
+                                    } else if (
+                                        response.data.data.yearsemester
+                                            .length === 0
+                                    ) {
+                                        axios
+                                            .patch(
+                                                `http://localhost:8000/api/v1/yearsemesters/${id}`,
+                                                {
+                                                    yearsemestername: editedYearSemester,
+                                                }
+                                            )
+                                            .then((res) => {
+                                                setYearSemesterList(
+                                                    (prevlist) =>
+                                                        prevlist.map(
+                                                            (listItem) =>
+                                                                id ===
+                                                                listItem._id
+                                                                    ? {
+                                                                          ...listItem,
+                                                                          yearsemestername: editedYearSemester,
+                                                                      }
+                                                                    : listItem
+                                                        )
+                                                );
+                                            })
+                                            .catch((err) => console.log(err));
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        }
                     }
                 }
             });
@@ -144,12 +212,11 @@ function StudentGroupsYearsSemesters(props) {
 
     return (
         <div className="container">
-            <h4>{'Years & Semesters'}</h4>
-            <hr style={{ width: '100%' }} />
+            <ContentHeader header={'Years & Semesters'} />
             <div
                 style={{
                     position: 'fixed',
-                    width: '30%',
+                    width: '35%',
                     textAlign: 'center',
                     left: '60%',
                     padding: '20px',
@@ -216,4 +283,4 @@ function StudentGroupsYearsSemesters(props) {
     );
 }
 
-export default StudentGroupsYearsSemesters
+export default StudentGroupsYearsSemesters;
