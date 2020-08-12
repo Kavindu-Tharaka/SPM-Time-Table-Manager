@@ -1,9 +1,10 @@
 import React from 'react';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 const StatisticsStudent = (props) => {
 	return (
 		<div>
-			<h1>Statistics Students</h1>
+			<ContentHeader header="Student Statistics"/>
 		</div>
 	);
 };
