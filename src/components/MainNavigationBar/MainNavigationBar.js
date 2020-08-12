@@ -14,7 +14,7 @@ import {
 	FaExclamationTriangle,
 } from 'react-icons/fa';
 
-import './MainNavigationBar.css';
+import './mainNavigationBar.css';
 
 const MainNavigationBar = (props) => {
 	const iconSize = '24px';
