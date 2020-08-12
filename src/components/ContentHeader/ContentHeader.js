@@ -1,14 +1,34 @@
 import React from 'react';
 
-import './contentHeader.css'
+import './contentHeader.css';
+
+/**
+ * This component accepts following props
+ * header: Default null - Header text
+ * label: Default null - Small label with some content after the text
+ */
 
 const ContentHeader = (props) => {
-    return (
-        <div className="ch-header-container">
-            <h3>{props.header}</h3>
-            <hr/>
-        </div>
-    );
+	const header = props.header || null;
+	const label = props.label || null;
+
+	return (
+		<div className='ch-header-container'>
+			<div class='d-flex flex-row'>
+				<div>
+					<h4>{header}</h4>
+				</div>
+				<div>
+					{label ? (
+						<label className='mt-2 ml-2 badge badge-pill badge-info'>
+							{label}
+						</label>
+					) : null}
+				</div>
+			</div>
+			<hr className='mt-0' />
+		</div>
+	);
 };
 
 export default ContentHeader;

@@ -8,6 +8,6 @@
 .ac-main-container-without-side-menu {
 	margin-left: 80px;
 	padding: 10px;
-	width: calc(100% - 300px);
+	width: calc(100% - 80px);
 	overflow-y: auto;
 }
