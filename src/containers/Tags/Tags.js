@@ -1,11 +1,12 @@
 
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import './tags.css';
+import ContentHeader from '../../components/ContentHeader/ContentHeader';
 
 function Tags(props) {
     const [tagName, setTagName] = useState('');
@@ -135,8 +136,7 @@ function Tags(props) {
 
     return (
         <div className="container">
-            <h4>Tags</h4>
-            <hr style={{ width: '100%' }} />
+            <ContentHeader header={'Tags'} />
             <div
                 style={{
                     position: 'fixed',
