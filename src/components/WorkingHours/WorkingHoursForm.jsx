@@ -1,48 +1,90 @@
-import React,{useState} from "react";
-import './Styles.css'
+import React, { useState } from "react";
+import "./Styles.css";
 
-function WorkingHoursForm() {
-
-  const [weekDay,setWeekDay] = useState(false);
-  const [weekEnd,setWeekEnd] = useState(false);
+function WorkingHoursForm({addWorkingDay}) {
+  const [dayType, setDayType] = useState('');
   const [noOfWorkingDays, setNoOfWorkingDays] = useState(1);
-  const [workingHours,setWorkingHours] = useState(1);
-  const [workingMins,setWorkingMins] = useState(0);
-  const [workingMonday,setWorkingMonday] = useState(false)
-  const [workingTuesday,setWorkingTuesday] = useState(false)
-  const [workingWednesday,setWorkingWednesday] = useState(false)
-  const [workingThursday,setWorkingThursday] = useState(false)
-  const [workingFriday,setWorkingFriday] = useState(false)
-  const [workingSaturday,setWorkingSaturday] = useState(false)
-  const [workingSunday,setWorkingSunday] = useState(false)
+  const [workingHours, setWorkingHours] = useState(1);
+  const [workingMins, setWorkingMins] = useState(0);
+  const [dayOfWork,setDayOfWork] = useState('')
+  const [fromTime, setFromTime] = useState()
+  const [toTime,setToTime] = useState()
+
+
+  const ondayTypeChange = (value) => {
+    setDayType(value)
+    if(value == 'weekday')
+      setNoOfWorkingDays(5)
+    else 
+      setNoOfWorkingDays(7)
+  };
+
+  const onWorkingDayChange = (value) => {
+    console.log(value)
+    setDayOfWork(value)
+  };
+
+  const onFromTimeChange = e => {
+    console.log(e.target.value, 'from Time')
+    setFromTime(e.target.value)
+  }
+
+  const onToTimeChange = e => {
+    console.log(e.target.value, "To time")
+    setToTime(e.target.value)
+  }
+
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault()
+    let newDay = {
+      dayType,
+      noOfWorkingDays,
+      workingHours,
+      workingMins,
+      dayOfWork,
+      fromTime,
+      toTime
+    }
+    addWorkingDay(newDay)
+   
+  };
 
 
 
-
+// Styles hadanna ona
 
   return (
-    <div className="container" >
-      <form>
+    <div className="container" style = {{width: "1100px"}}>
+      <form  onSubmit={onSubmitHandler}>
         {" "}
-        {/*onSubmit={onSubmitHandler} */}
-        <div className="row">
-          <div className="col col-md-6">
+       
+        <div className="row" style={{marginBottom : '30px'}}>
+          <div className="col col-md-2">
             <h5>Day Type</h5>
             <div className="">
               <div className="wh-inputs_block">
                 <label htmlFor="">Week Day</label>{" "}
-                <input type="radio" name="dayType" />{" "}
-                {/*onChange={ondayTypeChange} */}
+                <input
+                  type="radio"
+                  name="dayType"
+                  value="weekday"
+                  onChange={(e) => ondayTypeChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
                 <label htmlFor="">Week End</label>{" "}
-                <input type="radio" name="dayType" />{" "}
-                {/* onChange={ondayTypeChange} */}
+                <input
+                  type="radio"
+                  name="dayType"
+                  value="weekend"
+                  onChange={(e) => ondayTypeChange(e.target.value)}
+                />{" "}
               </div>
             </div>
           </div>
-          <div className="col col-md-6" >
+          <div className="col col-md-2">
             <h5>Number of working days</h5>
             <div className="">
               <input
@@ -50,36 +92,59 @@ function WorkingHoursForm() {
                 name=""
                 min={1}
                 max={7}
-                // value={workingDays}
+                value={noOfWorkingDays}
               />
             </div>
           </div>
-          <div className="col col-md-6">
+          <div className="col col-md-2">
+            <h5>From</h5>
+            <div className="">
+              <input
+                type="time"
+                name=""
+                value = {fromTime}
+                onChange={e => onFromTimeChange(e)}
+              />
+            </div>
+          </div>
+          <div className="col col-md-2">
+            <h5>To</h5>
+            <div className="">
+              <input
+                type="time"
+                name=""
+                value={toTime}
+                onChange={e => onToTimeChange(e)}
+              />
+            </div>
+          </div>
+          <div className="col col-md-2">
             <h5>Time Slot</h5>
-            <div className="" style = {{backgroundColor: 'red'}}>
+            <div className="" >
               <input
                 type="number"
                 name=""
                 min={1}
                 max={24}
                 placeholder="hours"
-                // value={hours}
-                // onChange={(e) => {
-                //   setHours(e.target.value);
-                //   console.log(hours);
-                // }}
+                value={workingHours}
+                onChange={(e) => {
+                  setWorkingHours(e.target.value);
+                  console.log(workingHours);
+                }}
               />
               <input
                 type="number"
                 name=""
                 min={0}
                 max={59}
+                step = {30}
                 placeholder="mins"
-                // value={mins}
-                // onChange={(e) => {
-                //   setMins(e.target.value);
-                //   console.log(mins);
-                // }}
+                value={workingMins}
+                onChange={(e) => {
+                  setWorkingMins(e.target.value);
+                  console.log(workingMins);
+                }}
               />
             </div>
           </div>
@@ -89,40 +154,75 @@ function WorkingHoursForm() {
             <h5>Working Days</h5>
             <div className="">
               <div className="wh-inputs_block">
-                <label>Monday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Monday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="monday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
-                <label>Tuesday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Tuesday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="tuesday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block"></div>
 
               <div className="wh-inputs_block">
-                <label>Wednesday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Wednesday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="wednesday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
-                <label>Thursday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Thursday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="thursday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
-                <label>Friday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Friday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="friday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
-                <label>Saturday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Saturday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="saturday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
 
               <div className="wh-inputs_block">
-                <label>Sunday</label> <input type="radio" name="day" />{" "}
-                
+                <label>Sunday</label>{" "}
+                <input
+                  type="radio"
+                  name="day"
+                  value="sunday"
+                  onChange={(e) => onWorkingDayChange(e.target.value)}
+                />{" "}
               </div>
             </div>
           </div>
@@ -130,7 +230,7 @@ function WorkingHoursForm() {
         <div className="row">
           <div className="col  ">
             <button className="btn btn-primary wk-submit-button">Submit</button>{" "}
-            {/*onClick = {addWorkList}*/}
+           
           </div>
         </div>
       </form>
