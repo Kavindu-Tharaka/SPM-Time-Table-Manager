@@ -5,6 +5,8 @@ import { useState } from 'react';
 //components
 import Statistics from '../../containers/Statistics/Statistics';
 import Locations from '../../containers/Locations/Locations';
+import Lecturers from '../../containers/Lecturers/Lecturers';
+import Subjects from '../../containers/Subjects/Subjects';
 
 import './applicationContent.css';
 import Tags from '../../containers/Tags/Tags';
@@ -44,6 +46,18 @@ const ApplicationContent = (props) => {
 					path='/student-groups'
 					component={() => (
 						<StudentGroups setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
+					path='/lecturers'
+					component={() => (
+						<Lecturers setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
+					path='/subjects'
+					component={() => (
+						<Subjects setShowSubMenu={setShowSubMenu} />
 					)}
 				/>
 			</Switch>
