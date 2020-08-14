@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
@@ -71,7 +70,7 @@ function Tags(props) {
             text: "You won't be able to revert this!",
             // icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#205374',
             // cancelButtonColor: '#3085d6',
             confirmButtonText: 'Delete',
         }).then((result) => {
@@ -97,6 +96,7 @@ function Tags(props) {
             input: 'text',
             inputValue: tagName,
             confirmButtonText: 'Edit',
+            confirmButtonColor: '#205374',
             showCancelButton: true,
         })
             .queue([
@@ -135,7 +135,7 @@ function Tags(props) {
     };
 
     return (
-        <div className="container">
+        <div>
             <ContentHeader header={'Tags'} />
             <div
                 style={{
@@ -181,18 +181,28 @@ function Tags(props) {
                 }}
                 className="row"
             >
-                {tagList.map((tag) => (
-                    <div key={tag._id}>
-                        <div className="col">
-                            <Tag
-                                id={tag._id}
-                                deleteMethod={deleteTagName}
-                                editMethod={editTagName}
-                                tagName={tag.tagname}
-                            />
-                        </div>
+                {tagList.length === 0 ? (
+                    <div style={{ paddingLeft: '50%' }}>
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no Tag names in the database!{' '}
+                        </h1>{' '}
                     </div>
-                ))}
+                ) : (
+                    tagList.map((tag) => (
+                        <div key={tag._id}>
+                            <div className="col">
+                                <Tag
+                                    id={tag._id}
+                                    deleteMethod={deleteTagName}
+                                    editMethod={editTagName}
+                                    tagName={tag.tagname}
+                                />
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

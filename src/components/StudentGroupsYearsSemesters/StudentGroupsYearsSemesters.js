@@ -43,8 +43,10 @@ function StudentGroupsYearsSemesters(props) {
 
     const addYearSemester = async (e) => {
         e.preventDefault();
-        if (year === '' && semester === '') {
+        if (year === '' || semester === '' || year === '0' || semester === '0') {
             Swal.fire('Please Enter Valid Year and Semester!');
+            setYear('');
+            setSemester('');
         } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
             Swal.fire('Year and Semster Should be Numbers!');
             setYear('');
@@ -102,7 +104,7 @@ function StudentGroupsYearsSemesters(props) {
             text: "You won't be able to revert this!",
             // icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#205374',
             // cancelButtonColor: '#3085d6',
             confirmButtonText: 'Delete',
         }).then((result) => {
@@ -130,6 +132,7 @@ function StudentGroupsYearsSemesters(props) {
             input: 'text',
             inputValue: inputText,
             confirmButtonText: 'Edit',
+            confirmButtonColor: '#205374',
             showCancelButton: true,
         })
             .queue([
@@ -266,7 +269,15 @@ function StudentGroupsYearsSemesters(props) {
                 }}
                 className="row"
             >
-                {yearsemesterList.map((tag) => (
+                {yearsemesterList.length === 0 ? (
+                    <div className="col">
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no year semester combinations in the database!{' '}
+                        </h1>{' '}
+                    </div>
+                ) : yearsemesterList.map((tag) => (
                     <div key={tag._id}>
                         <div className="col">
                             <Label
