@@ -37,7 +37,7 @@ function Tag(props) {
                             marginRight: 5,
                         }}
                         size="25px"
-                        color="#06e"
+                        color="#205374"
                         onClick={() => editMethod(props.tagName, props.id)}
                     />
                     <MdDelete
@@ -48,7 +48,7 @@ function Tag(props) {
                             borderRadius: 50,
                         }}
                         size="25px"
-                        color="#06e"
+                        color="#205374"
                         onClick={() => deleteMethod(props.id)}
                     />
                 </div>

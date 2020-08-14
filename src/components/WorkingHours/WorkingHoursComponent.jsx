@@ -16,7 +16,7 @@ function WorkingHoursComponent() {
     }
 
     const updateWorkingDay = (v) => {
-        const new
+        // const new
     }
     
   

@@ -14,7 +14,7 @@ const ContentHeader = (props) => {
 
 	return (
 		<div className='ch-header-container'>
-			<div class='d-flex flex-row'>
+			<div className='d-flex flex-row'>
 				<div>
 					<h4>{header}</h4>
 				</div>
