@@ -2,7 +2,7 @@
   "name": "time-table-manager-desktop",
   "description": "SPM Time Table Manager",
   "version": "0.1.0",
-  "homepage": "http://./",
+  "homepage": "./",
   "main": "public/main.js",
   "private": true,
   "dependencies": {
