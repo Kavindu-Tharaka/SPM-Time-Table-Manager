@@ -24,6 +24,9 @@ function createWindow() {
 	);
 	mainWindow.on('closed', () => (mainWindow = null));
 	mainWindow.setMenuBarVisibility(false);
+
+
+
 	mainWindow.webContents.openDevTools();
 }
 

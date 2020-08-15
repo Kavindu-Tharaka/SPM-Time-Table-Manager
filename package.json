@@ -6,7 +6,7 @@
   "main": "public/main.js",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.9.7",
+    "@material-ui/core": "^4.9.7",	
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -21,7 +21,7 @@
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^3.4.2",
     "reactstrap": "^8.4.1",
     "styled-components": "^5.1.1",
     "sweetalert2": "^9.10.6",
@@ -68,15 +68,5 @@
       "buildResources": "assets"
     },
     "extends": null
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kavindu-Tharaka/time-table-manager-desktop.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Kavindu-Tharaka/time-table-manager-desktop/issues"
   }
 }
