@@ -61,6 +61,7 @@ const ApplicationContent = (props) => {
 						<Subjects setShowSubMenu={setShowSubMenu} />
 					)}
 				/>
+				<Route
 					path='/working-time'
 					component={() => (				
 						<WorkingTime  setShowSubMenu= {setShowSubMenu}/>
