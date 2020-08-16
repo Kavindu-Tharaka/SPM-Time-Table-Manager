@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import Tag from '../../components/Tag/Tag';
+import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
@@ -15,6 +15,9 @@ function StudentGroupsGroupIDs(props) {
 
     const [groupNumber, setGroupNumber] = useState('');
     const [groupNumberList, setGroupNumberList] = useState([]);
+
+    const [groupID, setGroupID] = useState('');
+    const [groupIDList, setGroupIDList] = useState([]);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -67,6 +70,18 @@ function StudentGroupsGroupIDs(props) {
                 .catch(function (error) {
                     console.log(error);
                 });
+
+            axios
+                .get('http://localhost:8000/api/v1/groupids', {
+                    cancelToken: source.token,
+                })
+                .then(function (response) {
+                    console.log(response.data.data.groupids);
+                    setGroupIDList(response.data.data.groupids);                    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         };
 
         loadData();
@@ -91,9 +106,20 @@ function StudentGroupsGroupIDs(props) {
 
     const addGroupID = (e) => {
         e.preventDefault();
-        console.log(yearSemester);
-        console.log(specialization);
-        console.log(groupNumber);
+
+        axios
+            .post('http://localhost:8000/api/v1/groupids', {
+                yearsemestername: yearSemester,
+                specializationname: specialization,
+                groupnumber: groupNumber,
+            })
+            .then(function (response) {
+                console.log(response.data.data.groupid);
+                setGroupIDList([...groupIDList, response.data.data.groupid]);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     return (
@@ -175,7 +201,43 @@ function StudentGroupsGroupIDs(props) {
             </div>
             <br />
             <ContentHeader label={'1st Year'} />
-            <div></div>
+            <div
+                style={{
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    // top: '25%',
+                    // marginLeft: '10%',
+                    // padding: '20px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
+                }}
+                className="row"
+            >
+                {groupIDList.length === 0 ? (
+                    <div style={{ paddingLeft: '33%' }}>
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no Tag names in the database!{' '}
+                        </h1>{' '}
+                    </div>
+                ) : (
+                    groupIDList.map((item) => (
+                        <div key={item._id}>
+                            <div className="col">
+                                <LabelTag
+                                    id={item._id}
+                                    // deleteMethod={deleteTagName}
+                                    // editMethod={editTagName}
+                                    tagName={`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}
+                                />
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
             <br />
             <ContentHeader label={'2nd Year'} />
             <div></div>
