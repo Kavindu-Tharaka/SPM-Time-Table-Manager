@@ -2,7 +2,7 @@ import React from 'react'
 import DataTable from 'react-data-table-component';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
-import './lecturerContent.css';
+import './LecturerContent.css';
 
 const LecturerContent = () => {
     const data = [{ id: 1, lecturer: ' Barbarian', employeeId: '1982', faculty: 'Faculty of Computing', department: 'DEPARTMENT OF COMPUTER SCIENCE & SOFTWARE ENGINEERING', center: 'Malabe', building: 'Main building', level: 'Professor', rank: '1.1111', action: '' }];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
@@ -77,7 +77,7 @@ function StudentGroupsGroupIDs(props) {
                 })
                 .then(function (response) {
                     console.log(response.data.data.groupids);
-                    setGroupIDList(response.data.data.groupids);                    
+                    setGroupIDList(response.data.data.groupids);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -107,19 +107,93 @@ function StudentGroupsGroupIDs(props) {
     const addGroupID = (e) => {
         e.preventDefault();
 
-        axios
-            .post('http://localhost:8000/api/v1/groupids', {
-                yearsemestername: yearSemester,
-                specializationname: specialization,
-                groupnumber: groupNumber,
-            })
-            .then(function (response) {
-                console.log(response.data.data.groupid);
-                setGroupIDList([...groupIDList, response.data.data.groupid]);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        let isExist = false;
+
+        groupIDList.forEach((element) => {
+            if (
+                `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
+                `${yearSemester}.${specialization}.${groupNumber}`
+            ) {
+                Swal.fire('The Group ID You Entered is Already Exists!!');
+                isExist = true;
+            }
+        });
+
+        if (!isExist) {
+            axios
+                .post('http://localhost:8000/api/v1/groupids', {
+                    yearsemestername: yearSemester,
+                    specializationname: specialization,
+                    groupnumber: groupNumber,
+                })
+                .then(function (response) {
+                    console.log(response.data.data.groupid);
+                    setGroupIDList([
+                        ...groupIDList,
+                        response.data.data.groupid,
+                    ]);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    };
+
+    const deleteTagName = (tagId) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            // icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#205374',
+            // cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete',
+        }).then((result) => {
+            if (result.value) {
+                axios
+                    .delete(`http://localhost:8000/api/v1/groupids/${tagId}`)
+                    .then(function (response) {
+                        setGroupIDList(
+                            groupIDList.filter((item) => {
+                                return tagId !== item._id;
+                            })
+                        );
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        });
+    };
+
+    const editTagName = (groupNumber, id) => {
+        // const { value: formValues } =  Swal.fire({
+        //     title: 'Edit Group ID',
+        //     html:
+        //     '<div class="row">' +
+        //         '<div class="col-12">' +
+        //              '<input id="swal-input1" type="text" class="form-control">' +
+        //         '</div>' +
+        //     '</div>' +
+        //     '<br/>' +
+        //     '<div class="row">' +
+        //         '<div class="col-12">' +
+        //             '<input id="swal-input2" type="text" class="form-control">' +
+        //         '</div>' +
+        //     '</div>', 
+
+
+        //     focusConfirm: true,
+        //     confirmButtonText: 'Edit',
+        //     confirmButtonColor: '#205374',
+        //     preConfirm: () => {
+        //       return [
+        //         document.getElementById('swal-input1').value,
+        //         document.getElementById('swal-input2').value
+        //       ]
+        //     }
+        //   })
+          
     };
 
     return (
@@ -216,23 +290,30 @@ function StudentGroupsGroupIDs(props) {
                 className="row"
             >
                 {groupIDList.length === 0 ? (
-                    <div style={{ paddingLeft: '33%' }}>
+                    <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
                             {' '}
-                            There are no Tag names in the database!{' '}
+                            There are no 1st Year Group IDs in the database!{' '}
                         </h1>{' '}
                     </div>
                 ) : (
                     groupIDList.map((item) => (
                         <div key={item._id}>
                             <div className="col">
-                                <LabelTag
-                                    id={item._id}
-                                    // deleteMethod={deleteTagName}
-                                    // editMethod={editTagName}
-                                    tagName={`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}
-                                />
+                                {item.yearsemestername === 'Y1.S1' ||
+                                item.yearsemestername === 'Y1.S2' ? (
+                                    <LabelTag
+                                        id={item._id}
+                                        deleteMethod={deleteTagName}
+                                        editMethod={editTagName}
+                                        tagName={
+                                            item.groupnumber < 10
+                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                        }
+                                    />
+                                ) : null}
                             </div>
                         </div>
                     ))
@@ -240,13 +321,142 @@ function StudentGroupsGroupIDs(props) {
             </div>
             <br />
             <ContentHeader label={'2nd Year'} />
-            <div></div>
+            <div
+                style={{
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    // top: '25%',
+                    // marginLeft: '10%',
+                    // padding: '20px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
+                }}
+                className="row"
+            >
+                {groupIDList.length === 0 ? (
+                    <div style={{ paddingLeft: '30%' }}>
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no 2nd Year Group IDs in the database!{' '}
+                        </h1>{' '}
+                    </div>
+                ) : (
+                    groupIDList.map((item) => (
+                        <div key={item._id}>
+                            <div className="col">
+                                {item.yearsemestername === 'Y2.S1' ||
+                                item.yearsemestername === 'Y2.S2' ? (
+                                    <LabelTag
+                                        id={item._id}
+                                        deleteMethod={deleteTagName}
+                                        editMethod={editTagName}
+                                        tagName={
+                                            item.groupnumber < 10
+                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
             <br />
             <ContentHeader label={'3rd Year'} />
-            <div></div>
+            <div
+                style={{
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    // top: '25%',
+                    // marginLeft: '10%',
+                    // padding: '20px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
+                }}
+                className="row"
+            >
+                {groupIDList.length === 0 ? (
+                    <div style={{ paddingLeft: '30%' }}>
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no 3rd Year Group IDs in the database!{' '}
+                        </h1>{' '}
+                    </div>
+                ) : (
+                    groupIDList.map((item) => (
+                        <div key={item._id}>
+                            <div className="col">
+                                {item.yearsemestername === 'Y3.S1' ||
+                                item.yearsemestername === 'Y3.S2' ? (
+                                    <LabelTag
+                                        id={item._id}
+                                        deleteMethod={deleteTagName}
+                                        editMethod={editTagName}
+                                        tagName={
+                                            item.groupnumber < 10
+                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
             <br />
             <ContentHeader label={'4th Year'} />
-            <div></div>
+            <div
+                style={{
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    // top: '25%',
+                    // marginLeft: '10%',
+                    // padding: '20px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
+                }}
+                className="row"
+            >
+                {groupIDList.length === 0 ? (
+                    <div style={{ paddingLeft: '30%' }}>
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no 4th Year Group IDs in the database!{' '}
+                        </h1>{' '}
+                    </div>
+                ) : (
+                    groupIDList.map((item) => (
+                        <div key={item._id}>
+                            <div className="col">
+                                {item.yearsemestername === 'Y4.S1' ||
+                                item.yearsemestername === 'Y4.S2' ? (
+                                    <LabelTag
+                                        id={item._id}
+                                        deleteMethod={deleteTagName}
+                                        editMethod={editTagName}
+                                        tagName={
+                                            item.groupnumber < 10
+                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 }
