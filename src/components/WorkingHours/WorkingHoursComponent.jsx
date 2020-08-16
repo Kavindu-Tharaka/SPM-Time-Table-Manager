@@ -173,7 +173,7 @@ function WorkingHoursComponent() {
       {/* <WorkingHoursModal/>*/}
       <HeaderComponent title={"Working Time"} />
 
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={onSubmitHandler} style = {{marginBottom:20}}>
         {" "}
         <div className="row" style={{ marginBottom: "30px" }}>
           <div className="col col-md-2">
@@ -212,6 +212,7 @@ function WorkingHoursComponent() {
                 min={1}
                 max={7}
                 value={noOfWorkingDays}
+                disabled={true}
               />
             </div>
           </div>
@@ -222,6 +223,7 @@ function WorkingHoursComponent() {
                 type="time"
                 name=""
                 value={fromTime}
+               
                 onChange={(e) => onFromTimeChange(e)}
               />
             </div>
@@ -337,6 +339,8 @@ function WorkingHoursComponent() {
                   value="saturday"
                   checked={dayOfWork === "saturday" ? true : false}
                   onChange={(e) => onWorkingDayChange(e.target.value)}
+                  disabled = {dayType === 'weekday' ? true : false}
+
                 />{" "}
               </div>
 
@@ -348,6 +352,7 @@ function WorkingHoursComponent() {
                   value="sunday"
                   checked={dayOfWork === "sunday" ? true : false}
                   onChange={(e) => onWorkingDayChange(e.target.value)}
+                  disabled = {dayType === 'weekday' ? true : false}
                 />{" "}
               </div>
             </div>

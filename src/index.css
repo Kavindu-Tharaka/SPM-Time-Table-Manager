@@ -4,10 +4,6 @@
 	box-sizing: border-box;
 }
 
-a {
-	text-decoration: none !important;
-}
-
 html,
 body {
 	height: 100%;
@@ -18,4 +14,50 @@ body {
 		'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	text-decoration: none !important;
+}
+
+.btn-primary{
+	min-width: 120px;
+	background: #205374 !important;
+	outline: none;
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+input {
+	outline: none;
+	border: 1px solid #cccccc !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+select {
+	outline: none;
+	border: 1px solid #cccccc !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+input:focus {
+	outline: none;
+	border: 1px solid #205374 !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+select:focus {
+	outline: none;
+	border: 1px solid #205374 !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
 }

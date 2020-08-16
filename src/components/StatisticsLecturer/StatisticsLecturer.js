@@ -1,9 +1,12 @@
 import React from 'react';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 const StatisticsLecturer = (props) => {
 	return (
 		<div>
-			<h1>Lecturer Statistics</h1>
+			<ContentHeader header='Lecturer Statistics' />
+			<input type='text' className='tms-input'></input>
+			<button className='tms-primary-btn'></button>
 		</div>
 	);
 };

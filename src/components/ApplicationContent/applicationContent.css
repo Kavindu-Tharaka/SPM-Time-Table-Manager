@@ -1,13 +1,13 @@
 .ac-main-container-with-side-menu {
 	margin-left: 300px;
 	padding: 10px;
-	width: fit-content;
+	width: calc(100% - 300px);
 	overflow-y: auto;
 }
 
 .ac-main-container-without-side-menu {
 	margin-left: 80px;
 	padding: 10px;
-	width: fit-content;
+	width: calc(100% - 80px);
 	overflow-y: auto;
 }

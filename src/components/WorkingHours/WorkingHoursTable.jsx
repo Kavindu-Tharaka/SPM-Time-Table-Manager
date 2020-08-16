@@ -1,49 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import './workingHours.css'
 import Swal from "sweetalert2";
 function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   useEffect(() => {
     console.log(workingDay);
   }, []);
-
-  const [day, setDay] = useState();
-
-  // const onEditClick = async (v) => {
-  // row.dayType,
-  //             row.dayOfWork,
-  //             row.dayOfWork,
-  //             row.dayOfWork,
-  //             row.fromTime,
-  //             row.toTime,
-  //             row.timeSlot
-  //   console.log(v.dayType);
-  //   setDay(v);
-  //   console.log(day);
-  //   try {
-  //     const { value: formValues } = await Swal.fire({
-  //       title: "Multiple inputs",
-  //       html:
-  //         `<input type = radio id="swal-input1"  name ='day' checked=${v.dayType === 'weekday' ? true: false}>` +
-  //         `<input type = radio id="swal-input1"  name ='day' value=${true}>` +
-  //         `<input id="swal-input1" class="swal2-input" value=${v.dayType}>` +
-  //         '<input id="swal-input1" class="swal2-input" value="John">' +
-  //         '<input id="swal-input1" class="swal2-input">' +
-  //         '<input id="swal-input2" class="swal2-input">',
-  //       focusConfirm: false,
-  //       preConfirm: () => {
-  //         return [
-  //           document.getElementById("swal-input1").value,
-  //           document.getElementById("swal-input2").value,
-  //         ];
-  //       },
-  //     });
-  //     if (formValues) {
-  //       Swal.fire(JSON.stringify(formValues));
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const columns = [
     {
@@ -81,16 +44,18 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
       cell: (row) => (
         <>
           <button
-            className="btn btn-warning"
+            className="btn btn-warning wh-btn"
+            style = {style.button}
             onClick={() => updateWorkingDay(row)}
           >
-            Update
+           <FaPencilAlt color = {'#1a1aff'}/>
           </button>
           <button
-            className="btn btn-danger"
+            style = {style.button}
+            className="btn btn-danger wh-btn"
             onClick={() => deleteWorkingDay(row._id)}
           >
-            Delete
+          <FaTrashAlt color = {'1a1aff'}/>
           </button>
         </>
       ),
@@ -102,6 +67,9 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   return (
     <>
       <DataTable
+        noDataComponent = {<img src = {require('./nodata1.png')} style = {{width :400,height: 250}} />}
+        
+        subHeader = {true}
         title="Working Hours"
         columns={columns}
         data={workingDay}
@@ -126,3 +94,16 @@ export default WorkingHoursTable;
 //     <li>{day.workingMins}</li>
 //   </div>
 // ))}
+
+
+const style = {
+  button : {
+    borderRadius : '50%',
+    paddingBottom:10,
+    backgroundColor : 'lightgray',
+    border:'none',
+    marginRight:10,
+  
+    
+  } 
+}

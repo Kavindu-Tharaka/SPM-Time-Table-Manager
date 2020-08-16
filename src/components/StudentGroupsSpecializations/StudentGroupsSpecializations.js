@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -68,7 +69,7 @@ function StudentGroupsSpecializations(props) {
             text: "You won't be able to revert this!",
             // icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#205374',
             // cancelButtonColor: '#3085d6',
             confirmButtonText: 'Delete',
         }).then((result) => {
@@ -96,6 +97,7 @@ function StudentGroupsSpecializations(props) {
             input: 'text',
             inputValue: specializationName,
             confirmButtonText: 'Edit',
+            confirmButtonColor: '#205374',
             showCancelButton: true,
         })
             .queue([
@@ -138,8 +140,7 @@ function StudentGroupsSpecializations(props) {
 
     return (
         <div className="container">
-            <h4>Specializations</h4>
-            <hr style={{ width: '100%' }} />
+            <ContentHeader header={'Specializations'} />
             <div
                 style={{
                     position: 'fixed',
@@ -184,18 +185,28 @@ function StudentGroupsSpecializations(props) {
                 }}
                 className="row"
             >
-                {specializationList.map((tag) => (
-                    <div key={tag._id}>
-                        <div className="col">
-                            <Tag
-                                id={tag._id}
-                                deleteMethod={deleteSpecializationName}
-                                editMethod={editSpecializationName}
-                                tagName={tag.specializationname}
-                            />
-                        </div>
+                {specializationList.length === 0 ? (
+                    <div className="col">
+                        {' '}
+                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
+                            {' '}
+                            There are no specializations in the database!{' '}
+                        </h1>{' '}
                     </div>
-                ))}
+                ) : (
+                    specializationList.map((tag) => (
+                        <div key={tag._id}>
+                            <div className="col">
+                                <Tag
+                                    id={tag._id}
+                                    deleteMethod={deleteSpecializationName}
+                                    editMethod={editSpecializationName}
+                                    tagName={tag.specializationname}
+                                />
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useEffect } from 'react';
+import LocationContent from '../../components/LocationContent/LocationContent';
 
 const Locations = (props) => {
 	useEffect(() => {
@@ -7,9 +8,9 @@ const Locations = (props) => {
 	});
 
 	return (
-		<div>
-			<h1>Locations Container</h1>
-		</div>
+		<Fragment>
+			<LocationContent/>
+		</Fragment>
 	);
 };
 

@@ -1,0 +1,53 @@
+.custom-select{
+    border-radius: 0% !important; 
+}
+#lec-insert{
+    border-radius: 0% !important;  
+}
+#btn-edit{
+    background-color: #d1d1e0;
+}
+#btn-remove{
+    background-color: #d1d1e0; 
+}
+#faculty-select{
+    width: 128%;
+    height: 50%;
+    font-size: 60%;
+}
+#center-select{
+    height: 50%;
+    font-size: 60%;
+    width: 209% 
+}
+#level-select{
+    height: 50%;
+    font-size: 60%;
+    width: 144%;
+}
+#department-select{
+    height: 50%; 
+    font-size: 60%;
+    max-width: 68.2%; 
+    min-width: 71%
+}
+#building-select{
+    min-width: 150%;
+    font-Size: 60%;
+    height: 50%;
+}
+#faculty-container{
+    margin-left: 10.8%;
+}
+#center-container{
+    margin-left: 15.5%;
+}
+#level-container{
+    margin-left: 22.5%;
+}
+#department-container{
+    margin-left: 6.5%;
+}
+#building-container{
+    padding-right: 15%;
+}

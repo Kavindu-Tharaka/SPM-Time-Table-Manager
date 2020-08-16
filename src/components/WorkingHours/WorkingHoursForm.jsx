@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Styles.css";
+import "./workingHours.css";
 
 function WorkingHoursForm({addWorkingDay, day}) {
   const [dayType, setDayType] = useState('');
