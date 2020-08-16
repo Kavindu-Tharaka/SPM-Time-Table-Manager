@@ -14,6 +14,8 @@ function Label(props) {
                     height: 42,
                     borderRadius: 50,
                     border: 'solid 1px gainsboro',
+                    // marginRight: -10,
+                    // marginLeft: 10
                     // boxShadow: '5px 5px 5px gainsboro',
                     // padding: 3,
                 }}

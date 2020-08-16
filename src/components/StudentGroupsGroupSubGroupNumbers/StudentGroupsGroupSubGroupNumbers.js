@@ -206,7 +206,7 @@ function StudentGroupsGroupSubGroupNumbers() {
     const editGroupNumber = (groupNumber, id) => {
         Swal.mixin({
             input: 'text',
-            inputValue: groupNumber,
+            inputValue: groupNumber.substring(1, 2),
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
             showCancelButton: true,
@@ -222,27 +222,43 @@ function StudentGroupsGroupSubGroupNumbers() {
                     if (!/^[+]?\d+([.]\d+)?$/g.test(editedGroupNumber.trim())) {
                         Swal.fire('Group Number Should be a Positive Number!');
                     } else {
-                        if (groupNumber !== editedGroupNumber) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/groupnumbers/${id}`,
-                                    {
-                                        groupnumber: editedGroupNumber,
-                                    }
-                                )
-                                .then((res) => {
-                                    setGroupNumberList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      groupnumber: editedGroupNumber,
-                                                  }
-                                                : listItem
-                                        )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
+                        let isExist = false;
+
+                        groupNumberList.forEach((element) => {
+                            if (
+                                parseInt(element.groupnumber) ===
+                                parseInt(editedGroupNumber.trim())
+                            ) {
+                                Swal.fire(
+                                    'The Group Number You Entered is Already Exist!!'
+                                );
+                                isExist = true;
+                            }
+                        });
+
+                        if (!isExist) {
+                            if (groupNumber !== editedGroupNumber) {
+                                axios
+                                    .patch(
+                                        `http://localhost:8000/api/v1/groupnumbers/${id}`,
+                                        {
+                                            groupnumber: editedGroupNumber,
+                                        }
+                                    )
+                                    .then((res) => {
+                                        setGroupNumberList((prevlist) =>
+                                            prevlist.map((listItem) =>
+                                                id === listItem._id
+                                                    ? {
+                                                          ...listItem,
+                                                          groupnumber: editedGroupNumber,
+                                                      }
+                                                    : listItem
+                                            )
+                                        );
+                                    })
+                                    .catch((err) => console.log(err));
+                            }
                         }
                     }
                 }
@@ -272,27 +288,43 @@ function StudentGroupsGroupSubGroupNumbers() {
                             'Sub Group Number Should be a Positive Number!'
                         );
                     } else {
-                        if (subGroupNumber !== editedSubGroupNumber) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
-                                    {
-                                        subgroupnumber: editedSubGroupNumber,
-                                    }
-                                )
-                                .then((res) => {
-                                    setSubGroupNumberList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      subgroupnumber: editedSubGroupNumber,
-                                                  }
-                                                : listItem
-                                        )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
+                        let isExist = false;
+
+                        subGroupNumberList.forEach((element) => {
+                            if (
+                                parseInt(element.subgroupnumber) ===
+                                parseInt(editedSubGroupNumber.trim())
+                            ) {
+                                Swal.fire(
+                                    'The Sub Group Number You Entered is Already Exist!!'
+                                );
+                                isExist = true;
+                            }
+                        });
+
+                        if (!isExist) {
+                            if (subGroupNumber !== editedSubGroupNumber) {
+                                axios
+                                    .patch(
+                                        `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
+                                        {
+                                            subgroupnumber: editedSubGroupNumber,
+                                        }
+                                    )
+                                    .then((res) => {
+                                        setSubGroupNumberList((prevlist) =>
+                                            prevlist.map((listItem) =>
+                                                id === listItem._id
+                                                    ? {
+                                                          ...listItem,
+                                                          subgroupnumber: editedSubGroupNumber,
+                                                      }
+                                                    : listItem
+                                            )
+                                        );
+                                    })
+                                    .catch((err) => console.log(err));
+                            }
                         }
                     }
                 }

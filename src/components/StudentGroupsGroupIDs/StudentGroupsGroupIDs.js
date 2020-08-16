@@ -180,9 +180,7 @@ function StudentGroupsGroupIDs(props) {
         //         '<div class="col-12">' +
         //             '<input id="swal-input2" type="text" class="form-control">' +
         //         '</div>' +
-        //     '</div>', 
-
-
+        //     '</div>',
         //     focusConfirm: true,
         //     confirmButtonText: 'Edit',
         //     confirmButtonColor: '#205374',
@@ -193,7 +191,6 @@ function StudentGroupsGroupIDs(props) {
         //       ]
         //     }
         //   })
-          
     };
 
     return (
@@ -278,14 +275,15 @@ function StudentGroupsGroupIDs(props) {
             <div
                 style={{
                     // position: 'fixed',
-                    // width: '95%',
+                    width: '100%',
                     textAlign: 'center',
-                    // top: '25%',
+                    marginTop: '2%',
                     // marginLeft: '10%',
-                    // padding: '20px',
+                    paddingLeft: '7%',
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
+                    height: '100px',
+                    marginBottom: '3%',
                 }}
                 className="row"
             >
@@ -298,25 +296,30 @@ function StudentGroupsGroupIDs(props) {
                         </h1>{' '}
                     </div>
                 ) : (
-                    groupIDList.map((item) => (
-                        <div key={item._id}>
-                            <div className="col">
-                                {item.yearsemestername === 'Y1.S1' ||
-                                item.yearsemestername === 'Y1.S2' ? (
-                                    <LabelTag
-                                        id={item._id}
-                                        deleteMethod={deleteTagName}
-                                        editMethod={editTagName}
-                                        tagName={
-                                            item.groupnumber < 10
-                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
-                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                                        }
-                                    />
-                                ) : null}
-                            </div>
-                        </div>
-                    ))
+                    groupIDList.map((item) => {
+                        if (
+                            item.yearsemestername === 'Y1.S1' ||
+                            item.yearsemestername === 'Y1.S2'
+                        ) {
+                            return (
+                                <div key={item._id}>
+                                    <div className="col">
+                                        <LabelTag
+                                            width={190}
+                                            id={item._id}
+                                            deleteMethod={deleteTagName}
+                                            editMethod={editTagName}
+                                            tagName={
+                                                item.groupnumber < 10
+                                                    ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                    : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
                 )}
             </div>
             <br />
@@ -324,14 +327,16 @@ function StudentGroupsGroupIDs(props) {
             <div
                 style={{
                     // position: 'fixed',
-                    // width: '95%',
+                    width: '100%',
                     textAlign: 'center',
-                    // top: '25%',
+                    marginTop: '2%',
                     // marginLeft: '10%',
-                    // padding: '20px',
+                    paddingLeft: '7%',
+
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
+                    height: '100px',
+                    marginBottom: '3%',
                 }}
                 className="row"
             >
@@ -344,25 +349,30 @@ function StudentGroupsGroupIDs(props) {
                         </h1>{' '}
                     </div>
                 ) : (
-                    groupIDList.map((item) => (
-                        <div key={item._id}>
-                            <div className="col">
-                                {item.yearsemestername === 'Y2.S1' ||
-                                item.yearsemestername === 'Y2.S2' ? (
-                                    <LabelTag
-                                        id={item._id}
-                                        deleteMethod={deleteTagName}
-                                        editMethod={editTagName}
-                                        tagName={
-                                            item.groupnumber < 10
-                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
-                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                                        }
-                                    />
-                                ) : null}
-                            </div>
-                        </div>
-                    ))
+                    groupIDList.map((item) => {
+                        if (
+                            item.yearsemestername === 'Y2.S1' ||
+                            item.yearsemestername === 'Y2.S2'
+                        ) {
+                            return (
+                                <div key={item._id}>
+                                    <div className="col">
+                                        <LabelTag
+                                            width={190}
+                                            id={item._id}
+                                            deleteMethod={deleteTagName}
+                                            editMethod={editTagName}
+                                            tagName={
+                                                item.groupnumber < 10
+                                                    ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                    : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
                 )}
             </div>
             <br />
@@ -370,14 +380,16 @@ function StudentGroupsGroupIDs(props) {
             <div
                 style={{
                     // position: 'fixed',
-                    // width: '95%',
+                    width: '100%',
                     textAlign: 'center',
-                    // top: '25%',
+                    marginTop: '2%',
                     // marginLeft: '10%',
-                    // padding: '20px',
+                    paddingLeft: '7%',
+
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
+                    height: '100px',
+                    marginBottom: '3%',
                 }}
                 className="row"
             >
@@ -390,25 +402,30 @@ function StudentGroupsGroupIDs(props) {
                         </h1>{' '}
                     </div>
                 ) : (
-                    groupIDList.map((item) => (
-                        <div key={item._id}>
-                            <div className="col">
-                                {item.yearsemestername === 'Y3.S1' ||
-                                item.yearsemestername === 'Y3.S2' ? (
-                                    <LabelTag
-                                        id={item._id}
-                                        deleteMethod={deleteTagName}
-                                        editMethod={editTagName}
-                                        tagName={
-                                            item.groupnumber < 10
-                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
-                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                                        }
-                                    />
-                                ) : null}
-                            </div>
-                        </div>
-                    ))
+                    groupIDList.map((item) => {
+                        if (
+                            item.yearsemestername === 'Y3.S1' ||
+                            item.yearsemestername === 'Y3.S2'
+                        ) {
+                            return (
+                                <div key={item._id}>
+                                    <div className="col">
+                                        <LabelTag
+                                            width={190}
+                                            id={item._id}
+                                            deleteMethod={deleteTagName}
+                                            editMethod={editTagName}
+                                            tagName={
+                                                item.groupnumber < 10
+                                                    ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                    : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
                 )}
             </div>
             <br />
@@ -416,14 +433,16 @@ function StudentGroupsGroupIDs(props) {
             <div
                 style={{
                     // position: 'fixed',
-                    // width: '95%',
+                    width: '100%',
                     textAlign: 'center',
-                    // top: '25%',
+                    marginTop: '2%',
                     // marginLeft: '10%',
-                    // padding: '20px',
+                    paddingLeft: '7%',
+
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
+                    height: '100px',
+                    marginBottom: '3%',
                 }}
                 className="row"
             >
@@ -436,25 +455,30 @@ function StudentGroupsGroupIDs(props) {
                         </h1>{' '}
                     </div>
                 ) : (
-                    groupIDList.map((item) => (
-                        <div key={item._id}>
-                            <div className="col">
-                                {item.yearsemestername === 'Y4.S1' ||
-                                item.yearsemestername === 'Y4.S2' ? (
-                                    <LabelTag
-                                        id={item._id}
-                                        deleteMethod={deleteTagName}
-                                        editMethod={editTagName}
-                                        tagName={
-                                            item.groupnumber < 10
-                                                ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
-                                                : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                                        }
-                                    />
-                                ) : null}
-                            </div>
-                        </div>
-                    ))
+                    groupIDList.map((item) => {
+                        if (
+                            item.yearsemestername === 'Y4.S1' ||
+                            item.yearsemestername === 'Y4.S2'
+                        ) {
+                            return (
+                                <div key={item._id}>
+                                    <div className="col">
+                                        <LabelTag
+                                            width={190}
+                                            id={item._id}
+                                            deleteMethod={deleteTagName}
+                                            editMethod={editTagName}
+                                            tagName={
+                                                item.groupnumber < 10
+                                                    ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                                    : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
                 )}
             </div>
         </div>

@@ -45,21 +45,38 @@ function StudentGroupsSpecializations(props) {
         if (specializationName === '') {
             Swal.fire('Please Enter a Specialization Name!');
         } else {
-            axios
-                .post('http://localhost:8000/api/v1/specializations', {
-                    specializationname: specializationName,
-                })
-                .then(function (response) {
-                    console.log(response.data.data.specialization);
-                    setSpecializationList([
-                        ...specializationList,
-                        response.data.data.specialization,
-                    ]);
+            let isExist = false;
+
+            specializationList.forEach((element) => {
+                if (
+                    element.specializationname ===
+                    specializationName.toUpperCase()
+                ) {
+                    Swal.fire(
+                        'The Group Number You Entered is Already Exist!!'
+                    );
                     setSpecializationName('');
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                    isExist = true;
+                }
+            });
+
+            if (!isExist) {
+                axios
+                    .post('http://localhost:8000/api/v1/specializations', {
+                        specializationname: specializationName.toUpperCase(),
+                    })
+                    .then(function (response) {
+                        console.log(response.data.data.specialization);
+                        setSpecializationList([
+                            ...specializationList,
+                            response.data.data.specialization,
+                        ]);
+                        setSpecializationName('');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         }
     };
 
@@ -108,27 +125,44 @@ function StudentGroupsSpecializations(props) {
             .then((result) => {
                 if (result.value) {
                     const editedSpecializationName = result.value[0];
-                    if (specializationName !== editedSpecializationName) {
-                        axios
-                            .patch(
-                                `http://localhost:8000/api/v1/specializations/${id}`,
-                                {
-                                    specializationname: editedSpecializationName,
-                                }
-                            )
-                            .then((res) => {
-                                setSpecializationList((prevlist) =>
-                                    prevlist.map((listItem) =>
-                                        id === listItem._id
-                                            ? {
-                                                  ...listItem,
-                                                  specializationname: editedSpecializationName,
-                                              }
-                                            : listItem
-                                    )
-                                );
-                            })
-                            .catch((err) => console.log(err));
+
+                    let isExist = false;
+
+                    specializationList.forEach((element) => {
+                        if (
+                            element.specializationname ===
+                            editedSpecializationName.trim().toUpperCase()
+                        ) {
+                            Swal.fire(
+                                'The Specialization Name You Entered is Already Exist!!'
+                            );
+                            isExist = true;
+                        }
+                    });
+
+                    if (!isExist) {
+                        if (specializationName !== editedSpecializationName) {
+                            axios
+                                .patch(
+                                    `http://localhost:8000/api/v1/specializations/${id}`,
+                                    {
+                                        specializationname: editedSpecializationName.toUpperCase(),
+                                    }
+                                )
+                                .then((res) => {
+                                    setSpecializationList((prevlist) =>
+                                        prevlist.map((listItem) =>
+                                            id === listItem._id
+                                                ? {
+                                                      ...listItem,
+                                                      specializationname: editedSpecializationName,
+                                                  }
+                                                : listItem
+                                        )
+                                    );
+                                })
+                                .catch((err) => console.log(err));
+                        }
                     }
                 }
             });
