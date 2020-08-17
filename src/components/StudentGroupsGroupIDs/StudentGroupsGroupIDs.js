@@ -31,7 +31,7 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.yearsemesters);
+                    // console.log(response.data.data.yearsemesters);
                     setYearSemesterList(response.data.data.yearsemesters);
                     setYearSemester(
                         response.data.data.yearsemesters[0].yearsemestername
@@ -46,7 +46,7 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.groupnumbers);
+                    // console.log(response.data.data.groupnumbers);
                     setGroupNumberList(response.data.data.groupnumbers);
                     setGroupNumber(
                         response.data.data.groupnumbers[0].groupnumber
@@ -61,7 +61,7 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.specializations);
+                    // console.log(response.data.data.specializations);
                     setSpecializationList(response.data.data.specializations);
                     setSpecialization(
                         response.data.data.specializations[0].specializationname
@@ -76,7 +76,7 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.groupids);
+                    // console.log(response.data.data.groupids);
                     setGroupIDList(response.data.data.groupids);
                 })
                 .catch(function (error) {
@@ -166,31 +166,90 @@ function StudentGroupsGroupIDs(props) {
         });
     };
 
-    const editTagName = (groupNumber, id) => {
-        // const { value: formValues } =  Swal.fire({
-        //     title: 'Edit Group ID',
-        //     html:
-        //     '<div class="row">' +
-        //         '<div class="col-12">' +
-        //              '<input id="swal-input1" type="text" class="form-control">' +
-        //         '</div>' +
-        //     '</div>' +
-        //     '<br/>' +
-        //     '<div class="row">' +
-        //         '<div class="col-12">' +
-        //             '<input id="swal-input2" type="text" class="form-control">' +
-        //         '</div>' +
-        //     '</div>',
-        //     focusConfirm: true,
-        //     confirmButtonText: 'Edit',
-        //     confirmButtonColor: '#205374',
-        //     preConfirm: () => {
-        //       return [
-        //         document.getElementById('swal-input1').value,
-        //         document.getElementById('swal-input2').value
-        //       ]
-        //     }
-        //   })
+    const editTagName = (groupid, id) => {
+        const { value: formValues } = Swal.fire({
+            title: 'Edit Group ID',
+            html: `<label>Year & Semester</label> &nbsp
+                <input id="swal-input1" value=${groupid.substring(
+                    0,
+                    5
+                )}> <br/> <br/>
+                <label>Specialization</label> &nbsp &nbsp &nbsp
+                <input id="swal-input2" value=${
+                    groupid.split('.')[2]
+                }> <br/> <br/>
+                <label>Group Number</label> &nbsp &nbsp
+                <input id="swal-input3" value=${
+                    groupid.split('.')[3] < 10
+                        ? groupid.split('.')[3].substring(1, 2)
+                        : groupid.split('.')[3]
+                }>`,
+            focusConfirm: false,
+            preConfirm: () => {
+                const editedYearSemester = document.getElementById(
+                    'swal-input1'
+                ).value;
+                const editedSpecialization = document.getElementById(
+                    'swal-input2'
+                ).value;
+                const editedGroupNumber = document.getElementById('swal-input3')
+                    .value;
+
+                const editedGroupID = `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`;
+
+                // alert(editedGroupID);
+
+                if (
+                    `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}` !==
+                    groupid
+                ) {
+                    // alert(editedGroupID);
+
+                    let isExist = false;
+
+                    groupIDList.forEach((element) => {
+                        if (
+                            `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
+                            `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`
+                        ) {
+                            Swal.fire(
+                                'The Group ID You Entered is Already Exists!!'
+                            );
+                            isExist = true;
+                        }
+                    });
+
+                    if (!isExist) {
+                        axios
+                            .patch(
+                                `http://localhost:8000/api/v1/groupids/${id}`,
+                                {
+                                    yearsemestername: editedYearSemester,
+                                    specializationname: editedSpecialization,
+                                    groupnumber: editedGroupNumber,
+                                }
+                            )
+                            .then(function (response) {
+                                setGroupIDList((prevlist) =>
+                                    prevlist.map((listItem) =>
+                                        id === listItem._id
+                                            ? {
+                                                  ...listItem,
+                                                  yearsemestername: editedYearSemester,
+                                                  specializationname: editedSpecialization,
+                                                  groupnumber: editedGroupNumber,
+                                              }
+                                            : listItem
+                                    )
+                                );
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    }
+                }
+            },
+        });
     };
 
     return (

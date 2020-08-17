@@ -125,23 +125,22 @@ function StudentGroupsSpecializations(props) {
             .then((result) => {
                 if (result.value) {
                     const editedSpecializationName = result.value[0];
+                    if (specializationName !== editedSpecializationName) {
+                        let isExist = false;
 
-                    let isExist = false;
+                        specializationList.forEach((element) => {
+                            if (
+                                element.specializationname ===
+                                editedSpecializationName.trim().toUpperCase()
+                            ) {
+                                Swal.fire(
+                                    'The Specialization Name You Entered is Already Exist!!'
+                                );
+                                isExist = true;
+                            }
+                        });
 
-                    specializationList.forEach((element) => {
-                        if (
-                            element.specializationname ===
-                            editedSpecializationName.trim().toUpperCase()
-                        ) {
-                            Swal.fire(
-                                'The Specialization Name You Entered is Already Exist!!'
-                            );
-                            isExist = true;
-                        }
-                    });
-
-                    if (!isExist) {
-                        if (specializationName !== editedSpecializationName) {
+                        if (!isExist) {
                             axios
                                 .patch(
                                     `http://localhost:8000/api/v1/specializations/${id}`,
