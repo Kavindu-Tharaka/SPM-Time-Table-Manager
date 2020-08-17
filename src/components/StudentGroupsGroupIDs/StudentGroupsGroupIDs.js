@@ -282,7 +282,7 @@ function StudentGroupsGroupIDs(props) {
                     paddingLeft: '7%',
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    height: '100px',
+                    maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -335,7 +335,7 @@ function StudentGroupsGroupIDs(props) {
 
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    height: '100px',
+                    maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -388,7 +388,7 @@ function StudentGroupsGroupIDs(props) {
 
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    height: '100px',
+                    maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -441,7 +441,7 @@ function StudentGroupsGroupIDs(props) {
 
                     // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    height: '100px',
+                    maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"

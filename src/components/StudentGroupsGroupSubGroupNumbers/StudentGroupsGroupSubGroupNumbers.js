@@ -206,7 +206,8 @@ function StudentGroupsGroupSubGroupNumbers() {
     const editGroupNumber = (groupNumber, id) => {
         Swal.mixin({
             input: 'text',
-            inputValue: groupNumber.substring(1, 2),
+            inputValue:
+                groupNumber < 10 ? groupNumber.substring(1, 2) : groupNumber,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
             showCancelButton: true,
@@ -222,22 +223,22 @@ function StudentGroupsGroupSubGroupNumbers() {
                     if (!/^[+]?\d+([.]\d+)?$/g.test(editedGroupNumber.trim())) {
                         Swal.fire('Group Number Should be a Positive Number!');
                     } else {
-                        let isExist = false;
+                        if (groupNumber.toString() !== editedGroupNumber.toString()) {
+                        if (groupNumber < 10 && (groupNumber.toString().substring(1, 2) !== editedGroupNumber.toString())) {
+                            let isExist = false;
+                            groupNumberList.forEach((element) => {
+                                if (
+                                    parseInt(element.groupnumber) ===
+                                    parseInt(editedGroupNumber.trim())
+                                ) {
+                                    Swal.fire(
+                                        'The Group Number You Entered is Already Exist!!'
+                                    );
+                                    isExist = true;
+                                }
+                            });
 
-                        groupNumberList.forEach((element) => {
-                            if (
-                                parseInt(element.groupnumber) ===
-                                parseInt(editedGroupNumber.trim())
-                            ) {
-                                Swal.fire(
-                                    'The Group Number You Entered is Already Exist!!'
-                                );
-                                isExist = true;
-                            }
-                        });
-
-                        if (!isExist) {
-                            if (groupNumber !== editedGroupNumber) {
+                            if (!isExist) {
                                 axios
                                     .patch(
                                         `http://localhost:8000/api/v1/groupnumbers/${id}`,
@@ -260,6 +261,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                                     .catch((err) => console.log(err));
                             }
                         }
+                    }
                     }
                 }
             });
@@ -288,6 +290,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                             'Sub Group Number Should be a Positive Number!'
                         );
                     } else {
+                        if (subGroupNumber.toString() !== editedSubGroupNumber.toString()) {
                         let isExist = false;
 
                         subGroupNumberList.forEach((element) => {
@@ -303,7 +306,6 @@ function StudentGroupsGroupSubGroupNumbers() {
                         });
 
                         if (!isExist) {
-                            if (subGroupNumber !== editedSubGroupNumber) {
                                 axios
                                     .patch(
                                         `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
@@ -324,9 +326,10 @@ function StudentGroupsGroupSubGroupNumbers() {
                                         );
                                     })
                                     .catch((err) => console.log(err));
-                            }
+                            
                         }
                     }
+                }
                 }
             });
     };
