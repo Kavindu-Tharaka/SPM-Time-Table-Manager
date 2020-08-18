@@ -3,6 +3,7 @@
 	padding: 10px;
 	width: calc(100% - 300px);
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .ac-main-container-without-side-menu {
@@ -10,4 +11,5 @@
 	padding: 10px;
 	width: calc(100% - 80px);
 	overflow-y: auto;
+	overflow-x: hidden;
 }
