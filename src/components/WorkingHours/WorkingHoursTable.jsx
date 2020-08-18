@@ -1,12 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-
-function WorkingHoursTable({ workingDay,updateWorkingDay }) {
+import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import './workingHours.css'
+import Swal from "sweetalert2";
+function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   useEffect(() => {
     console.log(workingDay);
   }, []);
-  const data = [{ id: 1, title: "Conan the Barbarian", year: "1982" }];
+
   const columns = [
+    {
+      name: "ID",
+      selector: "_id",
+      sortable: true,
+      omit: true,
+    },
     {
       name: "Day Type",
       selector: "dayType",
@@ -17,11 +25,7 @@ function WorkingHoursTable({ workingDay,updateWorkingDay }) {
       selector: "dayOfWork",
       sortable: true,
     },
-    {
-      name: "Day of Work",
-      selector: "dayOfWork",
-      sortable: true,
-    },
+
     {
       name: "From",
       selector: "fromTime",
@@ -39,8 +43,20 @@ function WorkingHoursTable({ workingDay,updateWorkingDay }) {
       selector: "action",
       cell: (row) => (
         <>
-          <button className="btn btn-warning" onClick = {() => updateWorkingDay(row.dayType)} >Update</button>
-          <button className="btn btn-danger">Delete</button>
+          <button
+            className="btn btn-warning wh-btn"
+            style = {style.button}
+            onClick={() => updateWorkingDay(row)}
+          >
+           <FaPencilAlt color = {'#1a1aff'}/>
+          </button>
+          <button
+            style = {style.button}
+            className="btn btn-danger wh-btn"
+            onClick={() => deleteWorkingDay(row._id)}
+          >
+          <FaTrashAlt color = {'1a1aff'}/>
+          </button>
         </>
       ),
       ignoreRowClick: true,
@@ -51,12 +67,17 @@ function WorkingHoursTable({ workingDay,updateWorkingDay }) {
   return (
     <>
       <DataTable
+        noDataComponent = {<img src = {require('./nodata1.png')} style = {{width :400,height: 250}} />}
+        
+        subHeader = {true}
         title="Working Hours"
         columns={columns}
         data={workingDay}
         pagination={true}
         paginationTotalRows={7}
         paginationPerPage={7}
+        highlightOnHover={true}
+        responsive={true}
       />
     </>
   );
@@ -73,3 +94,16 @@ export default WorkingHoursTable;
 //     <li>{day.workingMins}</li>
 //   </div>
 // ))}
+
+
+const style = {
+  button : {
+    borderRadius : '50%',
+    paddingBottom:10,
+    backgroundColor : 'lightgray',
+    border:'none',
+    marginRight:10,
+  
+    
+  } 
+}
