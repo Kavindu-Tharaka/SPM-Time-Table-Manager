@@ -1,6 +1,6 @@
 import React from 'react'
 import DataTable from 'react-data-table-component';
-import ContentHeader from '../../components/ContentHeader/ContentHeader';
+import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import './lecturerContent.css';
 
