@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import ContentHeader from '../../components/ContentHeader/ContentHeader';
+import ContentHeader from '../ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
 
 function StudentGroupsGroupIDs(props) {
