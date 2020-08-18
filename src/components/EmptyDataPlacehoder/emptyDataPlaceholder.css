@@ -1,0 +1,16 @@
+.edp-placeholder-container {
+	width: 100%;
+	height: 300px;
+	text-align: center;
+	padding: 80px;
+	background: rgb(238, 238, 238);
+}
+
+.edp-placeholder-container img {
+	width: 200px;
+	opacity: 0.4;
+}
+
+.edp-placeholder-container p {
+	opacity: 0.4;
+}
