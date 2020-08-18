@@ -57,59 +57,90 @@ function WorkingHoursComponent() {
     setToTime(e.target.value);
   };
 
-  const onSubmitHandler = (e) => {
+
+  function getDayTypeCount  () {
+    // axios.get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
+    //   .then(res => {
+    //     if(res < 5) { 
+    //       console.log(res.data) 
+    //       return true
+    //     }
+    //     else {
+    //       console.log(res.data)
+    //       return false
+    //     };
+    //   })
+  }
+
+
+  const onSubmitHandler =  (e) => {
+    // console.log( getDayTypeCount())
     e.preventDefault();
     // setId(Math.round(Math.random() * 10));
 
-    if (!edit) {
-      axios
-        .post("http://localhost:8000/api/v1/workingDays", {
-          id,
-          dayType,
-          noOfWorkingDays,
-          workingHours,
-          workingMins,
-          dayOfWork,
-          fromTime,
-          toTime,
-        })
-        .then((res) => {
-          console.log(res);
-          addWorkingDay(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.log("Im editing");
-      const updateDay = {
-        dayType,
-        noOfWorkingDays,
-        workingHours,
-        workingMins,
-        dayOfWork,
-        fromTime,
-        toTime,
+    axios.get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
+    .then(res => {
+      console.log(res.dat)
+      console.log(dayType)
+
+      if((res.data < 5 && dayType === 'weekday') || (res.data < 7 && dayType === 'weekend')) { 
+        if (!edit) {
+          axios
+            .post("http://localhost:8000/api/v1/workingDays", {
+              id,
+              dayType,
+              noOfWorkingDays,
+              workingHours,
+              workingMins,
+              dayOfWork,
+              fromTime,
+              toTime,
+            })
+            .then((res) => {
+              console.log(res);
+              addWorkingDay(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          console.log("Im editing");
+          const updateDay = {
+            dayType,
+            noOfWorkingDays,
+            workingHours,
+            workingMins,
+            dayOfWork,
+            fromTime,
+            toTime,
+          };
+          axios
+            .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
+              dayType,
+              noOfWorkingDays,
+              workingHours,
+              workingMins,
+              dayOfWork,
+              fromTime,
+              toTime,
+            })
+            .then((res) => {
+              console.log(res.data);
+              editWorkingDay(res.data);
+              setEdit(false);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      }
+      else {
+        console.log(res.data)
+        return false
       };
-      axios
-        .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
-          dayType,
-          noOfWorkingDays,
-          workingHours,
-          workingMins,
-          dayOfWork,
-          fromTime,
-          toTime,
-        })
-        .then((res) => {
-          console.log(res.data);
-          editWorkingDay(res.data);
-          setEdit(false);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
+    })
+
+
   };
 
   const addWorkingDay = (values) => {
@@ -177,7 +208,7 @@ function WorkingHoursComponent() {
         {" "}
         <div className="row" style={{ marginBottom: "30px" }}>
           <div className="col col-md-2">
-            <h5>Day Type</h5>
+            <h6>Day Type</h6>
             <div className="">
               <div className="wh-inputs_block">
                 <label htmlFor="">Week Day</label>{" "}
@@ -204,7 +235,7 @@ function WorkingHoursComponent() {
             </div>
           </div>
           <div className="col col-md-2">
-            <h5>Number of working days</h5>
+            <h6>Number of working days</h6>
             <div className="">
               <input
                 type="number"
@@ -217,7 +248,7 @@ function WorkingHoursComponent() {
             </div>
           </div>
           <div className="col col-md-2">
-            <h5>From</h5>
+            <h6>From</h6>
             <div className="">
               <input
                 type="time"
@@ -229,7 +260,7 @@ function WorkingHoursComponent() {
             </div>
           </div>
           <div className="col col-md-2">
-            <h5>To</h5>
+            <h6>To</h6>
             <div className="">
               <input
                 type="time"
@@ -240,7 +271,7 @@ function WorkingHoursComponent() {
             </div>
           </div>
           <div className="col col-md-2">
-            <h5>Time Slot</h5>
+            <h6>Time Slot</h6>
             <div className="">
               <input
                 type="number"
@@ -272,7 +303,7 @@ function WorkingHoursComponent() {
         </div>
         <div className="row">
           <div className="col col-md-12">
-            <h5>Working Days</h5>
+            <h6>Working Days</h6>
             <div className="">
               <div className="wh-inputs_block">
                 <label>Monday</label>{" "}
@@ -350,7 +381,7 @@ function WorkingHoursComponent() {
                   type="radio"
                   name="day"
                   value="sunday"
-                  checked={dayOfWork === "sunday" ? true : false}
+                  checked={(dayOfWork === "sunday" ? true : false) } // (dayType === 'weekend' ? false : true)
                   onChange={(e) => onWorkingDayChange(e.target.value)}
                   disabled = {dayType === 'weekday' ? true : false}
                 />{" "}
