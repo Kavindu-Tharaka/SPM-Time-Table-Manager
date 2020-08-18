@@ -268,7 +268,7 @@ function StudentGroupsGroupIDs(props) {
                         <Label>{'Year & Semester'}</Label>
                         <select
                             style={{ borderRadius: 0 }}
-                            className="form-control form-control-sm"
+                            className="custom-select"
                             value={yearSemester}
                             onChange={onInputChangeYearSemester}
                         >
@@ -286,7 +286,7 @@ function StudentGroupsGroupIDs(props) {
                         <Label>{'Specialization'}</Label>
                         <select
                             style={{ borderRadius: 0 }}
-                            className="form-control form-control-sm"
+                            className="custom-select"
                             value={specialization}
                             onChange={onInputChangeSpecialization}
                         >
@@ -305,7 +305,7 @@ function StudentGroupsGroupIDs(props) {
 
                         <select
                             style={{ borderRadius: 0 }}
-                            className="form-control form-control-sm"
+                            className="custom-select"
                             value={groupNumber}
                             onChange={onInputChangeGroupNumber}
                         >

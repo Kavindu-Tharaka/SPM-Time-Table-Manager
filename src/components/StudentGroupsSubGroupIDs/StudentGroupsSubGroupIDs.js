@@ -10,8 +10,14 @@ function StudentGroupsSubGroupIDs(props) {
     const [groupID, setGroupID] = useState('');
     const [groupIDList, setGroupIDList] = useState([]);
 
+    const [subGroupID, setSubGroupID] = useState('');
+    const [subGroupIDList, setSubGroupIDList] = useState([]);
+
     const [subGroupNumber, setSubGroupNumber] = useState('');
     const [subGroupNumberList, setSubGroupNumberList] = useState([]);
+
+    const [year, setYear] = useState('1');
+    const [semester, setSemester] = useState('1');
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -27,7 +33,35 @@ function StudentGroupsSubGroupIDs(props) {
                 .then(function (response) {
                     console.log(response.data.data.groupids);
                     setGroupIDList(response.data.data.groupids);
-                    setGroupID(response.data.data.groupids[0].groupid);
+                    // setGroupID(response.data.data.groupids[0].groupid);
+                    // setGroupID(
+                    //     response.data.data.groupids.map((item) => (
+                    //         year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
+                    //             `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                    //         : null
+                    //     ))
+                    // );
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            axios
+                .get('http://localhost:8000/api/v1/subgroupids', {
+                    cancelToken: source.token,
+                })
+                .then(function (response) {
+                    console.log(response.data.data.subgroupids);
+                    setSubGroupIDList(response.data.data.subgroupids);
+                    
+                    // setGroupID(response.data.data.groupids[0].groupid);
+                    // setGroupID(
+                    //     response.data.data.groupids.map((item) => (
+                    //         year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
+                    //             `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                    //         : null
+                    //     ))
+                    // );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -38,7 +72,7 @@ function StudentGroupsSubGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.subgroupnumbers);
+                    // console.log(response.data.data.subgroupnumbers);
                     setSubGroupNumberList(response.data.data.subgroupnumbers);
                     setSubGroupNumber(
                         response.data.data.subgroupnumbers[0].subgroupnumber
@@ -56,6 +90,12 @@ function StudentGroupsSubGroupIDs(props) {
         };
     }, []);
 
+    const onInputChangeYear = (e) => {
+        setYear(e.target.value);
+    };
+    const onInputChangeSemester = (e) => {
+        setSemester(e.target.value);
+    };
     const onInputChangeGroupID = (e) => {
         setGroupID(e.target.value);
     };
@@ -65,8 +105,36 @@ function StudentGroupsSubGroupIDs(props) {
 
     const addSubGroupID = (e) => {
         e.preventDefault();
-        console.log(groupID);
-        console.log(subGroupNumber);
+
+        let isExist = false;
+
+        subGroupIDList.forEach((element) => {
+            if (
+                `${element.groupid}.${element.subgroupnumber}` ===
+                `${groupID}.${subGroupNumber}`
+            ) {
+                Swal.fire('The Sub Group ID You Entered is Already Exists!!');
+                isExist = true;
+            }
+        });
+
+        if (!isExist) {
+            axios
+                .post('http://localhost:8000/api/v1/subgroupids', {
+                    groupid: groupID,
+                    subgroupnumber: subGroupNumber
+                })
+                .then(function (response) {
+                    console.log(response.data.data.subgroupid);
+                    setSubGroupIDList([
+                        ...subGroupIDList,
+                        response.data.data.subgroupid,
+                    ]);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
     };
 
     return (
@@ -76,25 +144,45 @@ function StudentGroupsSubGroupIDs(props) {
                 style={{
                     left: '20%',
                     marginTop: '3%',
-                    paddingLeft: '25%',
-                    paddingRight: '25%',
+                    paddingLeft: '14%',
+                    paddingRight: '20%',
                 }}
                 className=""
             >
                 <div className="row">
-                    <div className="col-5">
+                    <div className="col-2">
+                    <Label>{'Year'}</Label>
+                        <select className="custom-select" value={year} onChange={onInputChangeYear}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div className="col-2">
+                    <Label>{'Semester'}</Label>
+                        <select className="custom-select" value={semester} onChange={onInputChangeSemester}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                    <div className="col-3">
                         <Label>{'Group ID'}</Label>
                         <select
                             style={{ borderRadius: 0 }}
-                            className="form-control form-control-sm"
+                            className="custom-select"
                             value={groupID}
                             onChange={onInputChangeGroupID}
                         >
-                            {groupIDList.map((item) => (
-                                <option key={item._id} value={item.groupid}>
-                                    {item.groupid}
+                            {
+                            groupIDList.map((item) => (
+                                year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
+                                <option key={item._id} value={`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}>
+                                    {`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}
                                 </option>
-                            ))}
+                                : null
+                            ))
+                            }
                         </select>
                     </div>
                     <div className="col-4">
@@ -102,7 +190,7 @@ function StudentGroupsSubGroupIDs(props) {
 
                         <select
                             style={{ borderRadius: 0 }}
-                            className="form-control form-control-sm"
+                            className="custom-select"
                             value={subGroupNumber}
                             onChange={onInputChangeSubGroupNumber}
                         >
