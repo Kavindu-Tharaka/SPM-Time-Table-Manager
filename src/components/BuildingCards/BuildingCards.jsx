@@ -3,7 +3,7 @@ import BuildingCard from './BuildingCard/BuildingCard';
 
 const BuildingCards = (props) => {
 	return (
-		<div className='row row-cols-4'>
+		<div className='row row-cols-3 pr-2 pl-2'>
 			{props.buildings.map((building) => {
 				return (
 					<BuildingCard
