@@ -26,12 +26,6 @@ const ApplicationContent = (props) => {
 		>
 			<Switch>
 				<Route
-					path='/'
-					component={() => (
-						<WorkingTime setShowSubMenu={setShowSubMenu} />
-					)}
-				/>
-				<Route
 					path='/locations'
 					component={() => (
 						<Locations setShowSubMenu={setShowSubMenu} />
@@ -67,6 +61,12 @@ const ApplicationContent = (props) => {
 				/>
 				<Route
 					path='/working-time'
+					component={() => (
+						<WorkingTime setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
+					path='/'
 					component={() => (
 						<WorkingTime setShowSubMenu={setShowSubMenu} />
 					)}
