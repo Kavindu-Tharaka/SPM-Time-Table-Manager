@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import DataTable from "react-data-table-component";
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
+import ContentHeader from "../ContentHeader/ContentHeader";
 import WorkingHoursForm from "../../components/WorkingHours/WorkingHoursForm";
 import WorkingHoursTable from "./WorkingHoursTable";
 import Swal from "sweetalert2";
@@ -58,76 +59,71 @@ function WorkingHoursComponent() {
     setToTime(e.target.value);
   };
 
-  function getDayTypeCount() {
-    // axios.get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
-    //   .then(res => {
-    //     if(res < 5) {
-    //       console.log(res.data)
-    //       return true
-    //     }
-    //     else {
-    //       console.log(res.data)
-    //       return false
-    //     };
-    //   })
-  }
-
   const onSubmitHandler = (e) => {
     // console.log( getDayTypeCount())
     e.preventDefault();
     // setId(Math.round(Math.random() * 10));
+    if (
+      dayType == "" ||
+      workingHours == "" ||
+      workingMins == "" ||
+      fromTime == "" ||
+      toTime == ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Sorry",
+        text: `Please Enter the Required Fields`,
+      });
+      
+    } else {
+      axios
+        .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
+        .then((res) => {
+          console.log(res.dat);
+          console.log(dayType);
 
-    axios
-      .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
-      .then((res) => {
-        console.log(res.dat);
-        console.log(dayType);
+          if (
+            (res.data < 5 && dayType === "weekday") ||
+            (res.data < 7 && dayType === "weekend")
+          ) {
+            if (!edit) {
+              axios
+                .post("http://localhost:8000/api/v1/workingDays", {
+                  id,
+                  dayType,
+                  noOfWorkingDays,
+                  workingHours,
+                  workingMins,
+                  dayOfWork,
+                  fromTime,
+                  toTime,
+                })
+                .then((res) => {
+                  console.log(res);
+                  addWorkingDay(res.data);
+                  Swal.fire(
+                    "Submited!",
+                    "Entry has been sucessfuly submited.",
+                    "success"
+                  );
+                  clear();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              console.log("Im editing");
+              const updateDay = {
+                dayType,
+                noOfWorkingDays,
+                workingHours,
+                workingMins,
+                dayOfWork,
+                fromTime,
+                toTime,
+              };
 
-        if (
-          (res.data < 5 && dayType === "weekday") ||
-          (res.data < 7 && dayType === "weekend")
-        ) {
-          if (!edit) {
-         
-              
-                axios
-                  .post("http://localhost:8000/api/v1/workingDays", {
-                    id,
-                    dayType,
-                    noOfWorkingDays,
-                    workingHours,
-                    workingMins,
-                    dayOfWork,
-                    fromTime,
-                    toTime,
-                  })
-                  .then((res) => {
-                    console.log(res);
-                    addWorkingDay(res.data);
-                      Swal.fire(
-                  "Submited!",
-                  "Entry has been sucessfuly submited.",
-                  "success"
-                );
-                clear();
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              
-           
-          } else {
-            console.log("Im editing");
-            const updateDay = {
-              dayType,
-              noOfWorkingDays,
-              workingHours,
-              workingMins,
-              dayOfWork,
-              fromTime,
-              toTime,
-            };
-           
               axios
                 .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
                   dayType,
@@ -146,26 +142,22 @@ function WorkingHoursComponent() {
                 .catch((e) => {
                   console.log(e);
                 });
-             
-                Swal.fire(
-                  "Updated!",
-                  "Your Entry has been updated.",
-                  "success"
-                );
-            
+
+              Swal.fire("Updated!", "Your Entry has been updated.", "success");
+
               clear();
-          
+            }
+          } else {
+            console.log(res.data);
+            Swal.fire({
+              icon: "error",
+              title: "Sorry",
+              text: `You have Reach Maximum Entries for! ${dayType}`,
+            });
+            return false;
           }
-        } else {
-          console.log(res.data);
-          Swal.fire({
-            icon: 'error',
-            title: 'Sorry',
-            text: `You have Reach Maximum Entries for! ${dayType}`,
-          })
-          return false;
-        }
-      });
+        });
+    }
   };
 
   const addWorkingDay = (values) => {
@@ -175,10 +167,10 @@ function WorkingHoursComponent() {
   };
 
   const editWorkingDay = (updateDay) => {
-    console.log('UPDATE DAY = ', updateDay)
+    console.log("UPDATE DAY = ", updateDay);
     setWorkingDay(
       workingDay.map((day) => {
-        console.log(day)
+        console.log(day);
         if (day._id === updateDay._id) {
           day.dayType = updateDay.dayType;
           day.noOfWorkingDays = updateDay.noOfWorkingDays;
@@ -244,9 +236,10 @@ function WorkingHoursComponent() {
   };
 
   return (
-    <div className="">
+    <div>
       {/* <WorkingHoursModal/>*/}
-      <HeaderComponent title={"Working Time"} />
+      {/* <HeaderComponent title={"Working Time"} /> */}
+      <ContentHeader header={"Working Time"} />
 
       <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>
         {" "}
