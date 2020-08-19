@@ -13,6 +13,12 @@ const LocationContent = (props) => {
 
 	const [buildings, setBuildings] = useState([]);
 
+	const [updateComponent, setUpdateComponent] = useState(0);
+
+	const refreshComponent = () => {
+		setUpdateComponent(Math.random());
+	};
+
 	const onAddClick = (e) => {
 		e.preventDefault();
 
@@ -35,7 +41,7 @@ const LocationContent = (props) => {
 			.catch((err) => {
 				console.log(err.response);
 			});
-	}, []);
+	}, [updateComponent]);
 
 	return (
 		<div>
@@ -60,7 +66,10 @@ const LocationContent = (props) => {
 			{buildings.length === 0 ? (
 				<EmptyDataPlaceholder message='Building list is currently empty' />
 			) : (
-				<BuildingCards buildings={buildings} />
+				<BuildingCards
+					buildings={buildings}
+					refreshComponent={refreshComponent}
+				/>
 			)}
 
 			<br />

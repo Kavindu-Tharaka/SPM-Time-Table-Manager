@@ -81,8 +81,8 @@ select:focus {
 }
 
 .sm-ctrl-btn {
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 	border-radius: 50%;
 	border: none;
 	outline: none;
