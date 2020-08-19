@@ -5,15 +5,19 @@ import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import BuildingCards from '../BuildingCards/BuildingCards';
 
 const LocationContent = (props) => {
+
+	// Inputs
 	const [buildingName, setBuildingName] = useState('');
+
+	// DB data
+	const [buildings, setBuildings] = useState([]);
+	const [rooms, setRooms] = useState([]);
+
+	const [updateComponent, setUpdateComponent] = useState(0);
 
 	const onBuildingNameChange = (e) => {
 		setBuildingName(e.target.value);
 	};
-
-	const [buildings, setBuildings] = useState([]);
-
-	const [updateComponent, setUpdateComponent] = useState(0);
 
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
