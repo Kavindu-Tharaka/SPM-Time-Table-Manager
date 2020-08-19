@@ -75,3 +75,30 @@ select:focus {
 .form-element-left-margin {
 	margin-left: 10px;
 }
+
+.br-0 {
+	border-radius: 0 !important;
+}
+
+.sm-ctrl-btn {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+}
+
+.sm-ctrl-btn:focus {
+	border: none;
+	outline: none;
+}
+
+.sm-ctrl-btn-dlt:hover {
+	background: rgb(241, 0, 0);
+	color: #fff;
+}
+
+.sm-ctrl-btn-upt:hover {
+	background: rgb(255, 174, 0);
+	color: #fff;
+}
