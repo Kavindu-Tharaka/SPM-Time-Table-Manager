@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Redirect } from 'react-router-dom';
 
 // Components
 import MainNavigationBar from './components/MainNavigationBar/MainNavigationBar';
@@ -14,6 +14,7 @@ function App() {
 				selectedMainLink={selectedMainLink}
 				setSelectedMainLink={setSelectedMainLink}
 			/>
+			<Redirect to='/working-time'/>
 			<ApplicationContent />
 		</BrowserRouter>
 	);
