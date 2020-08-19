@@ -88,17 +88,8 @@ function WorkingHoursComponent() {
           (res.data < 7 && dayType === "weekend")
         ) {
           if (!edit) {
-            Swal.fire({
-              title: "Are you sure?",
-              text: "Do you Want to Submit this!",
-              icon: "info",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes",
-              cancelButtonText: "No",
-            }).then((result) => {
-              if (result.value) {
+         
+              
                 axios
                   .post("http://localhost:8000/api/v1/workingDays", {
                     id,
@@ -113,18 +104,18 @@ function WorkingHoursComponent() {
                   .then((res) => {
                     console.log(res);
                     addWorkingDay(res.data);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-                Swal.fire(
+                      Swal.fire(
                   "Submited!",
                   "Entry has been sucessfuly submited.",
                   "success"
                 );
                 clear();
-              }
-            });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              
+           
           } else {
             console.log("Im editing");
             const updateDay = {
@@ -136,16 +127,7 @@ function WorkingHoursComponent() {
               fromTime,
               toTime,
             };
-            Swal.fire({
-              title: "Are you sure?",
-              text: "Do you want to update this entry!",
-              icon: "info",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes",
-              cancelButtonText: "No",
-            }).then((result) => {
+           
               axios
                 .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
                   dayType,
@@ -164,15 +146,15 @@ function WorkingHoursComponent() {
                 .catch((e) => {
                   console.log(e);
                 });
-              if (result.value) {
+             
                 Swal.fire(
                   "Updated!",
                   "Your Entry has been updated.",
                   "success"
                 );
-              }
+            
               clear();
-            });
+          
           }
         } else {
           console.log(res.data);
@@ -193,17 +175,16 @@ function WorkingHoursComponent() {
   };
 
   const editWorkingDay = (updateDay) => {
+    console.log('UPDATE DAY = ', updateDay)
     setWorkingDay(
       workingDay.map((day) => {
-        if (day.id === updateDay.id) {
-          day.id = updateDay.id;
+        console.log(day)
+        if (day._id === updateDay._id) {
           day.dayType = updateDay.dayType;
           day.noOfWorkingDays = updateDay.noOfWorkingDays;
           day.workingHours = updateDay.workingHours;
           day.workingMins = updateDay.workingMins;
           day.dayOfWork = updateDay.dayOfWork;
-          //   day.fromTime = updateDay.fromTime;
-          //   day.toTime = updateDay.toTime;
         }
         console.log("updated day ==== ", day);
         return day;

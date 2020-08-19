@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder'
 import './workingHours.css'
 import Swal from "sweetalert2";
 function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
@@ -68,7 +69,7 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   return (
     <>
       <DataTable
-        noDataComponent = {<img src = {require('./nodata1.png')} style = {{width :400,height: 250}} />}
+        noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
         
         subHeader = {true}
         title="Working Hours"
