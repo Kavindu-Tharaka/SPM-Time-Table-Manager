@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import axios from "axios";
-import './LecturerContent.css';
+import './lecturerContent.css';
 import Swal from 'sweetalert2';
 
 const LecturerContent = () => {
@@ -95,7 +95,6 @@ const LecturerContent = () => {
             .catch((e) => console.error(e));
     }
     const onSubmit = (e) => {
-        console.log("fn called");
         e.preventDefault();
 
         if (name === '' && employeeId === '') {
@@ -134,8 +133,6 @@ const LecturerContent = () => {
         }
     }
 
-
-    const data = [{ id: 1, lecturer: ' Barbarian', employeeId: '1982', faculty: 'Faculty of Computing', department: 'DEPARTMENT OF COMPUTER SCIENCE & SOFTWARE ENGINEERING', center: 'Malabe', building: 'Main building', level: 'Professor', rank: '1.1111', action: '' }];
     const columns = [
         {
             name: "ID",
@@ -202,7 +199,7 @@ const LecturerContent = () => {
     ];
     return (
         <div>
-            <div className="">
+            <div>
                 <ContentHeader header={'Lecturers'} />
                 <br />
                 <form onSubmit={onSubmit}>
@@ -318,7 +315,7 @@ const LecturerContent = () => {
                     </div>{/* second row ends*/}
 
                     <div className="d-flex justify-content-end mt-2">
-                        <button id="lec-insert" type="submit" className="btn btn-secondary btn-sm">&nbsp; Add &nbsp;</button>
+                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">&nbsp; Add &nbsp;</button>
                     </div>
                 </form>
 
