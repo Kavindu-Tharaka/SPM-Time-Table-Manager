@@ -37,6 +37,7 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
     {
       name: "Time Slot",
       selector: "timeSlot",
+      sortable : true
     },
     {
       name: "Actions",

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
 import WorkingHoursForm from "../../components/WorkingHours/WorkingHoursForm";
 import WorkingHoursTable from "./WorkingHoursTable";
+import Swal from "sweetalert2";
 import axios from "axios";
 // import WorkingHoursModal from "./WorkingHoursModal";
 function WorkingHoursComponent() {
@@ -11,12 +12,12 @@ function WorkingHoursComponent() {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState();
   const [dayType, setDayType] = useState("");
-  const [noOfWorkingDays, setNoOfWorkingDays] = useState(1);
-  const [workingHours, setWorkingHours] = useState(1);
-  const [workingMins, setWorkingMins] = useState(0);
+  const [noOfWorkingDays, setNoOfWorkingDays] = useState(0);
+  const [workingHours, setWorkingHours] = useState();
+  const [workingMins, setWorkingMins] = useState();
   const [dayOfWork, setDayOfWork] = useState("");
-  const [fromTime, setFromTime] = useState();
-  const [toTime, setToTime] = useState();
+  const [fromTime, setFromTime] = useState("00:00");
+  const [toTime, setToTime] = useState("00:00");
 
   //useEffect
 
@@ -57,12 +58,11 @@ function WorkingHoursComponent() {
     setToTime(e.target.value);
   };
 
-
-  function getDayTypeCount  () {
+  function getDayTypeCount() {
     // axios.get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
     //   .then(res => {
-    //     if(res < 5) { 
-    //       console.log(res.data) 
+    //     if(res < 5) {
+    //       console.log(res.data)
     //       return true
     //     }
     //     else {
@@ -72,22 +72,62 @@ function WorkingHoursComponent() {
     //   })
   }
 
-
-  const onSubmitHandler =  (e) => {
+  const onSubmitHandler = (e) => {
     // console.log( getDayTypeCount())
     e.preventDefault();
     // setId(Math.round(Math.random() * 10));
 
-    axios.get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
-    .then(res => {
-      console.log(res.dat)
-      console.log(dayType)
+    axios
+      .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
+      .then((res) => {
+        console.log(res.dat);
+        console.log(dayType);
 
-      if((res.data < 5 && dayType === 'weekday') || (res.data < 7 && dayType === 'weekend')) { 
-        if (!edit) {
-          axios
-            .post("http://localhost:8000/api/v1/workingDays", {
-              id,
+        if (
+          (res.data < 5 && dayType === "weekday") ||
+          (res.data < 7 && dayType === "weekend")
+        ) {
+          if (!edit) {
+            Swal.fire({
+              title: "Are you sure?",
+              text: "Do you Want to Submit this!",
+              icon: "info",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes",
+              cancelButtonText: "No",
+            }).then((result) => {
+              if (result.value) {
+                axios
+                  .post("http://localhost:8000/api/v1/workingDays", {
+                    id,
+                    dayType,
+                    noOfWorkingDays,
+                    workingHours,
+                    workingMins,
+                    dayOfWork,
+                    fromTime,
+                    toTime,
+                  })
+                  .then((res) => {
+                    console.log(res);
+                    addWorkingDay(res.data);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+                Swal.fire(
+                  "Submited!",
+                  "Entry has been sucessfuly submited.",
+                  "success"
+                );
+                clear();
+              }
+            });
+          } else {
+            console.log("Im editing");
+            const updateDay = {
               dayType,
               noOfWorkingDays,
               workingHours,
@@ -95,52 +135,55 @@ function WorkingHoursComponent() {
               dayOfWork,
               fromTime,
               toTime,
-            })
-            .then((res) => {
-              console.log(res);
-              addWorkingDay(res.data);
-            })
-            .catch((err) => {
-              console.log(err);
+            };
+            Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to update this entry!",
+              icon: "info",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes",
+              cancelButtonText: "No",
+            }).then((result) => {
+              axios
+                .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
+                  dayType,
+                  noOfWorkingDays,
+                  workingHours,
+                  workingMins,
+                  dayOfWork,
+                  fromTime,
+                  toTime,
+                })
+                .then((res) => {
+                  console.log(res.data);
+                  editWorkingDay(res.data);
+                  setEdit(false);
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              if (result.value) {
+                Swal.fire(
+                  "Updated!",
+                  "Your Entry has been updated.",
+                  "success"
+                );
+              }
+              clear();
             });
+          }
         } else {
-          console.log("Im editing");
-          const updateDay = {
-            dayType,
-            noOfWorkingDays,
-            workingHours,
-            workingMins,
-            dayOfWork,
-            fromTime,
-            toTime,
-          };
-          axios
-            .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
-              dayType,
-              noOfWorkingDays,
-              workingHours,
-              workingMins,
-              dayOfWork,
-              fromTime,
-              toTime,
-            })
-            .then((res) => {
-              console.log(res.data);
-              editWorkingDay(res.data);
-              setEdit(false);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          console.log(res.data);
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: `You have Reach Maximum Entries for! ${dayType}`,
+          })
+          return false;
         }
-      }
-      else {
-        console.log(res.data)
-        return false
-      };
-    })
-
-
+      });
   };
 
   const addWorkingDay = (values) => {
@@ -150,21 +193,21 @@ function WorkingHoursComponent() {
   };
 
   const editWorkingDay = (updateDay) => {
-    setWorkingDay( workingDay.map((day) => {
-          if (day.id === updateDay.id) {
-            day.id = updateDay.id;
-            day.dayType = updateDay.dayType;
-            day.noOfWorkingDays = updateDay.noOfWorkingDays;
-            day.workingHours = updateDay.workingHours;
-            day.workingMins = updateDay.workingMins;
-            day.dayOfWork = updateDay.dayOfWork;
-            //   day.fromTime = updateDay.fromTime;
-            //   day.toTime = updateDay.toTime;
-          }
-          console.log("updated day ==== ", day);
-          return day;
-        }),
-      
+    setWorkingDay(
+      workingDay.map((day) => {
+        if (day.id === updateDay.id) {
+          day.id = updateDay.id;
+          day.dayType = updateDay.dayType;
+          day.noOfWorkingDays = updateDay.noOfWorkingDays;
+          day.workingHours = updateDay.workingHours;
+          day.workingMins = updateDay.workingMins;
+          day.dayOfWork = updateDay.dayOfWork;
+          //   day.fromTime = updateDay.fromTime;
+          //   day.toTime = updateDay.toTime;
+        }
+        console.log("updated day ==== ", day);
+        return day;
+      })
     );
   };
 
@@ -183,20 +226,40 @@ function WorkingHoursComponent() {
   //deleting a working day
   const deleteWorkingDay = (rowID) => {
     console.log(rowID);
-    axios
-      .delete(`http://localhost:8000/api/v1/workingDays/${rowID}`)
-      .then((res) => {
-        console.log(res);
-        setWorkingDay(
-            workingDay.filter(day => {return day._id !== rowID})
-        );
-      })
-      .catch((e) => console.log(e));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        axios
+          .delete(`http://localhost:8000/api/v1/workingDays/${rowID}`)
+          .then((res) => {
+            console.log(res);
+            setWorkingDay(
+              workingDay.filter((day) => {
+                return day._id !== rowID;
+              })
+            );
+          })
+          .catch((e) => console.log(e));
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
 
-    // return setWorkingDay([
-    //   workingDay,
-    //   workingDay.filter((day) => day.id !== id),
-    // ]);
+  const clear = () => {
+    setDayType("");
+    setNoOfWorkingDays("");
+    setWorkingHours();
+    setWorkingMins();
+    setDayOfWork(0);
+    setFromTime("00:00");
+    setToTime("00:00");
   };
 
   return (
@@ -204,7 +267,7 @@ function WorkingHoursComponent() {
       {/* <WorkingHoursModal/>*/}
       <HeaderComponent title={"Working Time"} />
 
-      <form onSubmit={onSubmitHandler} style = {{marginBottom:20}}>
+      <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>
         {" "}
         <div className="row" style={{ marginBottom: "30px" }}>
           <div className="col col-md-2">
@@ -254,7 +317,6 @@ function WorkingHoursComponent() {
                 type="time"
                 name=""
                 value={fromTime}
-               
                 onChange={(e) => onFromTimeChange(e)}
               />
             </div>
@@ -284,6 +346,7 @@ function WorkingHoursComponent() {
                   setWorkingHours(e.target.value);
                   console.log(workingHours);
                 }}
+                disabled={edit ? true : false}
               />
               <input
                 type="number"
@@ -297,6 +360,7 @@ function WorkingHoursComponent() {
                   setWorkingMins(e.target.value);
                   console.log(workingMins);
                 }}
+                disabled={edit ? true : false}
               />
             </div>
           </div>
@@ -370,8 +434,7 @@ function WorkingHoursComponent() {
                   value="saturday"
                   checked={dayOfWork === "saturday" ? true : false}
                   onChange={(e) => onWorkingDayChange(e.target.value)}
-                  disabled = {dayType === 'weekday' ? true : false}
-
+                  disabled={dayType === "weekday" ? true : false}
                 />{" "}
               </div>
 
@@ -381,9 +444,9 @@ function WorkingHoursComponent() {
                   type="radio"
                   name="day"
                   value="sunday"
-                  checked={(dayOfWork === "sunday" ? true : false) } // (dayType === 'weekend' ? false : true)
+                  checked={dayOfWork === "sunday" ? true : false} // (dayType === 'weekend' ? false : true)
                   onChange={(e) => onWorkingDayChange(e.target.value)}
-                  disabled = {dayType === 'weekday' ? true : false}
+                  disabled={dayType === "weekday" ? true : false}
                 />{" "}
               </div>
             </div>
