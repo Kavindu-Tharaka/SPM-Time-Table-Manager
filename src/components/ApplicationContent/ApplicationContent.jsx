@@ -7,7 +7,7 @@ import Statistics from '../../containers/Statistics/Statistics';
 import Locations from '../../containers/Locations/Locations';
 import Lecturers from '../../containers/Lecturers/Lecturers';
 import Subjects from '../../containers/Subjects/Subjects';
-import WorkingTime from '../../containers/WorkingTime/WorkingTime'
+import WorkingTime from '../../containers/WorkingTime/WorkingTime';
 
 import './applicationContent.css';
 import Tags from '../../containers/Tags/Tags';
@@ -26,6 +26,12 @@ const ApplicationContent = (props) => {
 		>
 			<Switch>
 				<Route
+					path='/'
+					component={() => (
+						<WorkingTime setShowSubMenu={setShowSubMenu} />
+					)}
+				/>
+				<Route
 					path='/locations'
 					component={() => (
 						<Locations setShowSubMenu={setShowSubMenu} />
@@ -39,9 +45,7 @@ const ApplicationContent = (props) => {
 				/>
 				<Route
 					path='/tags'
-					component={() => (
-						<Tags setShowSubMenu={setShowSubMenu} />
-					)}
+					component={() => <Tags setShowSubMenu={setShowSubMenu} />}
 				/>
 				<Route
 					path='/student-groups'
@@ -63,8 +67,8 @@ const ApplicationContent = (props) => {
 				/>
 				<Route
 					path='/working-time'
-					component={() => (				
-						<WorkingTime  setShowSubMenu= {setShowSubMenu}/>
+					component={() => (
+						<WorkingTime setShowSubMenu={setShowSubMenu} />
 					)}
 				/>
 			</Switch>
