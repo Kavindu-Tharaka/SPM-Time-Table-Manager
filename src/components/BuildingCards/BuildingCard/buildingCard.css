@@ -1,3 +1,15 @@
-.bc-building-card-container {
-    padding: 10px;
+.bc-sm-ctrl-btn-dlt {
+    position: absolute;
+    top: 5px;
+    right: 40px;
+    display: grid;
+    place-items: center;
+}
+
+.bc-sm-ctrl-btn-upt {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: grid;
+    place-items: center;
 }
