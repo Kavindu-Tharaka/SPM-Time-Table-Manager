@@ -14,7 +14,6 @@ function App() {
 				selectedMainLink={selectedMainLink}
 				setSelectedMainLink={setSelectedMainLink}
 			/>
-			<Redirect to='/working-time'/>
 			<ApplicationContent />
 		</BrowserRouter>
 	);
