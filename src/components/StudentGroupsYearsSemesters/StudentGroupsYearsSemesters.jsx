@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Label from '../Label/Label';
 import ContentHeader from '../ContentHeader/ContentHeader';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
@@ -259,26 +260,25 @@ function StudentGroupsYearsSemesters(props) {
 
             <div
                 style={{
-                    position: 'fixed',
-                    // width: '95%',
-                    textAlign: 'center',
-                    top: '25%',
-                    // left: '50%',
-                    padding: '20px',
-                    // transform: 'translate(-50%, 0)',
-                    overflowY: 'auto',
-                    height: '450px',
+                        // position: 'fixed',
+                        // width: '95%',
+                        textAlign: 'center',
+                        marginTop: '10%',
+                        // left: '50%',
+                        padding: '10px',
+                        // transform: 'translate(-50%, 0)',
+                        overflowY: 'auto',
+                        // height: '450px',
                 }}
                 className="row"
             >
                 {yearsemesterList.length === 0 ? (
-                    <div className="col">
-                        {' '}
-                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
-                            {' '}
-                            There are no year semester combinations in the
-                            database!{' '}
-                        </h1>{' '}
+                    <div
+                        style={{
+                            width: '100%',
+                        }}
+                    >
+                        <EmptyDataPlaceholder message="Year Semester List is Currently Empty" />
                     </div>
                 ) : (
                     yearsemesterList.map((tag) => (

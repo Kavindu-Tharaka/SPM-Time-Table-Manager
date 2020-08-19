@@ -5,6 +5,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
@@ -166,25 +167,25 @@ function TagContent(props) {
 
             <div
                 style={{
-                    position: 'fixed',
-                    // width: '95%',
-                    textAlign: 'center',
-                    top: '25%',
-                    // left: '50%',
-                    padding: '20px',
-                    // transform: 'translate(-50%, 0)',
-                    overflowY: 'auto',
-                    height: '450px',
+                        // position: 'fixed',
+                        // width: '95%',
+                        textAlign: 'center',
+                        marginTop: '10%',
+                        // left: '50%',
+                        padding: '10px',
+                        // transform: 'translate(-50%, 0)',
+                        overflowY: 'auto',
+                        // height: '450px',
                 }}
                 className="row"
             >
                 {tagList.length === 0 ? (
-                    <div style={{ paddingLeft: '50%' }}>
-                        {' '}
-                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
-                            {' '}
-                            There are no Tag names in the database!{' '}
-                        </h1>{' '}
+                    <div
+                        style={{
+                            width: '100%',
+                        }}
+                    >
+                        <EmptyDataPlaceholder message="Tag List is Currently Empty" />
                     </div>
                 ) : (
                     tagList.map((tag) => (
@@ -205,4 +206,4 @@ function TagContent(props) {
     );
 }
 
-export default TagContent
+export default TagContent;

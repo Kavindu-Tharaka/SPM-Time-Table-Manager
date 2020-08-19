@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
 import ContentHeader from '../ContentHeader/ContentHeader';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -206,25 +207,25 @@ function StudentGroupsSpecializations(props) {
 
             <div
                 style={{
-                    position: 'fixed',
-                    // width: '95%',
-                    textAlign: 'center',
-                    top: '25%',
-                    // left: '50%',
-                    padding: '20px',
-                    // transform: 'translate(-50%, 0)',
-                    overflowY: 'auto',
-                    height: '450px',
+                        // position: 'fixed',
+                        // width: '95%',
+                        textAlign: 'center',
+                        marginTop: '10%',
+                        // left: '50%',
+                        padding: '10px',
+                        // transform: 'translate(-50%, 0)',
+                        overflowY: 'auto',
+                        // height: '450px',
                 }}
                 className="row"
             >
                 {specializationList.length === 0 ? (
-                    <div className="col">
-                        {' '}
-                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
-                            {' '}
-                            There are no specializations in the database!{' '}
-                        </h1>{' '}
+                    <div
+                        style={{
+                            width: '100%',
+                        }}
+                    >
+                        <EmptyDataPlaceholder message="Specialization List is Currently Empty" />
                     </div>
                 ) : (
                     specializationList.map((tag) => (

@@ -19,6 +19,11 @@ function StudentGroupsGroupIDs(props) {
     const [groupID, setGroupID] = useState('');
     const [groupIDList, setGroupIDList] = useState([]);
 
+    const [onegroupIDList, setOneGroupIDList] = useState([]);
+    const [twogroupIDList, setTwoGroupIDList] = useState([]);
+    const [threegroupIDList, setThreeGroupIDList] = useState([]);
+    const [fourgroupIDList, setFourGroupIDList] = useState([]);
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
@@ -75,9 +80,16 @@ function StudentGroupsGroupIDs(props) {
                 .get('http://localhost:8000/api/v1/groupids', {
                     cancelToken: source.token,
                 })
-                .then(function (response) {
-                    // console.log(response.data.data.groupids);
+                .then(function async (response) {
+                    console.log(response.data.data.groupids);
                     setGroupIDList(response.data.data.groupids);
+
+                    // response.data.data.groupids.forEach(item => {
+                    //     if(item.yearsemestername.substring(1, 2) == 1){
+                    //         setOneGroupIDList(prevList => prevList.push(item));
+                    //     }
+                    // });
+
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -346,12 +358,13 @@ function StudentGroupsGroupIDs(props) {
                 }}
                 className="row"
             >
+
                 {groupIDList.length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
                             {' '}
-                            There are no 1st Year Group IDs in the database!{' '}
+                            1st Year Group ID List is Currently Empty!{' '}
                         </h1>{' '}
                     </div>
                 ) : (
@@ -404,7 +417,7 @@ function StudentGroupsGroupIDs(props) {
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
                             {' '}
-                            There are no 2nd Year Group IDs in the database!{' '}
+                            2nd Year Group ID List is Currently Empty!{' '}
                         </h1>{' '}
                     </div>
                 ) : (
@@ -457,7 +470,7 @@ function StudentGroupsGroupIDs(props) {
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
                             {' '}
-                            There are no 3rd Year Group IDs in the database!{' '}
+                            3rd Year Group ID List is Currently Empty!{' '}
                         </h1>{' '}
                     </div>
                 ) : (
@@ -510,7 +523,7 @@ function StudentGroupsGroupIDs(props) {
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
                             {' '}
-                            There are no 4th Year Group IDs in the database!{' '}
+                            4th Year Group ID List is Currently Empty!{' '}
                         </h1>{' '}
                     </div>
                 ) : (
