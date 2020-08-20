@@ -136,7 +136,8 @@ const Rooms = (props) => {
 								id='lecture-hall'
 								name='room-type'
 								className='custom-control-input'
-								onClick={() => {
+								checked={roomType === 'lecture-hall'}
+								onChange={() => {
 									setRoomType('lecture-hall');
 								}}
 							/>
@@ -153,6 +154,7 @@ const Rooms = (props) => {
 								id='laboratory'
 								name='room-type'
 								className='custom-control-input'
+								checked={roomType === 'laboratory'}
 								onChange={() => {
 									setRoomType('laboratory');
 								}}
@@ -180,7 +182,11 @@ const Rooms = (props) => {
 			{rooms.length === 0 ? (
 				<EmptyDataPlaceholder message='Room list is currently empty' />
 			) : (
-				<RoomsTable rooms={rooms} buildings={buildings}/>
+				<RoomsTable
+					rooms={rooms}
+					buildings={buildings}
+					refreshComponent={refreshComponent}
+				/>
 			)}
 		</div>
 	);
