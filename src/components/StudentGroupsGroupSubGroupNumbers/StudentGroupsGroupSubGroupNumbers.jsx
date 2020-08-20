@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import Label from '../Label/Label';
 
@@ -63,19 +64,26 @@ function StudentGroupsGroupSubGroupNumbers() {
     const addGroupNumber = (e) => {
         e.preventDefault();
         if (groupNumber === '' || groupNumber === '0') {
-            Swal.fire('Please Enter a Valid Group Number!');
+            Swal.fire({
+                text: 'Please Enter a Valid Group Number!',
+                confirmButtonColor: '#205374',
+            });
             setGroupNumber('');
         } else if (!/^[+]?\d+([.]\d+)?$/.test(groupNumber)) {
-            Swal.fire('Group Number Should be a Positive Number!');
+            Swal.fire({
+                text: 'Group Number Should be a Positive Number!',
+                confirmButtonColor: '#205374',
+            });
             setGroupNumber('');
         } else {
             let isExist = false;
 
             groupNumberList.forEach((element) => {
                 if (parseInt(element.groupnumber) === parseInt(groupNumber)) {
-                    Swal.fire(
-                        'The Group Number You Entered is Already Exist!!'
-                    );
+                    Swal.fire({
+                        text: 'The Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
                     isExist = true;
                 }
             });
@@ -104,10 +112,16 @@ function StudentGroupsGroupSubGroupNumbers() {
     const addSubGroupNumber = (e) => {
         e.preventDefault();
         if (subGroupNumber === '' || subGroupNumber === '0') {
-            Swal.fire('Please Enter a Valid Sub Group Number!');
+            Swal.fire({
+                text: 'Please Enter a Valid Sub Group Number!',
+                confirmButtonColor: '#205374',
+            });
             setGroupNumber('');
         } else if (!/^[+]?\d+([.]\d+)?$/.test(subGroupNumber)) {
-            Swal.fire('Group Number Should be a Positive Number!');
+            Swal.fire({
+                text: 'Group Number Should be a Positive Number!',
+                confirmButtonColor: '#205374',
+            });
             setSubGroupNumber('');
         } else {
             let isExist = false;
@@ -117,9 +131,11 @@ function StudentGroupsGroupSubGroupNumbers() {
                     parseInt(element.subgroupnumber) ===
                     parseInt(subGroupNumber)
                 ) {
-                    Swal.fire(
-                        'The Sub Group Number You Entered is Already Exist!!'
-                    );
+                    Swal.fire({
+                        text:
+                            'The Sub Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
                     isExist = true;
                 }
             });
@@ -146,67 +162,70 @@ function StudentGroupsGroupSubGroupNumbers() {
     };
 
     const deleteGroupNumber = (groupNumberId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
-                axios
-                    .delete(
-                        `http://localhost:8000/api/v1/groupnumbers/${groupNumberId}`
-                    )
-                    .then((res) => {
-                        setGroupNumberList(
-                            groupNumberList.filter((item) => {
-                                return groupNumberId !== item._id;
-                            })
-                        );
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
+        axios
+            .delete(
+                `http://localhost:8000/api/v1/groupnumbers/${groupNumberId}`
+            )
+            .then((res) => {
+                swal.close();
+                setGroupNumberList(
+                    groupNumberList.filter((item) => {
+                        return groupNumberId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        });
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        //     }
+        // });
     };
 
     const deleteSubGroupNumber = (subGroupNumberId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
-                axios
-                    .delete(
-                        `http://localhost:8000/api/v1/subgroupnumbers/${subGroupNumberId}`
-                    )
-                    .then((res) => {
-                        setSubGroupNumberList(
-                            subGroupNumberList.filter((item) => {
-                                return subGroupNumberId !== item._id;
-                            })
-                        );
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
+        axios
+            .delete(
+                `http://localhost:8000/api/v1/subgroupnumbers/${subGroupNumberId}`
+            )
+            .then((res) => {
+                swal.close();
+                setSubGroupNumberList(
+                    subGroupNumberList.filter((item) => {
+                        return subGroupNumberId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        });
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        //     }
+        // });
     };
 
     const editGroupNumber = (groupNumber, id) => {
         Swal.mixin({
             input: 'text',
-            inputValue: groupNumber,
+            inputValue:
+                groupNumber < 10 ? groupNumber.substring(1, 2) : groupNumber,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
             showCancelButton: true,
@@ -220,29 +239,58 @@ function StudentGroupsGroupSubGroupNumbers() {
                 if (result.value) {
                     const editedGroupNumber = result.value[0];
                     if (!/^[+]?\d+([.]\d+)?$/g.test(editedGroupNumber.trim())) {
-                        Swal.fire('Group Number Should be a Positive Number!');
+                        Swal.fire({
+                            text: 'Group Number Should be a Positive Number!',
+                            confirmButtonColor: '#205374',
+                        });
                     } else {
-                        if (groupNumber !== editedGroupNumber) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/groupnumbers/${id}`,
-                                    {
-                                        groupnumber: editedGroupNumber,
+                        if (
+                            groupNumber.toString() !==
+                            editedGroupNumber.toString()
+                        ) {
+                            if (
+                                groupNumber < 10 &&
+                                groupNumber.toString().substring(1, 2) !==
+                                    editedGroupNumber.toString()
+                            ) {
+                                let isExist = false;
+                                groupNumberList.forEach((element) => {
+                                    if (
+                                        parseInt(element.groupnumber) ===
+                                        parseInt(editedGroupNumber.trim())
+                                    ) {
+                                        Swal.fire({
+                                            text:
+                                                'The Group Number You Entered is Already Exist!',
+                                            confirmButtonColor: '#205374',
+                                        });
+                                        isExist = true;
                                     }
-                                )
-                                .then((res) => {
-                                    setGroupNumberList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      groupnumber: editedGroupNumber,
-                                                  }
-                                                : listItem
+                                });
+
+                                if (!isExist) {
+                                    axios
+                                        .patch(
+                                            `http://localhost:8000/api/v1/groupnumbers/${id}`,
+                                            {
+                                                groupnumber: editedGroupNumber,
+                                            }
                                         )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
+                                        .then((res) => {
+                                            setGroupNumberList((prevlist) =>
+                                                prevlist.map((listItem) =>
+                                                    id === listItem._id
+                                                        ? {
+                                                              ...listItem,
+                                                              groupnumber: editedGroupNumber,
+                                                          }
+                                                        : listItem
+                                                )
+                                            );
+                                        })
+                                        .catch((err) => console.log(err));
+                                }
+                            }
                         }
                     }
                 }
@@ -268,31 +316,54 @@ function StudentGroupsGroupSubGroupNumbers() {
                     if (
                         !/^[+]?\d+([.]\d+)?$/g.test(editedSubGroupNumber.trim())
                     ) {
-                        Swal.fire(
-                            'Sub Group Number Should be a Positive Number!'
-                        );
+                        Swal.fire({
+                            text:
+                                'Sub Group Number Should be a Positive Number!',
+                            confirmButtonColor: '#205374',
+                        });
                     } else {
-                        if (subGroupNumber !== editedSubGroupNumber) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
-                                    {
-                                        subgroupnumber: editedSubGroupNumber,
-                                    }
-                                )
-                                .then((res) => {
-                                    setSubGroupNumberList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      subgroupnumber: editedSubGroupNumber,
-                                                  }
-                                                : listItem
-                                        )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
+                        if (
+                            subGroupNumber.toString() !==
+                            editedSubGroupNumber.toString()
+                        ) {
+                            let isExist = false;
+
+                            subGroupNumberList.forEach((element) => {
+                                if (
+                                    parseInt(element.subgroupnumber) ===
+                                    parseInt(editedSubGroupNumber.trim())
+                                ) {
+                                    Swal.fire({
+                                        text:
+                                            'The Sub Group Number You Entered is Already Exist!',
+                                        confirmButtonColor: '#205374',
+                                    });
+                                    isExist = true;
+                                }
+                            });
+
+                            if (!isExist) {
+                                axios
+                                    .patch(
+                                        `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
+                                        {
+                                            subgroupnumber: editedSubGroupNumber,
+                                        }
+                                    )
+                                    .then((res) => {
+                                        setSubGroupNumberList((prevlist) =>
+                                            prevlist.map((listItem) =>
+                                                id === listItem._id
+                                                    ? {
+                                                          ...listItem,
+                                                          subgroupnumber: editedSubGroupNumber,
+                                                      }
+                                                    : listItem
+                                            )
+                                        );
+                                    })
+                                    .catch((err) => console.log(err));
+                            }
                         }
                     }
                 }
@@ -330,6 +401,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                         onChange={onInputChangeGroupNumber}
                         onKeyDown={handleKeyDownGroupNumber}
                         value={groupNumber}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Group number can be a positive number"
                     />
                     <button
                         style={{ marginLeft: 20, borderRadius: 0 }}
@@ -408,6 +482,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                         onChange={onInputChangeSubGroupNumber}
                         onKeyDown={handleKeyDownSubGroupNumber}
                         value={subGroupNumber}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Sub Group number can be a positive number"
                     />
                     <button
                         style={{ marginLeft: 20, borderRadius: 0 }}

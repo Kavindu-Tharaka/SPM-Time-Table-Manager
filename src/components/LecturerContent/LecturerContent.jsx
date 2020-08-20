@@ -4,7 +4,6 @@ import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import './lecturerContent.css';
 import axios from "axios";
-
 import Swal from 'sweetalert2';
 
 const LecturerContent = () => {

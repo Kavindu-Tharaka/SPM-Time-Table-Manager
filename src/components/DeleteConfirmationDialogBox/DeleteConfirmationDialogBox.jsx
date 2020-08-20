@@ -5,7 +5,7 @@ import './deleteConfirmationDialogBox.css';
 
 const DeleteConfirmationDialogBox = (props) => {
 	const onDeleteClick = () => {
-		props.deleteEventHandler();
+		props.deleteEventHandler(props.id);
 	};
 
 	return (
