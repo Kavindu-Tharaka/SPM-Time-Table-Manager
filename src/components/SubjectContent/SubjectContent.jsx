@@ -67,9 +67,8 @@ const SubjectContent = () => {
                 numberOfEveluationHrs
             }).then((res) => {
                 window.location.reload()
-                console.log("subject data added", res);
             }).catch((err) => {
-                console.log("sub data err: ", err);
+                console.err(err);
             });
         }
         else {
@@ -85,8 +84,6 @@ const SubjectContent = () => {
                 numberOfEveluationHrs
             })
                 .then((res) => {
-                    console.log(res.data);
-                    console.log("subject update executed succesfully")
                     setUpdate(false);
                     window.location.reload();
                 })
@@ -104,7 +101,6 @@ const SubjectContent = () => {
         axios
             .get("http://localhost:8000/api/v1/subjects")
             .then((result) => {
-                console.log("subject api response: ", result.data.data.subjects);
                 setSubjectData(result.data.data.subjects);
             })
             .catch((e) => {
@@ -113,7 +109,6 @@ const SubjectContent = () => {
     }
 
     const updateSubject = (value, e) => {
-        console.log("fncalled update");
         setUpdate(true)
         setSubjectCode(value.subjectCode)
         setOfferedYear(value.offeredYear)
@@ -128,7 +123,6 @@ const SubjectContent = () => {
     }
 
     const deleteSubject = (id) => {
-        console.log("delete fn called");
         axios
             .delete(`http://localhost:8000/api/v1/subjects/${id}`)
             .then((res) => {

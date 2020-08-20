@@ -77,7 +77,6 @@ const LecturerContent = () => {
         axios
             .get("http://localhost:8000/api/v1/lecturers")
             .then((result) => {
-                console.log("api response: ", result.data.data.lecturers);
                 setLecturerDetails(result.data.data.lecturers);
 
             })
@@ -86,11 +85,9 @@ const LecturerContent = () => {
             });
     };
     const deleteLecturer = (rowID) => {
-        console.log("id is: ", rowID);
         axios
             .delete(`http://localhost:8000/api/v1/lecturers/${rowID}`)
             .then((res) => {
-                console.log(res);
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
