@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import './LecturerContent.css';
 import axios from "axios";
-import './lecturerContent.css';
+
 import Swal from 'sweetalert2';
 
 const LecturerContent = () => {
@@ -348,6 +349,7 @@ const LecturerContent = () => {
                     </div>{/* second row ends*/}
 
                     <div className="d-flex justify-content-end mt-2">
+
                         <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update?'Edit':'Add'} {" "}</button>
                     </div>
                 </form>
