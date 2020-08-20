@@ -8,7 +8,6 @@ import DeleteConfirmationDialogBox from '../../DeleteConfirmationDialogBox/Delet
 import UpdateBuildingDialogBox from '../../UpdateBuildingDialogBox/UpdateBuildingDialogBox';
 
 const BuildingCard = (props) => {
-
 	const deleteBuilding = () => {
 		axios
 			.delete(
@@ -27,7 +26,10 @@ const BuildingCard = (props) => {
 		swal({
 			buttons: false,
 			content: (
-				<UpdateBuildingDialogBox building={props.building} refreshComponent={props.refreshComponent}/>
+				<UpdateBuildingDialogBox
+					building={props.building}
+					refreshComponent={props.refreshComponent}
+				/>
 			),
 		});
 	};
