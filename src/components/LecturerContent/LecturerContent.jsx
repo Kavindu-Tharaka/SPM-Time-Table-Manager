@@ -350,7 +350,8 @@ const LecturerContent = () => {
                     </div>{/* second row ends*/}
 
                     <div className="d-flex justify-content-end mt-2">
-                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">&nbsp; Add &nbsp;</button>
+
+                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update?'Edit':'Add'} {" "}</button>
                     </div>
                 </form>
 
