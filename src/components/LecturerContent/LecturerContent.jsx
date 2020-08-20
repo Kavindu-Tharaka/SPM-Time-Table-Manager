@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
-import './LecturerContent.css';
+import './lecturerContent.css';
 import axios from "axios";
 
 import Swal from 'sweetalert2';
