@@ -18,7 +18,7 @@ const SubjectContent = () => {
     const [numberOfTutorialHrs, setNumberOfTutorialHrs] = useState("");
     const [numberOfLabHrs, setNumberOfLabHrs] = useState("");
     const [numberOfEveluationHrs, setnumberOfEveluationHrs] = useState("");
-    const [subjectData, setSubjectData] = useState(" ");
+    const [subjectData, setSubjectData] = useState([]);
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState();
 
