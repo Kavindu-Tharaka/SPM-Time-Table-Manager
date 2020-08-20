@@ -20,7 +20,7 @@ const DeleteConfirmationDialogBox = (props) => {
 			</p>
 			<p className='text-left'>{props.itemName}</p>
 			<button
-				className='btn btn-danger float-right mb-4'
+				className='btn btn-info float-right mb-4'
 				onClick={onDeleteClick}
 			>
 				Delete

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 
 import './buildingCard.css';
 import DeleteConfirmationDialogBox from '../../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import UpdateBuildingDialogBox from '../../UpdateBuildingDialogBox/UpdateBuildingDialogBox';
 
 const BuildingCard = (props) => {
 	const deleteBuilding = () => {
@@ -19,6 +20,18 @@ const BuildingCard = (props) => {
 			.catch((err) => {
 				console.log(err.response);
 			});
+	};
+
+	const onUpdateClick = () => {
+		swal({
+			buttons: false,
+			content: (
+				<UpdateBuildingDialogBox
+					building={props.building}
+					refreshComponent={props.refreshComponent}
+				/>
+			),
+		});
 	};
 
 	const onDeleteClick = () => {
@@ -37,7 +50,10 @@ const BuildingCard = (props) => {
 		<div className='bc-building-card-container col p-1'>
 			<div className='card pt-3 pb-3 pl-2'>
 				<h5>{props.building.buildingName}</h5>
-				<button className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'>
+				<button
+					className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
+					onClick={onUpdateClick}
+				>
 					<IoMdCreate />
 				</button>
 				<button
