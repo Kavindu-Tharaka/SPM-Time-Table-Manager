@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Label } from 'reactstrap';
+import swal from '@sweetalert/with-react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function StudentGroupsGroupIDsEdit(props) {
-
     const [yearSemester, setYearSemester] = useState(props.yearSemesterInit);
 
-    const [specialization, setSpecialization] = useState(props.specializationInit);
+    const [specialization, setSpecialization] = useState(
+        props.specializationInit
+    );
 
-    const [groupNumber, setGroupNumber] = useState(props.groupNumberInit);
-    
+    const [groupNumber, setGroupNumber] = useState(
+        parseInt(props.groupNumberInit)
+    );
+
     const onInputChangeYearSemester = (e) => {
         setYearSemester(e.target.value);
         console.log(yearSemester);
@@ -23,18 +29,60 @@ function StudentGroupsGroupIDsEdit(props) {
     };
 
     const editGroupID = () => {
-        console.log(`edited GID: ${yearSemester}.${specialization}.${groupNumber}`);
+        console.log(
+            `edited GID: ${yearSemester}.${specialization}.${groupNumber}`
+        );
+
+        if ((`${yearSemester}.${specialization}.${groupNumber}` !== props.groupid) || (groupNumber < 10 && `${yearSemester}.${specialization}.0${groupNumber}` !== props.groupid)) {
+
+            // alert(editedGroupID);
+
+            let isExist = false;
+
+            props.groupIDList.forEach((element) => {
+                if (
+                    `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
+                    `${yearSemester}.${specialization}.${groupNumber}`
+                ) {
+                    Swal.fire('The Group ID You Entered is Already Exists!!');
+                    isExist = true;
+                }
+            });
+
+            if (!isExist) {
+                axios
+                    .patch(
+                        `http://localhost:8000/api/v1/groupids/${props.id}`,
+                        {
+                            yearsemestername: yearSemester,
+                            specializationname: specialization,
+                            groupnumber: groupNumber,
+                        }
+                    )
+                    .then(function (response) {
+                        props.setGroupIDList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                props.id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          yearsemestername: yearSemester,
+                                          specializationname: specialization,
+                                          groupnumber: groupNumber,
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        
+        }
+        swal.close();
     };
 
     return (
-        <div
-        // style={{
-        //     left: '20%',
-        //     marginTop: '3%',
-        //     paddingLeft: '17%',
-        //     paddingRight: '25%',
-        // }}
-    >
         <div className="row">
             <div className="col-12">
                 <Label>{'Year & Semester'}</Label>
@@ -45,10 +93,7 @@ function StudentGroupsGroupIDsEdit(props) {
                     onChange={onInputChangeYearSemester}
                 >
                     {props.yearSemesterList.map((item) => (
-                        <option
-                            key={item._id}
-                            value={item.yearsemestername}
-                        >
+                        <option key={item._id} value={item.yearsemestername}>
                             {item.yearsemestername}
                         </option>
                     ))}
@@ -63,10 +108,7 @@ function StudentGroupsGroupIDsEdit(props) {
                     onChange={onInputChangeSpecialization}
                 >
                     {props.specializationList.map((item) => (
-                        <option
-                            key={item._id}
-                            value={item.specializationname}
-                        >
+                        <option key={item._id} value={item.specializationname}>
                             {item.specializationname}
                         </option>
                     ))}
@@ -89,8 +131,7 @@ function StudentGroupsGroupIDsEdit(props) {
                 </select>
             </div>
             <div className="col-12">
-                <Label style={{ color: 'transparent' }}>{'.'}</Label>{' '}
-                <br />
+                <Label style={{ color: 'transparent' }}>{'.'}</Label> <br />
                 <button
                     className="btn btn-primary"
                     style={{ borderRadius: 0 }}
@@ -100,8 +141,7 @@ function StudentGroupsGroupIDsEdit(props) {
                 </button>
             </div>
         </div>
-    </div>
-    )
+    );
 }
 
-export default StudentGroupsGroupIDsEdit
+export default StudentGroupsGroupIDsEdit;

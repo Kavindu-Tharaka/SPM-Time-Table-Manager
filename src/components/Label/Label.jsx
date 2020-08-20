@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Label(props) {
     const editMethod = props.editMethod;
@@ -44,7 +45,22 @@ function Label(props) {
                     </h6>
                 </div>
                 <div className="p-2 bd-highlight">
-                    <MdModeEdit
+                    <button
+                        className='sm-ctrl-btn sm-ctrl-btn-upt'
+                        onClick={() => editMethod(props.tagName, props.id)}
+                    >
+                        <IoMdCreate />
+                    </button>
+                    <button
+                    style={{
+                        marginLeft:5
+                    }}
+                        className='sm-ctrl-btn sm-ctrl-btn-dlt'
+                        onClick={onDeleteClick}
+                    >
+                        <IoMdClose />
+                    </button>
+                    {/* <MdModeEdit
                         style={{
                             display: 'inline',
                             backgroundColor: 'gainsboro',
@@ -66,7 +82,7 @@ function Label(props) {
                         size="23px"
                         color="#205374"
                         onClick={onDeleteClick}
-                    />
+                    /> */}
                 </div>
             </div>
         </Fragment>

@@ -46,35 +46,38 @@ function TagContent(props) {
         e.preventDefault();
 
         if (tagName === '') {
-            Swal.fire('Please Enter a Tag Name!');
+            Swal.fire({
+                text: 'Please Enter a Tag Name!',
+                confirmButtonColor: '#205374',
+            });
         } else {
-
             let isExist = false;
 
             tagList.forEach((element) => {
-                if (element.tagname === tagName){
-                    Swal.fire('The Tag Name You Entered is Already Exists!!');
+                if (element.tagname === tagName) {
+                    Swal.fire({
+                        text: 'The Tag Name You Entered is Already Exists!',
+                        confirmButtonColor: '#205374',
+                    });
                     isExist = true;
                     setTagName('');
                 }
             });
-    
+
             if (!isExist) {
                 axios
-                .post('http://localhost:8000/api/v1/tags', {
-                    tagname: tagName,
-                })
-                .then(function (response) {
-                    console.log(response.data.data.tag);
-                    setTagList([...tagList, response.data.data.tag]);
-                    setTagName('');
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                    .post('http://localhost:8000/api/v1/tags', {
+                        tagname: tagName,
+                    })
+                    .then(function (response) {
+                        console.log(response.data.data.tag);
+                        setTagList([...tagList, response.data.data.tag]);
+                        setTagName('');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
-
-
         }
     };
 
@@ -89,19 +92,19 @@ function TagContent(props) {
         //     confirmButtonText: 'Delete',
         // }).then((result) => {
         //     if (result.value) {
-                axios
-                    .delete(`http://localhost:8000/api/v1/tags/${tagId}`)
-                    .then((res) => {
-                        swal.close();
-                        setTagList(
-                            tagList.filter((item) => {
-                                return tagId !== item._id;
-                            })
-                        );
+        axios
+            .delete(`http://localhost:8000/api/v1/tags/${tagId}`)
+            .then((res) => {
+                swal.close();
+                setTagList(
+                    tagList.filter((item) => {
+                        return tagId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         //     }
         // });
     };
@@ -123,37 +126,41 @@ function TagContent(props) {
                 if (result.value) {
                     const editedTagName = result.value[0];
                     if (tagName !== editedTagName) {
-
                         let isExist = false;
 
                         tagList.forEach((element) => {
-                            if (element.tagname === editedTagName){
-                                Swal.fire('The Tag Name You Entered is Already Exists!!');
+                            if (element.tagname === editedTagName) {
+                                Swal.fire({
+                                    text:
+                                        'The Tag Name You Entered is Already Exists!',
+                                    confirmButtonColor: '#205374',
+                                });
                                 isExist = true;
                             }
                         });
-                
+
                         if (!isExist) {
                             axios
-                            .patch(`http://localhost:8000/api/v1/tags/${id}`, {
-                                tagname: editedTagName,
-                            })
-                            .then((res) => {
-                                setTagList((prevlist) =>
-                                    prevlist.map((listItem) =>
-                                        id === listItem._id
-                                            ? {
-                                                  ...listItem,
-                                                  tagname: editedTagName,
-                                              }
-                                            : listItem
-                                    )
-                                );
-                            })
-                            .catch((err) => console.log(err));
+                                .patch(
+                                    `http://localhost:8000/api/v1/tags/${id}`,
+                                    {
+                                        tagname: editedTagName,
+                                    }
+                                )
+                                .then((res) => {
+                                    setTagList((prevlist) =>
+                                        prevlist.map((listItem) =>
+                                            id === listItem._id
+                                                ? {
+                                                      ...listItem,
+                                                      tagname: editedTagName,
+                                                  }
+                                                : listItem
+                                        )
+                                    );
+                                })
+                                .catch((err) => console.log(err));
                         }
-
-
                     }
                 }
             });
@@ -186,7 +193,7 @@ function TagContent(props) {
                     onKeyDown={handleKeyDown}
                     value={tagName}
                     data-toggle="tooltip"
-                    data-placement="top" 
+                    data-placement="top"
                     title="Tag can be a text like Lecture, Tutorial..."
                 />
                 <button
@@ -201,15 +208,15 @@ function TagContent(props) {
 
             <div
                 style={{
-                        // position: 'fixed',
-                        // width: '95%',
-                        textAlign: 'center',
-                        marginTop: '10%',
-                        // left: '50%',
-                        padding: '10px',
-                        // transform: 'translate(-50%, 0)',
-                        overflowY: 'auto',
-                        // height: '450px',
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    marginTop: '10%',
+                    // left: '50%',
+                    padding: '10px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
                 }}
                 className="row"
             >

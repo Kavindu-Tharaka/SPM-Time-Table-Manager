@@ -51,19 +51,31 @@ function StudentGroupsYearsSemesters(props) {
             year === '0' ||
             semester === '0'
         ) {
-            Swal.fire('Please Enter Valid Year and Semester!');
+            Swal.fire({
+                text: 'Please Enter Valid Year and Semester!',
+                confirmButtonColor: '#205374',
+            });
             setYear('');
             setSemester('');
         } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire('Year and Semster Should be Positive Numbers!');
+            Swal.fire({
+                text: 'Year and Semster Should be Positive Numbers!',
+                confirmButtonColor: '#205374',
+            });
             setYear('');
             setSemester('');
         } else if (year > 4 || year < 0) {
-            Swal.fire('Year Should be in Between 1 and 4!');
+            Swal.fire({
+                text: 'Year Should be in Between 1 and 4!',
+                confirmButtonColor: '#205374',
+            });
             setYear('');
             setSemester('');
         } else if (semester > 2 || semester < 0) {
-            Swal.fire('Semester Should be 1 or 2!');
+            Swal.fire({
+                text: 'Semester Should be 1 or 2!',
+                confirmButtonColor: '#205374',
+            });
             setYear('');
             setSemester('');
         } else {
@@ -71,9 +83,11 @@ function StudentGroupsYearsSemesters(props) {
 
             yearsemesterList.forEach((element) => {
                 if (element.yearsemestername === `Y${year}.S${semester}`) {
-                    Swal.fire(
-                        'The Year Semester Combination You Entered is Already Exist!'
-                    );
+                    Swal.fire({
+                        text:
+                            'The Year Semester Combination You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
                     isExist = true;
                     setYear('');
                     setSemester('');
@@ -112,21 +126,21 @@ function StudentGroupsYearsSemesters(props) {
         //     confirmButtonText: 'Delete',
         // }).then((result) => {
         //     if (result.value) {
-                axios
-                    .delete(
-                        `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
-                    )
-                    .then((res) => {
-                        swal.close();
-                        setYearSemesterList(
-                            yearsemesterList.filter((item) => {
-                                return yearsemesterId !== item._id;
-                            })
-                        );
+        axios
+            .delete(
+                `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
+            )
+            .then((res) => {
+                swal.close();
+                setYearSemesterList(
+                    yearsemesterList.filter((item) => {
+                        return yearsemesterId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         //     }
         // });
     };
@@ -153,14 +167,16 @@ function StudentGroupsYearsSemesters(props) {
                 // '</div>' +
                 // '</div>',
                 `<h4>Year</h4>
-                <input class="swal2-input" id="swal-input1" value=${
-                    inputText.substring(0,2)
-                }
+                <input class="swal2-input" id="swal-input1" value=${inputText.substring(
+                    0,
+                    2
+                )}
                 ><br/> <br/>
                 <h4>Semester</h4>
-                <input class="swal2-input" id="swal-input2" value=${
-                    inputText.substring(3,5)
-                }>`,
+                <input class="swal2-input" id="swal-input2" value=${inputText.substring(
+                    3,
+                    5
+                )}>`,
             focusConfirm: true,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
@@ -177,9 +193,11 @@ function StudentGroupsYearsSemesters(props) {
                         !/(Y[1-4])/g.test(editedYearSemester) ||
                         !/(S[1-2])/g.test(editedYearSemester)
                     ) {
-                        Swal.fire(
-                            'Year Semester Text Pattern does not matched! \n\n Should be in Y1.S1 format!'
-                        );
+                        Swal.fire({
+                            text:
+                                'Year Semester Text Pattern does not matched! \n\n Should be in Y1.S1 format!',
+                            confirmButtonColor: '#205374',
+                        });
                     } else {
                         let isExist = false;
 
@@ -187,9 +205,11 @@ function StudentGroupsYearsSemesters(props) {
                             if (
                                 element.yearsemestername === editedYearSemester
                             ) {
-                                Swal.fire(
-                                    'The Year Semester Combination You Entered is Already Exist!'
-                                );
+                                Swal.fire({
+                                    text:
+                                        'The Year Semester Combination You Entered is Already Exist!',
+                                    confirmButtonColor: '#205374',
+                                });
                                 isExist = true;
                             }
                         });
@@ -233,7 +253,7 @@ function StudentGroupsYearsSemesters(props) {
     };
 
     return (
-        <div className="container">
+        <div>
             <ContentHeader header={'Years & Semesters'} />
             <div
                 style={{
@@ -255,7 +275,7 @@ function StudentGroupsYearsSemesters(props) {
                     onKeyDown={handleKeyDown}
                     value={year}
                     data-toggle="tooltip"
-                    data-placement="top" 
+                    data-placement="top"
                     title="Year can be a positive number between 1 and 4"
                 />
                 <input
@@ -267,7 +287,7 @@ function StudentGroupsYearsSemesters(props) {
                     onKeyDown={handleKeyDown}
                     value={semester}
                     data-toggle="tooltip"
-                    data-placement="top" 
+                    data-placement="top"
                     title="Semester can be number 1 or 2"
                 />
                 <button
@@ -282,15 +302,15 @@ function StudentGroupsYearsSemesters(props) {
 
             <div
                 style={{
-                        // position: 'fixed',
-                        // width: '95%',
-                        textAlign: 'center',
-                        marginTop: '10%',
-                        // left: '50%',
-                        padding: '10px',
-                        // transform: 'translate(-50%, 0)',
-                        overflowY: 'auto',
-                        // height: '450px',
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    marginTop: '10%',
+                    // left: '50%',
+                    padding: '10px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
                 }}
                 className="row"
             >

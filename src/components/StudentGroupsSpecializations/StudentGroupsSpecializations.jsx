@@ -7,7 +7,6 @@ import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import swal from '@sweetalert/with-react';
 
-
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
     const [specializationList, setSpecializationList] = useState([]);
@@ -46,7 +45,10 @@ function StudentGroupsSpecializations(props) {
     const addSpecializationName = (e) => {
         e.preventDefault();
         if (specializationName === '') {
-            Swal.fire('Please Enter a Specialization Name!');
+            Swal.fire({
+                text: 'Please Enter a Specialization Name!',
+                confirmButtonColor: '#205374',
+            });
         } else {
             let isExist = false;
 
@@ -55,9 +57,10 @@ function StudentGroupsSpecializations(props) {
                     element.specializationname ===
                     specializationName.toUpperCase()
                 ) {
-                    Swal.fire(
-                        'The Group Number You Entered is Already Exist!!'
-                    );
+                    Swal.fire({
+                        text: 'The Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
                     setSpecializationName('');
                     isExist = true;
                 }
@@ -94,21 +97,21 @@ function StudentGroupsSpecializations(props) {
         //     confirmButtonText: 'Delete',
         // }).then((result) => {
         //     if (result.value) {
-                axios
-                    .delete(
-                        `http://localhost:8000/api/v1/specializations/${specializationId}`
-                    )
-                    .then((res) => {
-                        swal.close();
-                        setSpecializationList(
-                            specializationList.filter((item) => {
-                                return specializationId !== item._id;
-                            })
-                        );
+        axios
+            .delete(
+                `http://localhost:8000/api/v1/specializations/${specializationId}`
+            )
+            .then((res) => {
+                swal.close();
+                setSpecializationList(
+                    specializationList.filter((item) => {
+                        return specializationId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         //     }
         // });
     };
@@ -137,9 +140,11 @@ function StudentGroupsSpecializations(props) {
                                 element.specializationname ===
                                 editedSpecializationName.trim().toUpperCase()
                             ) {
-                                Swal.fire(
-                                    'The Specialization Name You Entered is Already Exist!!'
-                                );
+                                Swal.fire({
+                                    text:
+                                        'The Specialization Name You Entered is Already Exist!',
+                                    confirmButtonColor: '#205374',
+                                });
                                 isExist = true;
                             }
                         });
@@ -176,7 +181,7 @@ function StudentGroupsSpecializations(props) {
     };
 
     return (
-        <div className="container">
+        <div>
             <ContentHeader header={'Specializations'} />
             <div
                 style={{
@@ -198,7 +203,7 @@ function StudentGroupsSpecializations(props) {
                     onKeyDown={handleKeyDown}
                     value={specializationName}
                     data-toggle="tooltip"
-                    data-placement="top" 
+                    data-placement="top"
                     title="Tag can be an acronym of a specialization."
                 />
                 <button
@@ -213,15 +218,15 @@ function StudentGroupsSpecializations(props) {
 
             <div
                 style={{
-                        // position: 'fixed',
-                        // width: '95%',
-                        textAlign: 'center',
-                        marginTop: '10%',
-                        // left: '50%',
-                        padding: '10px',
-                        // transform: 'translate(-50%, 0)',
-                        overflowY: 'auto',
-                        // height: '450px',
+                    // position: 'fixed',
+                    // width: '95%',
+                    textAlign: 'center',
+                    marginTop: '10%',
+                    // left: '50%',
+                    padding: '10px',
+                    // transform: 'translate(-50%, 0)',
+                    overflowY: 'auto',
+                    // height: '450px',
                 }}
                 className="row"
             >

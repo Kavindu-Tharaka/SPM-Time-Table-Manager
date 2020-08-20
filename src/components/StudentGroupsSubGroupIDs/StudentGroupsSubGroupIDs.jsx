@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
+import StudentGroupsSubGroupIDsEdit from './StudentGroupsSubGroupIDsEdit';
 
 function StudentGroupsSubGroupIDs(props) {
     let groupIdTemp;
@@ -157,77 +158,104 @@ function StudentGroupsSubGroupIDs(props) {
     };
 
     const editSubGroupID = (subgroupid, id) => {
-        Swal.fire({
-            // title: 'Edit Sub Group ID',
-            html: `<h4>Group ID</h4>
-                <input class="swal2-input" id="swal-input1" value=${
-                    `${subgroupid.split('.')[0]}.${subgroupid.split('.')[1]}.${subgroupid.split('.')[2]}.${subgroupid.split('.')[3]}`
-                }
-                ><br/> <br/>
-                <h4>Sub Group Number</h4>
-                <input class="swal2-input" id="swal-input3" value=${
-                    `${subgroupid.split('.')[4]}`
-                }>`,
-                focusConfirm: true,
-                confirmButtonText: 'Edit',
-                confirmButtonColor: '#205374',
-                showCancelButton: true,            
-                preConfirm: () => {
-                const editedGroupIDTemp = document.getElementById('swal-input1').value;
-                const editedGroupID = editedGroupIDTemp.split('.')[3] >= 10 ? `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3]}` : `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3].substring(1, 3)}`
-                const editedSubGroupNumber = document.getElementById('swal-input3').value;
 
+        // console.log(`${subgroupid.split(".")[0]}.${subgroupid.split(".")[1]}.${subgroupid.split(".")[2]}.${subgroupid.split(".")[3]}`);
+        // console.log(subgroupid.split(".")[4]);
+        // console.log(id);
 
-                if (
-                    `${editedGroupIDTemp}.${editedSubGroupNumber}` !==
-                    subgroupid
-                ) {
+        // console.log('Year: '+subgroupid.split(".")[0].substring(1,2))
+        // console.log('Semester: '+subgroupid.split(".")[1].substring(1,2))
 
-                    let isExist = false;
-
-                    subGroupIDList.forEach((element) => {
-                        if (
-                            `${element.groupid}.${element.subgroupnumber}` ===
-                            `${editedGroupID}.${editedSubGroupNumber}`
-                        ) {
-                            Swal.fire(
-                                'The Sub Group ID You Entered is Already Exists!!'
-                            );
-                            isExist = true;
-                        }
-                    });
-
-                    //put validations here 
-
-                    if (!isExist) {
-                        axios
-                            .patch(
-                                `http://localhost:8000/api/v1/subgroupids/${id}`,
-                                {
-                                    groupid: editedGroupID,
-                                    subgroupnumber: editedSubGroupNumber,
-                                }
-                            )
-                            .then(function (response) {
-                                setSubGroupIDList((prevlist) =>
-                                    prevlist.map((listItem) =>
-                                        id === listItem._id
-                                            ? {
-                                                  ...listItem,
-                                                  groupid: editedGroupID,
-                                                  subgroupnumber: editedSubGroupNumber,
-                                              }
-                                            : listItem
-                                    )
-                                );
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                    }
-                }
-            },
+        swal({
+			buttons: false,
+			content: (
+                <StudentGroupsSubGroupIDsEdit
+                    year={subgroupid.split(".")[0].substring(1,2)}
+                    semester={subgroupid.split(".")[1].substring(1,2)}
+                    groupIDList={groupIDList}
+                    subGroupNumberList={subGroupNumberList}
+                    subGroupIDList={subGroupIDList}
+                    setSubGroupIDList={setSubGroupIDList}
+                    id={id}
+                    subGroupIDList={subGroupIDList}
+                    subgroupid={subgroupid}
+                    groupIDInit={`${subgroupid.split(".")[0]}.${subgroupid.split(".")[1]}.${subgroupid.split(".")[2]}.${subgroupid.split(".")[3]}`}
+                    subGroupNumberInit={subgroupid.split(".")[4]}
+                />
+			),
         });
+
+        // Swal.fire({
+        //     // title: 'Edit Sub Group ID',
+        //     html: `<h4>Group ID</h4>
+        //         <input class="swal2-input" id="swal-input1" value=${
+        //             `${subgroupid.split('.')[0]}.${subgroupid.split('.')[1]}.${subgroupid.split('.')[2]}.${subgroupid.split('.')[3]}`
+        //         }
+        //         ><br/> <br/>
+        //         <h4>Sub Group Number</h4>
+        //         <input class="swal2-input" id="swal-input3" value=${
+        //             `${subgroupid.split('.')[4]}`
+        //         }>`,
+        //         focusConfirm: true,
+        //         confirmButtonText: 'Edit',
+        //         confirmButtonColor: '#205374',
+        //         showCancelButton: true,            
+        //         preConfirm: () => {
+        //         const editedGroupIDTemp = document.getElementById('swal-input1').value;
+        //         const editedGroupID = editedGroupIDTemp.split('.')[3] >= 10 ? `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3]}` : `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3].substring(1, 3)}`
+        //         const editedSubGroupNumber = document.getElementById('swal-input3').value;
+
+
+        //         if (
+        //             `${editedGroupIDTemp}.${editedSubGroupNumber}` !==
+        //             subgroupid
+        //         ) {
+
+        //             let isExist = false;
+
+        //             subGroupIDList.forEach((element) => {
+        //                 if (
+        //                     `${element.groupid}.${element.subgroupnumber}` ===
+        //                     `${editedGroupID}.${editedSubGroupNumber}`
+        //                 ) {
+        //                     Swal.fire(
+        //                         'The Sub Group ID You Entered is Already Exists!!'
+        //                     );
+        //                     isExist = true;
+        //                 }
+        //             });
+
+        //             //put validations here 
+
+        //             if (!isExist) {
+        //                 axios
+        //                     .patch(
+        //                         `http://localhost:8000/api/v1/subgroupids/${id}`,
+        //                         {
+        //                             groupid: editedGroupID,
+        //                             subgroupnumber: editedSubGroupNumber,
+        //                         }
+        //                     )
+        //                     .then(function (response) {
+        //                         setSubGroupIDList((prevlist) =>
+        //                             prevlist.map((listItem) =>
+        //                                 id === listItem._id
+        //                                     ? {
+        //                                           ...listItem,
+        //                                           groupid: editedGroupID,
+        //                                           subgroupnumber: editedSubGroupNumber,
+        //                                       }
+        //                                     : listItem
+        //                             )
+        //                         );
+        //                     })
+        //                     .catch(function (error) {
+        //                         console.log(error);
+        //                     });
+        //             }
+        //         }
+        //     },
+        // });
     };
 
     return (
@@ -347,7 +375,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
@@ -393,7 +421,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
@@ -439,7 +467,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
@@ -485,7 +513,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}

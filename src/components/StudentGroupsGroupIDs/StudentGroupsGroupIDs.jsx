@@ -194,7 +194,10 @@ function StudentGroupsGroupIDs(props) {
                     yearSemesterList={yearSemesterList}
                     specializationList={specializationList}
                     groupNumberList={groupNumberList}
+                    groupIDList={groupIDList}
+                    setGroupIDList={setGroupIDList}
                     id={id}
+                    groupid={groupid}
                     yearSemesterInit={`${groupid.split(".")[0]}.${groupid.split(".")[1]}`}
                     specializationInit={groupid.split(".")[2]}
                     groupNumberInit={groupid.split(".")[3]}
@@ -401,7 +404,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={195}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -455,7 +458,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={195}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -509,7 +512,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={195}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -563,7 +566,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={190}
+                                            width={195}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}

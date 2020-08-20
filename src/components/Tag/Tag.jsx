@@ -3,6 +3,7 @@ import { MdModeEdit, MdDelete } from 'react-icons/md';
 import swal from '@sweetalert/with-react';
 import './tag.css';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Tag(props) {
     const editMethod = props.editMethod;
@@ -42,7 +43,22 @@ function Tag(props) {
                     </h6>
                 </div>
                 <div className="p-2 bd-highlight">
-                    <MdModeEdit
+                    <button
+                        className='sm-ctrl-btn sm-ctrl-btn-upt'
+                        onClick={() => editMethod(props.tagName, props.id)}
+                    >
+                        <IoMdCreate />
+                    </button>
+                    <button
+                    style={{
+                        marginLeft:5
+                    }}
+                        className='sm-ctrl-btn sm-ctrl-btn-dlt'
+                        onClick={onDeleteClick}
+                    >
+                        <IoMdClose />
+                    </button>
+                    {/* <MdModeEdit
                         style={{
                             display: 'inline',
                             backgroundColor: 'gainsboro',
@@ -64,7 +80,7 @@ function Tag(props) {
                         size="25px"
                         color="#205374"
                         onClick={onDeleteClick}
-                    />
+                    /> */}
                 </div>
             </div>
         </Fragment>
