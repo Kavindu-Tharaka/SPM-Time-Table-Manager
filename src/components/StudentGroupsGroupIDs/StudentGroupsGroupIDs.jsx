@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
+import StudentGroupsGroupIDsEdit from './StudentGroupsGroupIDsEdit';
 
 function StudentGroupsGroupIDs(props) {
     const [yearSemester, setYearSemester] = useState('');
@@ -146,116 +148,142 @@ function StudentGroupsGroupIDs(props) {
         }
     };
 
-    const deleteTagName = (tagId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+    const deleteGroupID = (id) => {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
-                    .delete(`http://localhost:8000/api/v1/groupids/${tagId}`)
+                    .delete(`http://localhost:8000/api/v1/groupids/${id}`)
                     .then(function (response) {
+                        swal.close();
                         setGroupIDList(
                             groupIDList.filter((item) => {
-                                return tagId !== item._id;
+                                return id !== item._id;
                             })
                         );
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
-    const editTagName = (groupid, id) => {
-        Swal.fire({
-            // title: 'Edit Group ID',
-            html: `<h4>Year & Semester</h4>
-                <input class="swal2-input" id="swal-input1" value=${groupid.substring(
-                    0,
-                    5
-                )}> <br/> <br/>
-                <h4>Specialization</h4>
-                <input class="swal2-input" id="swal-input2" value=${
-                    groupid.split('.')[2]
-                }> <br/> <br/>
-                <h4>Group Number</h4>
-                <input class="swal2-input" id="swal-input3" value=${
-                    groupid.split('.')[3] < 10
-                        ? groupid.split('.')[3].substring(1, 2)
-                        : groupid.split('.')[3]
-                }>`,
-                focusConfirm: true,
-                confirmButtonText: 'Edit',
-                confirmButtonColor: '#205374',
-                showCancelButton: true,
-            preConfirm: () => {
-                const editedYearSemester = document.getElementById(
-                    'swal-input1'
-                ).value;
-                const editedSpecialization = document.getElementById(
-                    'swal-input2'
-                ).value;
-                const editedGroupNumber = document.getElementById('swal-input3')
-                    .value;
+    const editedGroupID = (groupid, id) => {
+        
+        console.log(groupid.split(".")[0]);
+        console.log(groupid.split(".")[1]);
+        console.log(groupid.split(".")[2]);
+        console.log(groupid.split(".")[3]);
 
-                if (
-                    `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}` !==
-                    groupid
-                ) {
-                    // alert(editedGroupID);
+        // setYearSemester(`${groupid.split(".")[0]}.${groupid.split(".")[1]}`);
+        // setSpecialization(groupid.split(".")[2]);
+        // setGroupNumber(groupid.split(".")[3]);
 
-                    let isExist = false;
-
-                    groupIDList.forEach((element) => {
-                        if (
-                            `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
-                            `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`
-                        ) {
-                            Swal.fire(
-                                'The Group ID You Entered is Already Exists!!'
-                            );
-                            isExist = true;
-                        }
-                    });
-
-                    if (!isExist) {
-                        axios
-                            .patch(
-                                `http://localhost:8000/api/v1/groupids/${id}`,
-                                {
-                                    yearsemestername: editedYearSemester,
-                                    specializationname: editedSpecialization,
-                                    groupnumber: editedGroupNumber,
-                                }
-                            )
-                            .then(function (response) {
-                                setGroupIDList((prevlist) =>
-                                    prevlist.map((listItem) =>
-                                        id === listItem._id
-                                            ? {
-                                                  ...listItem,
-                                                  yearsemestername: editedYearSemester,
-                                                  specializationname: editedSpecialization,
-                                                  groupnumber: editedGroupNumber,
-                                              }
-                                            : listItem
-                                    )
-                                );
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                    }
-                }
-            },
+        swal({
+			buttons: false,
+			content: (
+                <StudentGroupsGroupIDsEdit
+                    yearSemesterList={yearSemesterList}
+                    specializationList={specializationList}
+                    groupNumberList={groupNumberList}
+                    id={id}
+                    yearSemesterInit={`${groupid.split(".")[0]}.${groupid.split(".")[1]}`}
+                    specializationInit={groupid.split(".")[2]}
+                    groupNumberInit={groupid.split(".")[3]}
+                />
+			),
         });
+        
+        // Swal.fire({
+        //     // title: 'Edit Group ID',
+        //     html: `<h4>Year & Semester</h4>
+        //         <input class="swal2-input" id="swal-input1" value=${groupid.substring(
+        //             0,
+        //             5
+        //         )}> <br/> <br/>
+        //         <h4>Specialization</h4>
+        //         <input class="swal2-input" id="swal-input2" value=${
+        //             groupid.split('.')[2]
+        //         }> <br/> <br/>
+        //         <h4>Group Number</h4>
+        //         <input class="swal2-input" id="swal-input3" value=${
+        //             groupid.split('.')[3] < 10
+        //                 ? groupid.split('.')[3].substring(1, 2)
+        //                 : groupid.split('.')[3]
+        //         }>`,
+        //         focusConfirm: true,
+        //         confirmButtonText: 'Edit',
+        //         confirmButtonColor: '#205374',
+        //         showCancelButton: true,
+        //     preConfirm: () => {
+        //         const editedYearSemester = document.getElementById(
+        //             'swal-input1'
+        //         ).value;
+        //         const editedSpecialization = document.getElementById(
+        //             'swal-input2'
+        //         ).value;
+        //         const editedGroupNumber = document.getElementById('swal-input3')
+        //             .value;
+
+        //         if (
+        //             `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}` !==
+        //             groupid
+        //         ) {
+        //             // alert(editedGroupID);
+
+        //             let isExist = false;
+
+        //             groupIDList.forEach((element) => {
+        //                 if (
+        //                     `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
+        //                     `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`
+        //                 ) {
+        //                     Swal.fire(
+        //                         'The Group ID You Entered is Already Exists!!'
+        //                     );
+        //                     isExist = true;
+        //                 }
+        //             });
+
+        //             if (!isExist) {
+        //                 axios
+        //                     .patch(
+        //                         `http://localhost:8000/api/v1/groupids/${id}`,
+        //                         {
+        //                             yearsemestername: editedYearSemester,
+        //                             specializationname: editedSpecialization,
+        //                             groupnumber: editedGroupNumber,
+        //                         }
+        //                     )
+        //                     .then(function (response) {
+        //                         setGroupIDList((prevlist) =>
+        //                             prevlist.map((listItem) =>
+        //                                 id === listItem._id
+        //                                     ? {
+        //                                           ...listItem,
+        //                                           yearsemestername: editedYearSemester,
+        //                                           specializationname: editedSpecialization,
+        //                                           groupnumber: editedGroupNumber,
+        //                                       }
+        //                                     : listItem
+        //                             )
+        //                         );
+        //                     })
+        //                     .catch(function (error) {
+        //                         console.log(error);
+        //                     });
+        //             }
+        //         }
+        //     },
+        // });
     };
 
     return (
@@ -375,8 +403,8 @@ function StudentGroupsGroupIDs(props) {
                                         <LabelTag
                                             width={190}
                                             id={item._id}
-                                            deleteMethod={deleteTagName}
-                                            editMethod={editTagName}
+                                            deleteMethod={deleteGroupID}
+                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
@@ -429,8 +457,8 @@ function StudentGroupsGroupIDs(props) {
                                         <LabelTag
                                             width={190}
                                             id={item._id}
-                                            deleteMethod={deleteTagName}
-                                            editMethod={editTagName}
+                                            deleteMethod={deleteGroupID}
+                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
@@ -483,8 +511,8 @@ function StudentGroupsGroupIDs(props) {
                                         <LabelTag
                                             width={190}
                                             id={item._id}
-                                            deleteMethod={deleteTagName}
-                                            editMethod={editTagName}
+                                            deleteMethod={deleteGroupID}
+                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
@@ -537,8 +565,8 @@ function StudentGroupsGroupIDs(props) {
                                         <LabelTag
                                             width={190}
                                             id={item._id}
-                                            deleteMethod={deleteTagName}
-                                            editMethod={editTagName}
+                                            deleteMethod={deleteGroupID}
+                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`

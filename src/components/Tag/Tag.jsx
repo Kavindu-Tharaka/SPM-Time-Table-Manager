@@ -1,12 +1,26 @@
 import React, { Fragment } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
-
+import swal from '@sweetalert/with-react';
 import './tag.css';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
 
 function Tag(props) {
     const editMethod = props.editMethod;
     const deleteMethod = props.deleteMethod;
 
+    const onDeleteClick = () => {
+		swal({
+			buttons: false,
+			content: (
+				<DeleteConfirmationDialogBox
+					deleteEventHandler={deleteMethod}
+                    itemName={props.tagName}
+                    id={props.id}
+				/>
+			),
+		});
+    };
+    
     return (
         <Fragment>
             <div
@@ -49,7 +63,7 @@ function Tag(props) {
                         }}
                         size="25px"
                         color="#205374"
-                        onClick={() => deleteMethod(props.id)}
+                        onClick={onDeleteClick}
                     />
                 </div>
             </div>

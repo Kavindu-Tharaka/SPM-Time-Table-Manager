@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
 
@@ -128,19 +129,20 @@ function StudentGroupsSubGroupIDs(props) {
     };
 
     const deleteSubGroupID = (tagId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
                     .delete(`http://localhost:8000/api/v1/subgroupids/${tagId}`)
                     .then(function (response) {
+                        swal.close();
                         setSubGroupIDList(
                             subGroupIDList.filter((item) => {
                                 return tagId !== item._id;
@@ -150,8 +152,8 @@ function StudentGroupsSubGroupIDs(props) {
                     .catch(function (error) {
                         console.log(error);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
     const editSubGroupID = (subgroupid, id) => {

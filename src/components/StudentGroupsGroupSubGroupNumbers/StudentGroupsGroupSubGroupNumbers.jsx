@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import Label from '../Label/Label';
 
@@ -146,21 +147,22 @@ function StudentGroupsGroupSubGroupNumbers() {
     };
 
     const deleteGroupNumber = (groupNumberId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
                     .delete(
                         `http://localhost:8000/api/v1/groupnumbers/${groupNumberId}`
                     )
                     .then((res) => {
+                        swal.close();
                         setGroupNumberList(
                             groupNumberList.filter((item) => {
                                 return groupNumberId !== item._id;
@@ -170,26 +172,27 @@ function StudentGroupsGroupSubGroupNumbers() {
                     .catch((err) => {
                         console.log(err);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
     const deleteSubGroupNumber = (subGroupNumberId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
                     .delete(
                         `http://localhost:8000/api/v1/subgroupnumbers/${subGroupNumberId}`
                     )
                     .then((res) => {
+                        swal.close();
                         setSubGroupNumberList(
                             subGroupNumberList.filter((item) => {
                                 return subGroupNumberId !== item._id;
@@ -199,8 +202,8 @@ function StudentGroupsGroupSubGroupNumbers() {
                     .catch((err) => {
                         console.log(err);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
     const editGroupNumber = (groupNumber, id) => {
@@ -365,6 +368,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                         onChange={onInputChangeGroupNumber}
                         onKeyDown={handleKeyDownGroupNumber}
                         value={groupNumber}
+                        data-toggle="tooltip"
+                        data-placement="top" 
+                        title="Group number can be a positive number"
                     />
                     <button
                         style={{ marginLeft: 20, borderRadius: 0 }}
@@ -443,6 +449,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                         onChange={onInputChangeSubGroupNumber}
                         onKeyDown={handleKeyDownSubGroupNumber}
                         value={subGroupNumber}
+                        data-toggle="tooltip"
+                        data-placement="top" 
+                        title="Sub Group number can be a positive number"
                     />
                     <button
                         style={{ marginLeft: 20, borderRadius: 0 }}

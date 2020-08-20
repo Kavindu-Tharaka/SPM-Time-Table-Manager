@@ -1,9 +1,24 @@
 import React, { Fragment } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
+import swal from '@sweetalert/with-react';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
 
 function Label(props) {
     const editMethod = props.editMethod;
     const deleteMethod = props.deleteMethod;
+
+    const onDeleteClick = () => {
+		swal({
+			buttons: false,
+			content: (
+				<DeleteConfirmationDialogBox
+					deleteEventHandler={deleteMethod}
+                    itemName={props.tagName}
+                    id={props.id}
+				/>
+			),
+		});
+    };
 
     return (
         <Fragment>
@@ -50,7 +65,7 @@ function Label(props) {
                         }}
                         size="23px"
                         color="#205374"
-                        onClick={() => deleteMethod(props.id)}
+                        onClick={onDeleteClick}
                     />
                 </div>
             </div>

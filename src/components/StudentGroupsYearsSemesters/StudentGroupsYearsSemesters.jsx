@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import Label from '../Label/Label';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
@@ -54,7 +55,7 @@ function StudentGroupsYearsSemesters(props) {
             setYear('');
             setSemester('');
         } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire('Year and Semster Should be Numbers!');
+            Swal.fire('Year and Semster Should be Positive Numbers!');
             setYear('');
             setSemester('');
         } else if (year > 4 || year < 0) {
@@ -71,9 +72,11 @@ function StudentGroupsYearsSemesters(props) {
             yearsemesterList.forEach((element) => {
                 if (element.yearsemestername === `Y${year}.S${semester}`) {
                     Swal.fire(
-                        'The Group Number You Entered is Already Exist!!'
+                        'The Year Semester Combination You Entered is Already Exist!'
                     );
                     isExist = true;
+                    setYear('');
+                    setSemester('');
                 }
             });
 
@@ -99,21 +102,22 @@ function StudentGroupsYearsSemesters(props) {
     };
 
     const deleteYearSemester = (yearsemesterId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
                     .delete(
                         `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
                     )
                     .then((res) => {
+                        swal.close();
                         setYearSemesterList(
                             yearsemesterList.filter((item) => {
                                 return yearsemesterId !== item._id;
@@ -123,8 +127,8 @@ function StudentGroupsYearsSemesters(props) {
                     .catch((err) => {
                         console.log(err);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
     const editYearSemester = (inputText, id) => {
@@ -184,7 +188,7 @@ function StudentGroupsYearsSemesters(props) {
                                 element.yearsemestername === editedYearSemester
                             ) {
                                 Swal.fire(
-                                    'The Year Semester Combination You Entered is Already Exist!!'
+                                    'The Year Semester Combination You Entered is Already Exist!'
                                 );
                                 isExist = true;
                             }
@@ -250,6 +254,9 @@ function StudentGroupsYearsSemesters(props) {
                     onChange={onInputChangeYear}
                     onKeyDown={handleKeyDown}
                     value={year}
+                    data-toggle="tooltip"
+                    data-placement="top" 
+                    title="Year can be a positive number between 1 and 4"
                 />
                 <input
                     style={{ marginLeft: 20, borderRadius: 0 }}
@@ -259,6 +266,9 @@ function StudentGroupsYearsSemesters(props) {
                     onChange={onInputChangeSemester}
                     onKeyDown={handleKeyDown}
                     value={semester}
+                    data-toggle="tooltip"
+                    data-placement="top" 
+                    title="Semester can be number 1 or 2"
                 />
                 <button
                     style={{ marginLeft: 20, borderRadius: 0 }}

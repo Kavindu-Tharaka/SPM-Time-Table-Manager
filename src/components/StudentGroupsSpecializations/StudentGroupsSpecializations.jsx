@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+import swal from '@sweetalert/with-react';
+
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -82,21 +84,22 @@ function StudentGroupsSpecializations(props) {
     };
 
     const deleteSpecializationName = (specializationId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     // icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#205374',
+        //     // cancelButtonColor: '#3085d6',
+        //     confirmButtonText: 'Delete',
+        // }).then((result) => {
+        //     if (result.value) {
                 axios
                     .delete(
                         `http://localhost:8000/api/v1/specializations/${specializationId}`
                     )
                     .then((res) => {
+                        swal.close();
                         setSpecializationList(
                             specializationList.filter((item) => {
                                 return specializationId !== item._id;
@@ -106,8 +109,8 @@ function StudentGroupsSpecializations(props) {
                     .catch((err) => {
                         console.log(err);
                     });
-            }
-        });
+        //     }
+        // });
     };
 
     const editSpecializationName = (specializationName, id) => {
@@ -194,6 +197,9 @@ function StudentGroupsSpecializations(props) {
                     onChange={onInputChange}
                     onKeyDown={handleKeyDown}
                     value={specializationName}
+                    data-toggle="tooltip"
+                    data-placement="top" 
+                    title="Tag can be an acronym of a specialization."
                 />
                 <button
                     style={{ marginLeft: 20, borderRadius: 0 }}
