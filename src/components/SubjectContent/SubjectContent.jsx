@@ -286,6 +286,7 @@ const SubjectContent = () => {
 
             <div className="mt-4">
                 <DataTable
+                    title="Subject Details"
                     columns={columns}
                     data={subjectData}
                     pagination={true}

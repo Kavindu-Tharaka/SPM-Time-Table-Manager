@@ -19,8 +19,8 @@ const LecturerContent = () => {
     const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
-    const [update , setUpdate] = useState(false);
-    const [id , setId] = useState("");
+    const [update, setUpdate] = useState(false);
+    const [id, setId] = useState("");
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -94,7 +94,7 @@ const LecturerContent = () => {
             })
             .catch((e) => console.error(e));
     }
-    const updateLecturer = (data) =>{
+    const updateLecturer = (data) => {
         setUpdate(true)
         setId(data._id)
         setName(data.name)
@@ -124,7 +124,7 @@ const LecturerContent = () => {
             Swal.fire('Employee Id should be 6 digit number');
             setEmpId('');
         }
-        else if(!update){
+        else if (!update) {
 
             axios.post("http://localhost:8000/api/v1/lecturers", {
                 name,
@@ -142,7 +142,7 @@ const LecturerContent = () => {
                 console.log("err is: ", err);
             });
         }
-        else{
+        else {
             axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
                 name,
                 faculty,
@@ -340,7 +340,7 @@ const LecturerContent = () => {
                             <input
                                 id="rank-input"
                                 readOnly="readOnly"
-                                
+
                             />
                         </div>
 
@@ -348,13 +348,14 @@ const LecturerContent = () => {
 
                     <div className="d-flex justify-content-end mt-2">
 
-                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update?'Edit':'Add'} {" "}</button>
+                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update ? 'Edit' : 'Add'} {" "}</button>
                     </div>
                 </form>
 
                 {/* data table */}
                 <div className="mt-4">
                     <DataTable
+                        title="Lecturer Details"
                         columns={columns}
                         data={lecturerDetails}
                         pagination={true}
