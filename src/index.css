@@ -103,15 +103,21 @@ select:focus {
 }
 
 .sm-ctrl-btn-dlt:hover, .md-ctrl-btn-dlt:hover {
-	background: rgb(241, 0, 0);
+	background: #205374;
 	color: #fff;
 }
 
 .sm-ctrl-btn-upt:hover, .md-ctrl-btn-upt:hover{
-	background: rgb(255, 174, 0);
+	background: #205374;
 	color: #fff;
 }
 
 .btn-info {
 	background: #205374 !important;
+	border: none !important;
+	border: #205374 solid 1px !important;
+}
+
+.btn {
+	border-radius: 0 !important;
 }
