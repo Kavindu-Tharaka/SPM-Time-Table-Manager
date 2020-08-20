@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
-import swal from '@sweetalert/with-react';
+import swal from '@sweetalert/with-react'; 
+// import Swal from 'sweetalert2';
 
 import './buildingCard.css';
 import DeleteConfirmationDialogBox from '../../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';

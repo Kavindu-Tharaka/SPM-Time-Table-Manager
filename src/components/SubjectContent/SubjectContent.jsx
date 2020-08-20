@@ -87,7 +87,8 @@ const SubjectContent = () => {
                 .then((res) => {
                     console.log(res.data);
                     console.log("subject update executed succesfully")
-                    setUpdate(false)
+                    setUpdate(false);
+                    window.location.reload();
                 })
                 .catch((e) => {
                     console.err(e);
