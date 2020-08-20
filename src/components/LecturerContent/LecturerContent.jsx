@@ -16,7 +16,7 @@ const LecturerContent = () => {
     const [employeeId, setEmpId] = useState("");
     const [department, setDepartment] = useState("Department Of Information Technology");
     const [building, setBuilding] = useState("Main Building");
-    const [lecturerDetails, setLecturerDetails] = useState("");
+    const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
     const [update , setUpdate] = useState(false);
