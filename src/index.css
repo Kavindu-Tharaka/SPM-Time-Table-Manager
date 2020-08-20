@@ -75,3 +75,49 @@ select:focus {
 .form-element-left-margin {
 	margin-left: 10px;
 }
+
+.br-0 {
+	border-radius: 0 !important;
+}
+
+.sm-ctrl-btn {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+}
+
+.md-ctrl-btn {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+}
+
+.sm-ctrl-btn:focus,
+.md-ctrl-btn:focus {
+	border: none;
+	outline: none;
+}
+
+.sm-ctrl-btn-dlt:hover, .md-ctrl-btn-dlt:hover {
+	background: #205374;
+	color: #fff;
+}
+
+.sm-ctrl-btn-upt:hover, .md-ctrl-btn-upt:hover{
+	background: #205374;
+	color: #fff;
+}
+
+.btn-info {
+	background: #205374 !important;
+	border: none !important;
+	border: #205374 solid 1px !important;
+}
+
+.btn {
+	border-radius: 0 !important;
+}

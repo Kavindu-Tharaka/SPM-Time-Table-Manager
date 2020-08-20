@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder'
 import './workingHours.css'
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
+
 import Swal from "sweetalert2";
 function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   useEffect(() => {
@@ -37,6 +40,7 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
     {
       name: "Time Slot",
       selector: "timeSlot",
+      sortable : true
     },
     {
       name: "Actions",
@@ -44,18 +48,18 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
       cell: (row) => (
         <>
           <button
-            className="btn btn-warning wh-btn"
+            className="sm-ctrl-btn sm-ctrl-btn-upt"
             style = {style.button}
             onClick={() => updateWorkingDay(row)}
           >
-           <FaPencilAlt color = {'#1a1aff'}/>
+          	<IoMdCreate />
           </button>
           <button
             style = {style.button}
-            className="btn btn-danger wh-btn"
+            className="sm-ctrl-btn sm-ctrl-btn-dlt"
             onClick={() => deleteWorkingDay(row._id)}
           >
-          <FaTrashAlt color = {'1a1aff'}/>
+         	<IoMdClose />
           </button>
         </>
       ),
@@ -67,7 +71,7 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
   return (
     <>
       <DataTable
-        noDataComponent = {<img src = {require('./nodata1.png')} style = {{width :400,height: 250}} />}
+        noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
         
         subHeader = {true}
         title="Working Hours"
@@ -100,7 +104,7 @@ const style = {
   button : {
     borderRadius : '50%',
     paddingBottom:10,
-    backgroundColor : 'lightgray',
+    // backgroundColor : 'lightgray',
     border:'none',
     marginRight:10,
   
