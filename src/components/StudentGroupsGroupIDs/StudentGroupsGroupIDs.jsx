@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
@@ -16,13 +16,7 @@ function StudentGroupsGroupIDs(props) {
     const [groupNumber, setGroupNumber] = useState('');
     const [groupNumberList, setGroupNumberList] = useState([]);
 
-    const [groupID, setGroupID] = useState('');
     const [groupIDList, setGroupIDList] = useState([]);
-
-    const [onegroupIDList, setOneGroupIDList] = useState([]);
-    const [twogroupIDList, setTwoGroupIDList] = useState([]);
-    const [threegroupIDList, setThreeGroupIDList] = useState([]);
-    const [fourgroupIDList, setFourGroupIDList] = useState([]);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -119,6 +113,7 @@ function StudentGroupsGroupIDs(props) {
     const addGroupID = (e) => {
         e.preventDefault();
 
+
         let isExist = false;
 
         groupIDList.forEach((element) => {
@@ -179,24 +174,27 @@ function StudentGroupsGroupIDs(props) {
     };
 
     const editTagName = (groupid, id) => {
-        const { value: formValues } = Swal.fire({
-            title: 'Edit Group ID',
-            html: `<label>Year & Semester</label> &nbsp
-                <input id="swal-input1" value=${groupid.substring(
+        Swal.fire({
+            // title: 'Edit Group ID',
+            html: `<h4>Year & Semester</h4>
+                <input class="swal2-input" id="swal-input1" value=${groupid.substring(
                     0,
                     5
                 )}> <br/> <br/>
-                <label>Specialization</label> &nbsp &nbsp &nbsp
-                <input id="swal-input2" value=${
+                <h4>Specialization</h4>
+                <input class="swal2-input" id="swal-input2" value=${
                     groupid.split('.')[2]
                 }> <br/> <br/>
-                <label>Group Number</label> &nbsp &nbsp
-                <input id="swal-input3" value=${
+                <h4>Group Number</h4>
+                <input class="swal2-input" id="swal-input3" value=${
                     groupid.split('.')[3] < 10
                         ? groupid.split('.')[3].substring(1, 2)
                         : groupid.split('.')[3]
                 }>`,
-            focusConfirm: false,
+                focusConfirm: true,
+                confirmButtonText: 'Edit',
+                confirmButtonColor: '#205374',
+                showCancelButton: true,
             preConfirm: () => {
                 const editedYearSemester = document.getElementById(
                     'swal-input1'
@@ -206,10 +204,6 @@ function StudentGroupsGroupIDs(props) {
                 ).value;
                 const editedGroupNumber = document.getElementById('swal-input3')
                     .value;
-
-                const editedGroupID = `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`;
-
-                // alert(editedGroupID);
 
                 if (
                     `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}` !==
@@ -359,7 +353,9 @@ function StudentGroupsGroupIDs(props) {
                 className="row"
             >
 
-                {groupIDList.length === 0 ? (
+
+                {    
+                    groupIDList.filter(item => item.yearsemestername === 'Y1.S1' || item.yearsemestername === 'Y1.S2').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -412,7 +408,8 @@ function StudentGroupsGroupIDs(props) {
                 }}
                 className="row"
             >
-                {groupIDList.length === 0 ? (
+                {    
+                    groupIDList.filter(item => item.yearsemestername === 'Y2.S1' || item.yearsemestername === 'Y2.S2').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -465,7 +462,8 @@ function StudentGroupsGroupIDs(props) {
                 }}
                 className="row"
             >
-                {groupIDList.length === 0 ? (
+                {    
+                    groupIDList.filter(item => item.yearsemestername === 'Y3.S1' || item.yearsemestername === 'Y3.S2').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -518,7 +516,8 @@ function StudentGroupsGroupIDs(props) {
                 }}
                 className="row"
             >
-                {groupIDList.length === 0 ? (
+                {    
+                    groupIDList.filter(item => item.yearsemestername === 'Y4.S1' || item.yearsemestername === 'Y4.S2').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>

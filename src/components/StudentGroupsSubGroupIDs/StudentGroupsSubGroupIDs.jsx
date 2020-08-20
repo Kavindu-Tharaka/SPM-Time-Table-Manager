@@ -7,10 +7,10 @@ import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
 
 function StudentGroupsSubGroupIDs(props) {
+    let groupIdTemp;
     const [groupID, setGroupID] = useState('');
     const [groupIDList, setGroupIDList] = useState([]);
 
-    const [subGroupID, setSubGroupID] = useState('');
     const [subGroupIDList, setSubGroupIDList] = useState([]);
 
     const [subGroupNumber, setSubGroupNumber] = useState('');
@@ -33,14 +33,12 @@ function StudentGroupsSubGroupIDs(props) {
                 .then(function (response) {
                     console.log(response.data.data.groupids);
                     setGroupIDList(response.data.data.groupids);
-                    // setGroupID(response.data.data.groupids[0].groupid);
-                    // setGroupID(
-                    //     response.data.data.groupids.map((item) => (
-                    //         year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
-                    //             `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                    //         : null
-                    //     ))
-                    // );
+
+                    groupIdTemp = response.data.data.groupids.find(item => year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5))
+
+                    setGroupID(
+                        `${groupIdTemp.yearsemestername}.${groupIdTemp.specializationname}.${groupIdTemp.groupnumber}`
+                    );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -53,15 +51,6 @@ function StudentGroupsSubGroupIDs(props) {
                 .then(function (response) {
                     console.log(response.data.data.subgroupids);
                     setSubGroupIDList(response.data.data.subgroupids);
-                    
-                    // setGroupID(response.data.data.groupids[0].groupid);
-                    // setGroupID(
-                    //     response.data.data.groupids.map((item) => (
-                    //         year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
-                    //             `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                    //         : null
-                    //     ))
-                    // );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -72,7 +61,7 @@ function StudentGroupsSubGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    // console.log(response.data.data.subgroupnumbers);
+                    console.log(response.data.data.subgroupnumbers);
                     setSubGroupNumberList(response.data.data.subgroupnumbers);
                     setSubGroupNumber(
                         response.data.data.subgroupnumbers[0].subgroupnumber
@@ -81,6 +70,7 @@ function StudentGroupsSubGroupIDs(props) {
                 .catch(function (error) {
                     console.log(error);
                 });
+                
         };
 
         loadData();
@@ -88,7 +78,7 @@ function StudentGroupsSubGroupIDs(props) {
         return () => {
             source.cancel();
         };
-    }, []);
+    }, [year, semester]);
 
     const onInputChangeYear = (e) => {
         setYear(e.target.value);
@@ -165,28 +155,26 @@ function StudentGroupsSubGroupIDs(props) {
     };
 
     const editSubGroupID = (subgroupid, id) => {
-        const { value: formValues } = Swal.fire({
-            title: 'Edit Sub Group ID',
-            html: `<label>Group ID</label> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                <input id="swal-input1" value=${
+        Swal.fire({
+            // title: 'Edit Sub Group ID',
+            html: `<h4>Group ID</h4>
+                <input class="swal2-input" id="swal-input1" value=${
                     `${subgroupid.split('.')[0]}.${subgroupid.split('.')[1]}.${subgroupid.split('.')[2]}.${subgroupid.split('.')[3]}`
                 }
                 ><br/> <br/>
-                <label>Sub Group Number</label> &nbsp &nbsp
-                <input id="swal-input3" value=${
+                <h4>Sub Group Number</h4>
+                <input class="swal2-input" id="swal-input3" value=${
                     `${subgroupid.split('.')[4]}`
                 }>`,
-            focusConfirm: false,
-            preConfirm: () => {
+                focusConfirm: true,
+                confirmButtonText: 'Edit',
+                confirmButtonColor: '#205374',
+                showCancelButton: true,            
+                preConfirm: () => {
                 const editedGroupIDTemp = document.getElementById('swal-input1').value;
-                const editedGroupID = editedGroupIDTemp.split('.')[3] > 10 ? `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3]}` : `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3].substring(1, 3)}`
+                const editedGroupID = editedGroupIDTemp.split('.')[3] >= 10 ? `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3]}` : `${editedGroupIDTemp.split('.')[0]}.${editedGroupIDTemp.split('.')[1]}.${editedGroupIDTemp.split('.')[2]}.${editedGroupIDTemp.split('.')[3].substring(1, 3)}`
                 const editedSubGroupNumber = document.getElementById('swal-input3').value;
 
-                const editedSubGroupID = `${editedGroupID}.${editedSubGroupNumber}`;
-
-                // alert(editedSubGroupID + '  ' + subgroupid);
-                // alert(`${editedGroupID}.${editedSubGroupNumber}` ===
-                // subgroupid);
 
                 if (
                     `${editedGroupIDTemp}.${editedSubGroupNumber}` !==
@@ -281,7 +269,11 @@ function StudentGroupsSubGroupIDs(props) {
                             groupIDList.map((item) => (
                                 year === (item.yearsemestername).substring(1, 2) && semester ===  (item.yearsemestername).substring(4, 5)?
                                 <option key={item._id} value={`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}>
-                                    {`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}
+                                    {
+                                    item.groupnumber >= 10 ?
+                                    `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
+                                        : `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
+                                    }
                                 </option>
                                 : null
                             ))
@@ -338,7 +330,7 @@ function StudentGroupsSubGroupIDs(props) {
                 className="row"
             >
 
-                {subGroupIDList.length === 0 ? (
+                {subGroupIDList.filter(item => item.groupid.substring(1, 2) === '1').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -348,7 +340,7 @@ function StudentGroupsSubGroupIDs(props) {
                     </div>
                 ) : (
                     subGroupIDList.map((item) => {
-                        if (item.groupid.substring(1, 2) == '1') {
+                        if (item.groupid.substring(1, 2) === '1') {
                             return (
                                 <div key={item._id}>
                                     <div className="col">
@@ -357,7 +349,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
-                                            tagName={ item.groupid.split('.')[3] > 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
+                                            tagName={ item.groupid.split('.')[3] >= 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
                                         />
                                     </div>
                                 </div>
@@ -384,7 +376,7 @@ function StudentGroupsSubGroupIDs(props) {
                 className="row"
             >
 
-                {subGroupIDList.length === 0 ? (
+                {subGroupIDList.filter(item => item.groupid.substring(1, 2) === '2').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -394,7 +386,7 @@ function StudentGroupsSubGroupIDs(props) {
                     </div>
                 ) : (
                     subGroupIDList.map((item) => {
-                        if (item.groupid.substring(1, 2) == '2') {
+                        if (item.groupid.substring(1, 2) === '2') {
                             return (
                                 <div key={item._id}>
                                     <div className="col">
@@ -403,7 +395,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
-                                            tagName={ item.groupid.split('.')[3] > 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
+                                            tagName={ item.groupid.split('.')[3] >= 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
                                         />
                                     </div>
                                 </div>
@@ -430,7 +422,7 @@ function StudentGroupsSubGroupIDs(props) {
                 className="row"
             >
 
-                {subGroupIDList.length === 0 ? (
+                {subGroupIDList.filter(item => item.groupid.substring(1, 2) === '3').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -440,7 +432,7 @@ function StudentGroupsSubGroupIDs(props) {
                     </div>
                 ) : (
                     subGroupIDList.map((item) => {
-                        if (item.groupid.substring(1, 2) == '3') {
+                        if (item.groupid.substring(1, 2) === '3') {
                             return (
                                 <div key={item._id}>
                                     <div className="col">
@@ -449,7 +441,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
-                                            tagName={ item.groupid.split('.')[3] > 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
+                                            tagName={ item.groupid.split('.')[3] >= 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
                                         />
                                     </div>
                                 </div>
@@ -476,7 +468,7 @@ function StudentGroupsSubGroupIDs(props) {
                 className="row"
             >
 
-                {subGroupIDList.length === 0 ? (
+                {subGroupIDList.filter(item => item.groupid.substring(1, 2) === '4').length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -486,7 +478,7 @@ function StudentGroupsSubGroupIDs(props) {
                     </div>
                 ) : (
                     subGroupIDList.map((item) => {
-                        if (item.groupid.substring(1, 2) == '4') {
+                        if (item.groupid.substring(1, 2) === '4') {
                             return (
                                 <div key={item._id}>
                                     <div className="col">
@@ -495,7 +487,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             editMethod={editSubGroupID}
-                                            tagName={ item.groupid.split('.')[3] > 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
+                                            tagName={ item.groupid.split('.')[3] >= 10 ? `${item.groupid}.${item.subgroupnumber}` : `${item.groupid.split('.')[0]}.${item.groupid.split('.')[1]}.${item.groupid.split('.')[2]}.0${item.groupid.split('.')[3]}.${item.subgroupnumber}`}
                                         />
                                     </div>
                                 </div>

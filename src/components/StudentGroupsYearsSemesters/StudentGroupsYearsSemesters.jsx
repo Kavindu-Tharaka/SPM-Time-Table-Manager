@@ -129,26 +129,38 @@ function StudentGroupsYearsSemesters(props) {
 
     const editYearSemester = (inputText, id) => {
         Swal.fire({
-            title: 'Edit Year Semester',
+            // title: 'Edit Year Semester',
             html:
-                '<div class="container">' +
-                '<div class="row">' +
-                '<div class="col-5">' +
-                `<div class="row"> Year<input id="swal-input1" type="text" class="form-control" value=${inputText.substring(
-                    0,
-                    2
-                )} > </div>` +
-                '</div>' +
-                '<div class="col-2"></div>' +
-                '<div class="col-5">' +
-                `<div class="row"> Semester<input id="swal-input2" type="text" class="form-control" value=${inputText.substring(
-                    3,
-                    5
-                )} > </div>` +
-                '</div>' +
-                '</div>' +
-                '</div>',
+                // '<div class="container">' +
+                // '<div class="row">' +
+                // '<div class="col-5">' +
+                // `<div class="row"> Year<input class="swal2-input" id="swal-input1" type="text" class="form-control" value=${inputText.substring(
+                //     0,
+                //     2
+                // )} > </div>` +
+                // '</div>' +
+                // '<div class="col-1"></div>' +
+                // '<div class="col-5">' +
+                // `<div class="row"> Semester<input class="swal2-input" id="swal-input2" type="text" class="form-control" value=${inputText.substring(
+                //     3,
+                //     5
+                // )} > </div>` +
+                // '</div>' +
+                // '</div>' +
+                // '</div>',
+                `<h4>Year</h4>
+                <input class="swal2-input" id="swal-input1" value=${
+                    inputText.substring(0,2)
+                }
+                ><br/> <br/>
+                <h4>Semester</h4>
+                <input class="swal2-input" id="swal-input2" value=${
+                    inputText.substring(3,5)
+                }>`,
             focusConfirm: true,
+            confirmButtonText: 'Edit',
+            confirmButtonColor: '#205374',
+            showCancelButton: true,
             preConfirm: () => {
                 const editedYear = document.getElementById('swal-input1').value;
                 const editedSemester = document.getElementById('swal-input2')

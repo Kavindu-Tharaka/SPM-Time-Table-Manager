@@ -44,10 +44,23 @@ function TagContent(props) {
 
     const addTagName = (e) => {
         e.preventDefault();
+
         if (tagName === '') {
             Swal.fire('Please Enter a Tag Name!');
         } else {
-            axios
+
+            let isExist = false;
+
+            tagList.forEach((element) => {
+                if (element.tagname === tagName){
+                    Swal.fire('The Tag Name You Entered is Already Exists!!');
+                    isExist = true;
+                    setTagName('');
+                }
+            });
+    
+            if (!isExist) {
+                axios
                 .post('http://localhost:8000/api/v1/tags', {
                     tagname: tagName,
                 })
@@ -59,6 +72,9 @@ function TagContent(props) {
                 .catch(function (error) {
                     console.log(error);
                 });
+            }
+
+
         }
     };
 
@@ -106,7 +122,18 @@ function TagContent(props) {
                 if (result.value) {
                     const editedTagName = result.value[0];
                     if (tagName !== editedTagName) {
-                        axios
+
+                        let isExist = false;
+
+                        tagList.forEach((element) => {
+                            if (element.tagname === editedTagName){
+                                Swal.fire('The Tag Name You Entered is Already Exists!!');
+                                isExist = true;
+                            }
+                        });
+                
+                        if (!isExist) {
+                            axios
                             .patch(`http://localhost:8000/api/v1/tags/${id}`, {
                                 tagname: editedTagName,
                             })
@@ -123,6 +150,9 @@ function TagContent(props) {
                                 );
                             })
                             .catch((err) => console.log(err));
+                        }
+
+
                     }
                 }
             });
