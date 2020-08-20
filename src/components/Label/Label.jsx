@@ -1,9 +1,25 @@
 import React, { Fragment } from 'react';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
+import swal from '@sweetalert/with-react';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Label(props) {
     const editMethod = props.editMethod;
     const deleteMethod = props.deleteMethod;
+
+    const onDeleteClick = () => {
+		swal({
+			buttons: false,
+			content: (
+				<DeleteConfirmationDialogBox
+					deleteEventHandler={deleteMethod}
+                    itemName={props.tagName}
+                    id={props.id}
+				/>
+			),
+		});
+    };
 
     return (
         <Fragment>
@@ -14,6 +30,8 @@ function Label(props) {
                     height: 42,
                     borderRadius: 50,
                     border: 'solid 1px gainsboro',
+                    // marginRight: -10,
+                    // marginLeft: 10
                     // boxShadow: '5px 5px 5px gainsboro',
                     // padding: 3,
                 }}
@@ -27,7 +45,22 @@ function Label(props) {
                     </h6>
                 </div>
                 <div className="p-2 bd-highlight">
-                    <MdModeEdit
+                    <button
+                        className='sm-ctrl-btn sm-ctrl-btn-upt'
+                        onClick={() => editMethod(props.tagName, props.id)}
+                    >
+                        <IoMdCreate />
+                    </button>
+                    <button
+                    style={{
+                        marginLeft:5
+                    }}
+                        className='sm-ctrl-btn sm-ctrl-btn-dlt'
+                        onClick={onDeleteClick}
+                    >
+                        <IoMdClose />
+                    </button>
+                    {/* <MdModeEdit
                         style={{
                             display: 'inline',
                             backgroundColor: 'gainsboro',
@@ -48,8 +81,8 @@ function Label(props) {
                         }}
                         size="23px"
                         color="#205374"
-                        onClick={() => deleteMethod(props.id)}
-                    />
+                        onClick={onDeleteClick}
+                    /> */}
                 </div>
             </div>
         </Fragment>

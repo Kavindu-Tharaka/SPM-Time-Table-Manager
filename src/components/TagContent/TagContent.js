@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Tag from '../Tag/Tag';
-import ContentHeader from '../ContentHeader/ContentHeader';
-import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import swal from '@sweetalert/with-react';
+import ContentHeader from '../../components/ContentHeader/ContentHeader';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
-function StudentGroupsSpecializations(props) {
-    const [specializationName, setSpecializationName] = useState('');
-    const [specializationList, setSpecializationList] = useState([]);
+function TagContent(props) {
+    const [tagName, setTagName] = useState('');
+    const [tagList, setTagList] = useState([]);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -17,12 +17,12 @@ function StudentGroupsSpecializations(props) {
 
         const loadData = () => {
             axios
-                .get('http://localhost:8000/api/v1/specializations', {
+                .get('http://localhost:8000/api/v1/tags', {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    console.log(response.data.data.specializations);
-                    setSpecializationList(response.data.data.specializations);
+                    // console.log(response.data.data.tags);
+                    setTagList(response.data.data.tags);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -38,46 +38,41 @@ function StudentGroupsSpecializations(props) {
 
     const handleKeyDown = (e) => {
         if (e.keyCode === 13) {
-            addSpecializationName(e);
+            addTagName(e);
         }
     };
 
-    const addSpecializationName = (e) => {
+    const addTagName = (e) => {
         e.preventDefault();
-        if (specializationName === '') {
+
+        if (tagName === '') {
             Swal.fire({
-                text: 'Please Enter a Specialization Name!',
+                text: 'Please Enter a Tag Name!',
                 confirmButtonColor: '#205374',
             });
         } else {
             let isExist = false;
 
-            specializationList.forEach((element) => {
-                if (
-                    element.specializationname ===
-                    specializationName.toUpperCase()
-                ) {
+            tagList.forEach((element) => {
+                if (element.tagname === tagName) {
                     Swal.fire({
-                        text: 'The Group Number You Entered is Already Exist!',
+                        text: 'The Tag Name You Entered is Already Exists!',
                         confirmButtonColor: '#205374',
                     });
-                    setSpecializationName('');
                     isExist = true;
+                    setTagName('');
                 }
             });
 
             if (!isExist) {
                 axios
-                    .post('http://localhost:8000/api/v1/specializations', {
-                        specializationname: specializationName.toUpperCase(),
+                    .post('http://localhost:8000/api/v1/tags', {
+                        tagname: tagName,
                     })
                     .then(function (response) {
-                        console.log(response.data.data.specialization);
-                        setSpecializationList([
-                            ...specializationList,
-                            response.data.data.specialization,
-                        ]);
-                        setSpecializationName('');
+                        console.log(response.data.data.tag);
+                        setTagList([...tagList, response.data.data.tag]);
+                        setTagName('');
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -86,7 +81,7 @@ function StudentGroupsSpecializations(props) {
         }
     };
 
-    const deleteSpecializationName = (specializationId) => {
+    const deleteTagName = (tagId) => {
         // Swal.fire({
         //     title: 'Are you sure?',
         //     text: "You won't be able to revert this!",
@@ -98,14 +93,12 @@ function StudentGroupsSpecializations(props) {
         // }).then((result) => {
         //     if (result.value) {
         axios
-            .delete(
-                `http://localhost:8000/api/v1/specializations/${specializationId}`
-            )
+            .delete(`http://localhost:8000/api/v1/tags/${tagId}`)
             .then((res) => {
                 swal.close();
-                setSpecializationList(
-                    specializationList.filter((item) => {
-                        return specializationId !== item._id;
+                setTagList(
+                    tagList.filter((item) => {
+                        return tagId !== item._id;
                     })
                 );
             })
@@ -116,33 +109,30 @@ function StudentGroupsSpecializations(props) {
         // });
     };
 
-    const editSpecializationName = (specializationName, id) => {
+    const editTagName = (tagName, id) => {
         Swal.mixin({
             input: 'text',
-            inputValue: specializationName,
+            inputValue: tagName,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
             showCancelButton: true,
         })
             .queue([
                 {
-                    title: 'Edit Specialization Name',
+                    title: 'Edit Tag Name',
                 },
             ])
             .then((result) => {
                 if (result.value) {
-                    const editedSpecializationName = result.value[0];
-                    if (specializationName !== editedSpecializationName) {
+                    const editedTagName = result.value[0];
+                    if (tagName !== editedTagName) {
                         let isExist = false;
 
-                        specializationList.forEach((element) => {
-                            if (
-                                element.specializationname ===
-                                editedSpecializationName.trim().toUpperCase()
-                            ) {
+                        tagList.forEach((element) => {
+                            if (element.tagname === editedTagName) {
                                 Swal.fire({
                                     text:
-                                        'The Specialization Name You Entered is Already Exist!',
+                                        'The Tag Name You Entered is Already Exists!',
                                     confirmButtonColor: '#205374',
                                 });
                                 isExist = true;
@@ -152,18 +142,18 @@ function StudentGroupsSpecializations(props) {
                         if (!isExist) {
                             axios
                                 .patch(
-                                    `http://localhost:8000/api/v1/specializations/${id}`,
+                                    `http://localhost:8000/api/v1/tags/${id}`,
                                     {
-                                        specializationname: editedSpecializationName.toUpperCase(),
+                                        tagname: editedTagName,
                                     }
                                 )
                                 .then((res) => {
-                                    setSpecializationList((prevlist) =>
+                                    setTagList((prevlist) =>
                                         prevlist.map((listItem) =>
                                             id === listItem._id
                                                 ? {
                                                       ...listItem,
-                                                      specializationname: editedSpecializationName,
+                                                      tagname: editedTagName,
                                                   }
                                                 : listItem
                                         )
@@ -177,18 +167,18 @@ function StudentGroupsSpecializations(props) {
     };
 
     const onInputChange = (e) => {
-        setSpecializationName(e.target.value);
+        setTagName(e.target.value);
     };
 
     return (
         <div>
-            <ContentHeader header={'Specializations'} />
+            <ContentHeader header={'Tags'} />
             <div
                 style={{
                     position: 'fixed',
                     width: '30%',
                     textAlign: 'center',
-                    left: '60%',
+                    left: '50%',
                     padding: '20px',
                     transform: 'translate(-50%, 0)',
                 }}
@@ -198,19 +188,19 @@ function StudentGroupsSpecializations(props) {
                     style={{ borderRadius: 0 }}
                     type="text"
                     className="form-control"
-                    placeholder="Specialization Name"
+                    placeholder="Tag Name"
                     onChange={onInputChange}
                     onKeyDown={handleKeyDown}
-                    value={specializationName}
+                    value={tagName}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Tag can be an acronym of a specialization."
+                    title="Tag can be a text like Lecture, Tutorial..."
                 />
                 <button
                     style={{ marginLeft: 20, borderRadius: 0 }}
                     type="button"
                     className="btn btn-primary"
-                    onClick={addSpecializationName}
+                    onClick={addTagName}
                 >
                     Add
                 </button>
@@ -230,23 +220,23 @@ function StudentGroupsSpecializations(props) {
                 }}
                 className="row"
             >
-                {specializationList.length === 0 ? (
+                {tagList.length === 0 ? (
                     <div
                         style={{
                             width: '100%',
                         }}
                     >
-                        <EmptyDataPlaceholder message="Specialization List is Currently Empty" />
+                        <EmptyDataPlaceholder message="Tag List is Currently Empty" />
                     </div>
                 ) : (
-                    specializationList.map((tag) => (
+                    tagList.map((tag) => (
                         <div key={tag._id}>
                             <div className="col">
                                 <Tag
                                     id={tag._id}
-                                    deleteMethod={deleteSpecializationName}
-                                    editMethod={editSpecializationName}
-                                    tagName={tag.specializationname}
+                                    deleteMethod={deleteTagName}
+                                    editMethod={editTagName}
+                                    tagName={tag.tagname}
                                 />
                             </div>
                         </div>
@@ -257,4 +247,4 @@ function StudentGroupsSpecializations(props) {
     );
 }
 
-export default StudentGroupsSpecializations;
+export default TagContent;

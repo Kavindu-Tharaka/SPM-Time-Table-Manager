@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { Fragment, useEffect } from 'react'
+import SubjectContent from '../../components/SubjectContent/SubjectContent';
 
-const Subjects = () => {
+const Subjects = (props) => {
+
+    useEffect(() => {
+        props.setShowSubMenu(false);
+    }
+    );
+
+
     return (
-        <div className="container">
-            <h3 className="ml-265">Subjects container</h3>
-        </div>
+        <Fragment>
+            <SubjectContent/>
+        </Fragment>
     )
 }
 

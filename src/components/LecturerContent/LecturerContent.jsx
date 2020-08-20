@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
-import axios from "axios";
 import './lecturerContent.css';
+import axios from "axios";
 import Swal from 'sweetalert2';
 
 const LecturerContent = () => {
@@ -15,9 +15,11 @@ const LecturerContent = () => {
     const [employeeId, setEmpId] = useState("");
     const [department, setDepartment] = useState("Department Of Information Technology");
     const [building, setBuilding] = useState("Main Building");
-    const [lecturerDetails, setLecturerDetails] = useState("");
+    const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
+    const [update , setUpdate] = useState(false);
+    const [id , setId] = useState("");
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -74,7 +76,6 @@ const LecturerContent = () => {
         axios
             .get("http://localhost:8000/api/v1/lecturers")
             .then((result) => {
-                console.log("api response: ", result.data.data.lecturers);
                 setLecturerDetails(result.data.data.lecturers);
 
             })
@@ -83,16 +84,25 @@ const LecturerContent = () => {
             });
     };
     const deleteLecturer = (rowID) => {
-        console.log("id is: ", rowID);
         axios
             .delete(`http://localhost:8000/api/v1/lecturers/${rowID}`)
             .then((res) => {
-                console.log(res);
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
             })
             .catch((e) => console.error(e));
+    }
+    const updateLecturer = (data) =>{
+        setUpdate(true)
+        setId(data._id)
+        setName(data.name)
+        setFaculty(data.faculty)
+        setCenter(data.center)
+        setLevel(data.level)
+        setEmpId(data.employeeId)
+        setDepartment(data.department)
+        setBuilding(data.building)
     }
     const onSubmit = (e) => {
         e.preventDefault();
@@ -113,7 +123,7 @@ const LecturerContent = () => {
             Swal.fire('Employee Id should be 6 digit number');
             setEmpId('');
         }
-        else {
+        else if(!update){
 
             axios.post("http://localhost:8000/api/v1/lecturers", {
                 name,
@@ -130,6 +140,27 @@ const LecturerContent = () => {
             }).catch((err) => {
                 console.log("err is: ", err);
             });
+        }
+        else{
+            axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
+                name,
+                faculty,
+                center,
+                level,
+                employeeId,
+                department,
+                building,
+                rankVal
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    console.log("lecturer update executed succesfully")
+                    setUpdate(false);
+                    window.location.reload();
+                })
+                .catch((e) => {
+                    console.err(e);
+                });
         }
     }
 
@@ -191,7 +222,7 @@ const LecturerContent = () => {
             cell:
                 (row) => (
                     <div className="d-flex">
-                        <button id="btn-edit" className="btn rounded-circle border-none btn-sm"><FaPencilAlt color="#1a1aff" /></button>&nbsp;
+                        <button id="btn-edit" className="btn rounded-circle border-none btn-sm" onClick={() => updateLecturer(row)}><FaPencilAlt color="#1a1aff" /></button>&nbsp;
                         <button id="btn-remove" className="btn rounded-circle border-none btn-sm" onClick={() => deleteLecturer(row._id)}><FaTrashAlt color="#1a1aff" /></button>
                     </div>
                 )
@@ -315,7 +346,8 @@ const LecturerContent = () => {
                     </div>{/* second row ends*/}
 
                     <div className="d-flex justify-content-end mt-2">
-                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">&nbsp; Add &nbsp;</button>
+
+                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update?'Edit':'Add'} {" "}</button>
                     </div>
                 </form>
 
