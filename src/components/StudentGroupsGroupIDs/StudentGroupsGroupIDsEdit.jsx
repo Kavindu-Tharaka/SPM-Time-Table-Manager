@@ -33,10 +33,13 @@ function StudentGroupsGroupIDsEdit(props) {
             `edited GID: ${yearSemester}.${specialization}.${groupNumber}`
         );
 
-        if ((`${yearSemester}.${specialization}.${groupNumber}` !== props.groupid) || (groupNumber < 10 && `${yearSemester}.${specialization}.0${groupNumber}` !== props.groupid)) {
-
-            // alert(editedGroupID);
-
+        if (
+            `${yearSemester}.${specialization}.${groupNumber}` !==
+                props.groupid ||
+            (groupNumber < 10 &&
+                `${yearSemester}.${specialization}.0${groupNumber}` !==
+                    props.groupid)
+        ) {
             let isExist = false;
 
             props.groupIDList.forEach((element) => {
@@ -77,15 +80,14 @@ function StudentGroupsGroupIDsEdit(props) {
                         console.log(error);
                     });
             }
-        
         }
         swal.close();
     };
 
     return (
-        <div className="row">
+        <div>
             <div className="col-12">
-                <Label>{'Year & Semester'}</Label>
+                <h5>{'Year & Semester'}</h5>
                 <select
                     style={{ borderRadius: 0 }}
                     className="custom-select"
@@ -99,8 +101,9 @@ function StudentGroupsGroupIDsEdit(props) {
                     ))}
                 </select>
             </div>
+            <br />
             <div className="col-12">
-                <Label>{'Specialization'}</Label>
+                <h5>{'Specialization'}</h5>
                 <select
                     style={{ borderRadius: 0 }}
                     className="custom-select"
@@ -114,8 +117,9 @@ function StudentGroupsGroupIDsEdit(props) {
                     ))}
                 </select>
             </div>
+            <br />
             <div className="col-12">
-                <Label>{'Group Number'}</Label>
+                <h5>{'Group Number'}</h5>
 
                 <select
                     style={{ borderRadius: 0 }}
@@ -133,6 +137,9 @@ function StudentGroupsGroupIDsEdit(props) {
             <div className="col-12">
                 <Label style={{ color: 'transparent' }}>{'.'}</Label> <br />
                 <button
+                    style={{
+                        marginRight: 5,
+                    }}
                     className="btn btn-primary"
                     style={{ borderRadius: 0 }}
                     onClick={editGroupID}

@@ -162,16 +162,6 @@ function StudentGroupsGroupSubGroupNumbers() {
     };
 
     const deleteGroupNumber = (groupNumberId) => {
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     // icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#205374',
-        //     // cancelButtonColor: '#3085d6',
-        //     confirmButtonText: 'Delete',
-        // }).then((result) => {
-        //     if (result.value) {
         axios
             .delete(
                 `http://localhost:8000/api/v1/groupnumbers/${groupNumberId}`
@@ -187,21 +177,9 @@ function StudentGroupsGroupSubGroupNumbers() {
             .catch((err) => {
                 console.log(err);
             });
-        //     }
-        // });
     };
 
     const deleteSubGroupNumber = (subGroupNumberId) => {
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     // icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#205374',
-        //     // cancelButtonColor: '#3085d6',
-        //     confirmButtonText: 'Delete',
-        // }).then((result) => {
-        //     if (result.value) {
         axios
             .delete(
                 `http://localhost:8000/api/v1/subgroupnumbers/${subGroupNumberId}`
@@ -217,8 +195,6 @@ function StudentGroupsGroupSubGroupNumbers() {
             .catch((err) => {
                 console.log(err);
             });
-        //     }
-        // });
     };
 
     const editGroupNumber = (groupNumber, id) => {
@@ -228,7 +204,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                 groupNumber < 10 ? groupNumber.substring(1, 2) : groupNumber,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
-            showCancelButton: true,
+            showCancelButton: false,
         })
             .queue([
                 {
@@ -246,50 +222,47 @@ function StudentGroupsGroupSubGroupNumbers() {
                     } else {
                         if (
                             groupNumber.toString() !==
-                            editedGroupNumber.toString()
-                        ) {
-                            if (
-                                groupNumber < 10 &&
+                                editedGroupNumber.toString() ||
+                            (groupNumber < 10 &&
                                 groupNumber.toString().substring(1, 2) !==
-                                    editedGroupNumber.toString()
-                            ) {
-                                let isExist = false;
-                                groupNumberList.forEach((element) => {
-                                    if (
-                                        parseInt(element.groupnumber) ===
-                                        parseInt(editedGroupNumber.trim())
-                                    ) {
-                                        Swal.fire({
-                                            text:
-                                                'The Group Number You Entered is Already Exist!',
-                                            confirmButtonColor: '#205374',
-                                        });
-                                        isExist = true;
-                                    }
-                                });
-
-                                if (!isExist) {
-                                    axios
-                                        .patch(
-                                            `http://localhost:8000/api/v1/groupnumbers/${id}`,
-                                            {
-                                                groupnumber: editedGroupNumber,
-                                            }
-                                        )
-                                        .then((res) => {
-                                            setGroupNumberList((prevlist) =>
-                                                prevlist.map((listItem) =>
-                                                    id === listItem._id
-                                                        ? {
-                                                              ...listItem,
-                                                              groupnumber: editedGroupNumber,
-                                                          }
-                                                        : listItem
-                                                )
-                                            );
-                                        })
-                                        .catch((err) => console.log(err));
+                                    editedGroupNumber.toString())
+                        ) {
+                            let isExist = false;
+                            groupNumberList.forEach((element) => {
+                                if (
+                                    parseInt(element.groupnumber) ===
+                                    parseInt(editedGroupNumber.trim())
+                                ) {
+                                    Swal.fire({
+                                        text:
+                                            'The Group Number You Entered is Already Exist!',
+                                        confirmButtonColor: '#205374',
+                                    });
+                                    isExist = true;
                                 }
+                            });
+
+                            if (!isExist) {
+                                axios
+                                    .patch(
+                                        `http://localhost:8000/api/v1/groupnumbers/${id}`,
+                                        {
+                                            groupnumber: editedGroupNumber,
+                                        }
+                                    )
+                                    .then((res) => {
+                                        setGroupNumberList((prevlist) =>
+                                            prevlist.map((listItem) =>
+                                                id === listItem._id
+                                                    ? {
+                                                          ...listItem,
+                                                          groupnumber: editedGroupNumber,
+                                                      }
+                                                    : listItem
+                                            )
+                                        );
+                                    })
+                                    .catch((err) => console.log(err));
                             }
                         }
                     }
@@ -303,7 +276,7 @@ function StudentGroupsGroupSubGroupNumbers() {
             inputValue: subGroupNumber,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
-            showCancelButton: true,
+            showCancelButton: false,
         })
             .queue([
                 {
@@ -384,7 +357,6 @@ function StudentGroupsGroupSubGroupNumbers() {
                 <ContentHeader header={'Group Numbers'} />
                 <div
                     style={{
-                        // position: 'fixed',
                         width: '40%',
                         textAlign: 'center',
                         left: '50%',
@@ -417,13 +389,8 @@ function StudentGroupsGroupSubGroupNumbers() {
 
                 <div
                     style={{
-                        // position: 'fixed',
-                        // width: '95%',
                         textAlign: 'center',
-                        // top: '15%',
-                        // left: '50%',
                         padding: '10px',
-                        // transform: 'translate(-50%, 0)',
                         overflowY: 'auto',
                         height: '172px',
                     }}
@@ -465,7 +432,6 @@ function StudentGroupsGroupSubGroupNumbers() {
                 <ContentHeader header={'Sub-Group Numbers'} />
                 <div
                     style={{
-                        // position: 'fixed',
                         width: '40%',
                         textAlign: 'center',
                         left: '50%',
@@ -498,13 +464,7 @@ function StudentGroupsGroupSubGroupNumbers() {
 
                 <div
                     style={{
-                        // position: 'fixed',
-                        // width: '95%',
                         textAlign: 'center',
-                        // top: '25%',
-                        // left: '50%',
-                        // padding: '20px',
-                        // transform: 'translate(-50%, 0)',
                         overflowY: 'auto',
                         height: '172px',
                     }}

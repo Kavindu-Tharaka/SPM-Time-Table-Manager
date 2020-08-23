@@ -24,8 +24,6 @@ function StudentGroupsGroupIDs(props) {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
-        // props.setShowSubMenu(false);
-
         const loadData = () => {
             axios
                 .get('http://localhost:8000/api/v1/yearsemesters', {
@@ -47,7 +45,6 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    // console.log(response.data.data.groupnumbers);
                     setGroupNumberList(response.data.data.groupnumbers);
                     setGroupNumber(
                         response.data.data.groupnumbers[0].groupnumber
@@ -62,7 +59,6 @@ function StudentGroupsGroupIDs(props) {
                     cancelToken: source.token,
                 })
                 .then(function (response) {
-                    // console.log(response.data.data.specializations);
                     setSpecializationList(response.data.data.specializations);
                     setSpecialization(
                         response.data.data.specializations[0].specializationname
@@ -76,16 +72,9 @@ function StudentGroupsGroupIDs(props) {
                 .get('http://localhost:8000/api/v1/groupids', {
                     cancelToken: source.token,
                 })
-                .then(function async (response) {
+                .then(function async(response) {
                     console.log(response.data.data.groupids);
                     setGroupIDList(response.data.data.groupids);
-
-                    // response.data.data.groupids.forEach(item => {
-                    //     if(item.yearsemestername.substring(1, 2) == 1){
-                    //         setOneGroupIDList(prevList => prevList.push(item));
-                    //     }
-                    // });
-
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -114,7 +103,6 @@ function StudentGroupsGroupIDs(props) {
 
     const addGroupID = (e) => {
         e.preventDefault();
-
 
         let isExist = false;
 
@@ -149,47 +137,25 @@ function StudentGroupsGroupIDs(props) {
     };
 
     const deleteGroupID = (id) => {
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     // icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#205374',
-        //     // cancelButtonColor: '#3085d6',
-        //     confirmButtonText: 'Delete',
-        // }).then((result) => {
-        //     if (result.value) {
-                axios
-                    .delete(`http://localhost:8000/api/v1/groupids/${id}`)
-                    .then(function (response) {
-                        swal.close();
-                        setGroupIDList(
-                            groupIDList.filter((item) => {
-                                return id !== item._id;
-                            })
-                        );
+        axios
+            .delete(`http://localhost:8000/api/v1/groupids/${id}`)
+            .then(function (response) {
+                swal.close();
+                setGroupIDList(
+                    groupIDList.filter((item) => {
+                        return id !== item._id;
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-        //     }
-        // });
+                );
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     const editedGroupID = (groupid, id) => {
-        
-        console.log(groupid.split(".")[0]);
-        console.log(groupid.split(".")[1]);
-        console.log(groupid.split(".")[2]);
-        console.log(groupid.split(".")[3]);
-
-        // setYearSemester(`${groupid.split(".")[0]}.${groupid.split(".")[1]}`);
-        // setSpecialization(groupid.split(".")[2]);
-        // setGroupNumber(groupid.split(".")[3]);
-
         swal({
-			buttons: false,
-			content: (
+            buttons: false,
+            content: (
                 <StudentGroupsGroupIDsEdit
                     yearSemesterList={yearSemesterList}
                     specializationList={specializationList}
@@ -198,95 +164,14 @@ function StudentGroupsGroupIDs(props) {
                     setGroupIDList={setGroupIDList}
                     id={id}
                     groupid={groupid}
-                    yearSemesterInit={`${groupid.split(".")[0]}.${groupid.split(".")[1]}`}
-                    specializationInit={groupid.split(".")[2]}
-                    groupNumberInit={groupid.split(".")[3]}
+                    yearSemesterInit={`${groupid.split('.')[0]}.${
+                        groupid.split('.')[1]
+                    }`}
+                    specializationInit={groupid.split('.')[2]}
+                    groupNumberInit={groupid.split('.')[3]}
                 />
-			),
+            ),
         });
-        
-        // Swal.fire({
-        //     // title: 'Edit Group ID',
-        //     html: `<h4>Year & Semester</h4>
-        //         <input class="swal2-input" id="swal-input1" value=${groupid.substring(
-        //             0,
-        //             5
-        //         )}> <br/> <br/>
-        //         <h4>Specialization</h4>
-        //         <input class="swal2-input" id="swal-input2" value=${
-        //             groupid.split('.')[2]
-        //         }> <br/> <br/>
-        //         <h4>Group Number</h4>
-        //         <input class="swal2-input" id="swal-input3" value=${
-        //             groupid.split('.')[3] < 10
-        //                 ? groupid.split('.')[3].substring(1, 2)
-        //                 : groupid.split('.')[3]
-        //         }>`,
-        //         focusConfirm: true,
-        //         confirmButtonText: 'Edit',
-        //         confirmButtonColor: '#205374',
-        //         showCancelButton: true,
-        //     preConfirm: () => {
-        //         const editedYearSemester = document.getElementById(
-        //             'swal-input1'
-        //         ).value;
-        //         const editedSpecialization = document.getElementById(
-        //             'swal-input2'
-        //         ).value;
-        //         const editedGroupNumber = document.getElementById('swal-input3')
-        //             .value;
-
-        //         if (
-        //             `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}` !==
-        //             groupid
-        //         ) {
-        //             // alert(editedGroupID);
-
-        //             let isExist = false;
-
-        //             groupIDList.forEach((element) => {
-        //                 if (
-        //                     `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
-        //                     `${editedYearSemester}.${editedSpecialization}.${editedGroupNumber}`
-        //                 ) {
-        //                     Swal.fire(
-        //                         'The Group ID You Entered is Already Exists!!'
-        //                     );
-        //                     isExist = true;
-        //                 }
-        //             });
-
-        //             if (!isExist) {
-        //                 axios
-        //                     .patch(
-        //                         `http://localhost:8000/api/v1/groupids/${id}`,
-        //                         {
-        //                             yearsemestername: editedYearSemester,
-        //                             specializationname: editedSpecialization,
-        //                             groupnumber: editedGroupNumber,
-        //                         }
-        //                     )
-        //                     .then(function (response) {
-        //                         setGroupIDList((prevlist) =>
-        //                             prevlist.map((listItem) =>
-        //                                 id === listItem._id
-        //                                     ? {
-        //                                           ...listItem,
-        //                                           yearsemestername: editedYearSemester,
-        //                                           specializationname: editedSpecialization,
-        //                                           groupnumber: editedGroupNumber,
-        //                                       }
-        //                                     : listItem
-        //                             )
-        //                         );
-        //                     })
-        //                     .catch(function (error) {
-        //                         console.log(error);
-        //                     });
-        //             }
-        //         }
-        //     },
-        // });
     };
 
     return (
@@ -370,23 +255,21 @@ function StudentGroupsGroupIDs(props) {
             <ContentHeader label={'1st Year'} />
             <div
                 style={{
-                    // position: 'fixed',
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    // marginLeft: '10%',
                     paddingLeft: '7%',
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
                     maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
             >
-
-
-                {    
-                    groupIDList.filter(item => item.yearsemestername === 'Y1.S1' || item.yearsemestername === 'Y1.S2').length === 0 ? (
+                {groupIDList.filter(
+                    (item) =>
+                        item.yearsemestername === 'Y1.S1' ||
+                        item.yearsemestername === 'Y1.S2'
+                ).length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -404,7 +287,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={195}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -425,22 +308,21 @@ function StudentGroupsGroupIDs(props) {
             <ContentHeader label={'2nd Year'} />
             <div
                 style={{
-                    // position: 'fixed',
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    // marginLeft: '10%',
                     paddingLeft: '7%',
-
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
                     maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
             >
-                {    
-                    groupIDList.filter(item => item.yearsemestername === 'Y2.S1' || item.yearsemestername === 'Y2.S2').length === 0 ? (
+                {groupIDList.filter(
+                    (item) =>
+                        item.yearsemestername === 'Y2.S1' ||
+                        item.yearsemestername === 'Y2.S2'
+                ).length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -458,7 +340,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={195}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -479,22 +361,21 @@ function StudentGroupsGroupIDs(props) {
             <ContentHeader label={'3rd Year'} />
             <div
                 style={{
-                    // position: 'fixed',
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    // marginLeft: '10%',
                     paddingLeft: '7%',
-
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
                     maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
             >
-                {    
-                    groupIDList.filter(item => item.yearsemestername === 'Y3.S1' || item.yearsemestername === 'Y3.S2').length === 0 ? (
+                {groupIDList.filter(
+                    (item) =>
+                        item.yearsemestername === 'Y3.S1' ||
+                        item.yearsemestername === 'Y3.S2'
+                ).length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -512,7 +393,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={195}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
@@ -533,22 +414,21 @@ function StudentGroupsGroupIDs(props) {
             <ContentHeader label={'4th Year'} />
             <div
                 style={{
-                    // position: 'fixed',
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    // marginLeft: '10%',
                     paddingLeft: '7%',
-
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
                     maxHeight: '100px',
                     marginBottom: '3%',
                 }}
                 className="row"
             >
-                {    
-                    groupIDList.filter(item => item.yearsemestername === 'Y4.S1' || item.yearsemestername === 'Y4.S2').length === 0 ? (
+                {groupIDList.filter(
+                    (item) =>
+                        item.yearsemestername === 'Y4.S1' ||
+                        item.yearsemestername === 'Y4.S2'
+                ).length === 0 ? (
                     <div style={{ paddingLeft: '30%' }}>
                         {' '}
                         <h1 style={{ fontSize: 20, marginTop: '5%' }}>
@@ -566,7 +446,7 @@ function StudentGroupsGroupIDs(props) {
                                 <div key={item._id}>
                                     <div className="col">
                                         <LabelTag
-                                            width={195}
+                                            width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
                                             editMethod={editedGroupID}
