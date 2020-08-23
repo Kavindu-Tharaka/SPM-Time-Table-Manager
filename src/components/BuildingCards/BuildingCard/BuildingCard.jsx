@@ -42,6 +42,8 @@ const BuildingCard = (props) => {
 				<DeleteConfirmationDialogBox
 					deleteEventHandler={deleteBuilding}
 					itemName={props.building.buildingName}
+                    test={'Test'}
+
 				/>
 			),
 		});

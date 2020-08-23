@@ -6,6 +6,7 @@ import Tag from '../Tag/Tag';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import swal from '@sweetalert/with-react';
+import UpdateSpecializationsDialogBox from './UpdateSpecializationsDialogBox';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -105,63 +106,52 @@ function StudentGroupsSpecializations(props) {
     };
 
     const editSpecializationName = (specializationName, id) => {
-        Swal.mixin({
-            input: 'text',
-            inputValue: specializationName,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: false,
-        })
-            .queue([
-                {
-                    title: 'Edit Specialization Name',
-                },
-            ])
-            .then((result) => {
-                if (result.value) {
-                    const editedSpecializationName = result.value[0];
-                    if (specializationName !== editedSpecializationName) {
-                        let isExist = false;
+        if (specializationName === '') {
+            Swal.fire({
+                text: 'Please Enter a Specialization Name!',
+                confirmButtonColor: '#205374',
+            });
+        } else {
+            let isExist = false;
 
-                        specializationList.forEach((element) => {
-                            if (
-                                element.specializationname ===
-                                editedSpecializationName.trim().toUpperCase()
-                            ) {
-                                Swal.fire({
-                                    text:
-                                        'The Specialization Name You Entered is Already Exist!',
-                                    confirmButtonColor: '#205374',
-                                });
-                                isExist = true;
-                            }
-                        });
-
-                        if (!isExist) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/specializations/${id}`,
-                                    {
-                                        specializationname: editedSpecializationName.toUpperCase(),
-                                    }
-                                )
-                                .then((res) => {
-                                    setSpecializationList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      specializationname: editedSpecializationName,
-                                                  }
-                                                : listItem
-                                        )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
-                        }
-                    }
+            specializationList.forEach((element) => {
+                if (
+                    element.specializationname ===
+                    specializationName.toUpperCase()
+                ) {
+                    Swal.fire({
+                        text: 'The Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
+                    setSpecializationName('');
+                    isExist = true;
                 }
             });
+
+            if (!isExist) {
+                axios
+                    .patch(
+                        `http://localhost:8000/api/v1/specializations/${id}`,
+                        {
+                            specializationname: specializationName.toUpperCase(),
+                        }
+                    )
+                    .then((res) => {
+                        setSpecializationList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          specializationname: specializationName.toUpperCase(),
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        swal.close();
     };
 
     const onInputChange = (e) => {
@@ -230,6 +220,7 @@ function StudentGroupsSpecializations(props) {
                                     deleteMethod={deleteSpecializationName}
                                     editMethod={editSpecializationName}
                                     tagName={tag.specializationname}
+                                    component={UpdateSpecializationsDialogBox}
                                 />
                             </div>
                         </div>

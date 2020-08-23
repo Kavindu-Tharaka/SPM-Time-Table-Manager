@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
-import StudentGroupsGroupIDsEdit from './StudentGroupsGroupIDsEdit';
+import UpdateGroupIDsDialogBox from './UpdateGroupIDsDialogBox';
 
 function StudentGroupsGroupIDs(props) {
     const [yearSemester, setYearSemester] = useState('');
@@ -152,28 +152,6 @@ function StudentGroupsGroupIDs(props) {
             });
     };
 
-    const editedGroupID = (groupid, id) => {
-        swal({
-            buttons: false,
-            content: (
-                <StudentGroupsGroupIDsEdit
-                    yearSemesterList={yearSemesterList}
-                    specializationList={specializationList}
-                    groupNumberList={groupNumberList}
-                    groupIDList={groupIDList}
-                    setGroupIDList={setGroupIDList}
-                    id={id}
-                    groupid={groupid}
-                    yearSemesterInit={`${groupid.split('.')[0]}.${
-                        groupid.split('.')[1]
-                    }`}
-                    specializationInit={groupid.split('.')[2]}
-                    groupNumberInit={groupid.split('.')[3]}
-                />
-            ),
-        });
-    };
-
     return (
         <div>
             <ContentHeader header={'Generate Group IDs'} />
@@ -290,18 +268,26 @@ function StudentGroupsGroupIDs(props) {
                                             width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
-                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
                                                     : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
                                             }
+                                            component={UpdateGroupIDsDialogBox}
+                                            yearSemesterList={yearSemesterList}
+                                            specializationList={
+                                                specializationList
+                                            }
+                                            groupNumberList={groupNumberList}
+                                            groupIDList={groupIDList}
+                                            setGroupIDList={setGroupIDList}
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -344,18 +330,26 @@ function StudentGroupsGroupIDs(props) {
                                             width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
-                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
                                                     : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
                                             }
+                                            component={UpdateGroupIDsDialogBox}
+                                            yearSemesterList={yearSemesterList}
+                                            specializationList={
+                                                specializationList
+                                            }
+                                            groupNumberList={groupNumberList}
+                                            groupIDList={groupIDList}
+                                            setGroupIDList={setGroupIDList}
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -398,18 +392,26 @@ function StudentGroupsGroupIDs(props) {
                                             width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
-                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
                                                     : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
                                             }
+                                            component={UpdateGroupIDsDialogBox}
+                                            yearSemesterList={yearSemesterList}
+                                            specializationList={
+                                                specializationList
+                                            }
+                                            groupNumberList={groupNumberList}
+                                            groupIDList={groupIDList}
+                                            setGroupIDList={setGroupIDList}
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -452,18 +454,25 @@ function StudentGroupsGroupIDs(props) {
                                             width={200}
                                             id={item._id}
                                             deleteMethod={deleteGroupID}
-                                            editMethod={editedGroupID}
                                             tagName={
                                                 item.groupnumber < 10
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
                                                     : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
                                             }
+                                            
+                                            component={UpdateGroupIDsDialogBox}
+                                            yearSemesterList={yearSemesterList}
+                                            specializationList={specializationList}
+                                            groupNumberList={groupNumberList}
+                                            groupIDList={groupIDList}
+                                            setGroupIDList={setGroupIDList}
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>

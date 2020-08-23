@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import Label from '../Label/Label';
+import UpdateSubGroupNumbersDialogBox from './UpdateSubGroupNumbersDialogBox';
+import UpdateGroupNumbersDialogBox from './UpdateGroupNumbersDialogBox';
 
 function StudentGroupsGroupSubGroupNumbers() {
     const [groupNumber, setGroupNumber] = useState('');
@@ -198,149 +200,108 @@ function StudentGroupsGroupSubGroupNumbers() {
     };
 
     const editGroupNumber = (groupNumber, id) => {
-        Swal.mixin({
-            input: 'text',
-            inputValue:
-                groupNumber < 10 ? groupNumber.substring(1, 2) : groupNumber,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: false,
-        })
-            .queue([
-                {
-                    title: 'Edit Group Number',
-                },
-            ])
-            .then((result) => {
-                if (result.value) {
-                    const editedGroupNumber = result.value[0];
-                    if (!/^[+]?\d+([.]\d+)?$/g.test(editedGroupNumber.trim())) {
-                        Swal.fire({
-                            text: 'Group Number Should be a Positive Number!',
-                            confirmButtonColor: '#205374',
-                        });
-                    } else {
-                        if (
-                            groupNumber.toString() !==
-                                editedGroupNumber.toString() ||
-                            (groupNumber < 10 &&
-                                groupNumber.toString().substring(1, 2) !==
-                                    editedGroupNumber.toString())
-                        ) {
-                            let isExist = false;
-                            groupNumberList.forEach((element) => {
-                                if (
-                                    parseInt(element.groupnumber) ===
-                                    parseInt(editedGroupNumber.trim())
-                                ) {
-                                    Swal.fire({
-                                        text:
-                                            'The Group Number You Entered is Already Exist!',
-                                        confirmButtonColor: '#205374',
-                                    });
-                                    isExist = true;
-                                }
-                            });
+        if (groupNumber === '' || groupNumber === '0') {
+            Swal.fire({
+                text: 'Please Enter a Valid Group Number!',
+                confirmButtonColor: '#205374',
+            });
+            setGroupNumber('');
+        } else if (!/^[+]?\d+([.]\d+)?$/.test(groupNumber)) {
+            Swal.fire({
+                text: 'Group Number Should be a Positive Number!',
+                confirmButtonColor: '#205374',
+            });
+            setGroupNumber('');
+        } else {
+            let isExist = false;
 
-                            if (!isExist) {
-                                axios
-                                    .patch(
-                                        `http://localhost:8000/api/v1/groupnumbers/${id}`,
-                                        {
-                                            groupnumber: editedGroupNumber,
-                                        }
-                                    )
-                                    .then((res) => {
-                                        setGroupNumberList((prevlist) =>
-                                            prevlist.map((listItem) =>
-                                                id === listItem._id
-                                                    ? {
-                                                          ...listItem,
-                                                          groupnumber: editedGroupNumber,
-                                                      }
-                                                    : listItem
-                                            )
-                                        );
-                                    })
-                                    .catch((err) => console.log(err));
-                            }
-                        }
-                    }
+            groupNumberList.forEach((element) => {
+                if (parseInt(element.groupnumber) === parseInt(groupNumber)) {
+                    Swal.fire({
+                        text: 'The Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
+                    isExist = true;
                 }
             });
+
+            if (!isExist) {
+                axios
+                    .patch(`http://localhost:8000/api/v1/groupnumbers/${id}`, {
+                        groupnumber: groupNumber,
+                    })
+                    .then((res) => {
+                        setGroupNumberList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          groupnumber: groupNumber,
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        swal.close();
     };
 
     const editSubGroupNumber = (subGroupNumber, id) => {
-        Swal.mixin({
-            input: 'text',
-            inputValue: subGroupNumber,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: false,
-        })
-            .queue([
-                {
-                    title: 'Edit Sub-Group Number',
-                },
-            ])
-            .then((result) => {
-                if (result.value) {
-                    const editedSubGroupNumber = result.value[0];
-                    if (
-                        !/^[+]?\d+([.]\d+)?$/g.test(editedSubGroupNumber.trim())
-                    ) {
-                        Swal.fire({
-                            text:
-                                'Sub Group Number Should be a Positive Number!',
-                            confirmButtonColor: '#205374',
-                        });
-                    } else {
-                        if (
-                            subGroupNumber.toString() !==
-                            editedSubGroupNumber.toString()
-                        ) {
-                            let isExist = false;
+        if (subGroupNumber === '' || subGroupNumber === '0') {
+            Swal.fire({
+                text: 'Please Enter a Valid Sub Group Number!',
+                confirmButtonColor: '#205374',
+            });
+            setGroupNumber('');
+        } else if (!/^[+]?\d+([.]\d+)?$/.test(subGroupNumber)) {
+            Swal.fire({
+                text: 'Group Number Should be a Positive Number!',
+                confirmButtonColor: '#205374',
+            });
+            setSubGroupNumber('');
+        } else {
+            let isExist = false;
 
-                            subGroupNumberList.forEach((element) => {
-                                if (
-                                    parseInt(element.subgroupnumber) ===
-                                    parseInt(editedSubGroupNumber.trim())
-                                ) {
-                                    Swal.fire({
-                                        text:
-                                            'The Sub Group Number You Entered is Already Exist!',
-                                        confirmButtonColor: '#205374',
-                                    });
-                                    isExist = true;
-                                }
-                            });
-
-                            if (!isExist) {
-                                axios
-                                    .patch(
-                                        `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
-                                        {
-                                            subgroupnumber: editedSubGroupNumber,
-                                        }
-                                    )
-                                    .then((res) => {
-                                        setSubGroupNumberList((prevlist) =>
-                                            prevlist.map((listItem) =>
-                                                id === listItem._id
-                                                    ? {
-                                                          ...listItem,
-                                                          subgroupnumber: editedSubGroupNumber,
-                                                      }
-                                                    : listItem
-                                            )
-                                        );
-                                    })
-                                    .catch((err) => console.log(err));
-                            }
-                        }
-                    }
+            subGroupNumberList.forEach((element) => {
+                if (
+                    parseInt(element.subgroupnumber) ===
+                    parseInt(subGroupNumber)
+                ) {
+                    Swal.fire({
+                        text:
+                            'The Sub Group Number You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
+                    isExist = true;
                 }
             });
+
+            if (!isExist) {
+                axios
+                    .patch(
+                        `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
+                        {
+                            subgroupnumber: subGroupNumber,
+                        }
+                    )
+                    .then((res) => {
+                        setSubGroupNumberList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          subgroupnumber: subGroupNumber,
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        swal.close();
     };
 
     const onInputChangeGroupNumber = (e) => {
@@ -417,6 +378,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                                                 ? `${0}${tag.groupnumber}`
                                                 : tag.groupnumber
                                         }
+                                        component={UpdateGroupNumbersDialogBox}
                                     />
                                 </div>
                             </div>
@@ -487,6 +449,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                                         deleteMethod={deleteSubGroupNumber}
                                         editMethod={editSubGroupNumber}
                                         tagName={tag.subgroupnumber}
+                                        component={
+                                            UpdateSubGroupNumbersDialogBox
+                                        }
                                     />
                                 </div>
                             </div>

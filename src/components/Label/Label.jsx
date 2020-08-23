@@ -4,17 +4,39 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Label(props) {
-    const editMethod = props.editMethod;
-    const deleteMethod = props.deleteMethod;
-
     const onDeleteClick = () => {
         swal({
             buttons: false,
             content: (
                 <DeleteConfirmationDialogBox
-                    deleteEventHandler={deleteMethod}
+                    deleteEventWithIdHandler={props.deleteMethod}
+                    itemName={props.tagName}
+                    itemId={props.id}
+                />
+            ),
+        });
+    };
+
+    const onEditClick = () => {
+        swal({
+            buttons: false,
+            content: (
+                <props.component
+                    editEventHandler={props.editMethod}
                     itemName={props.tagName}
                     id={props.id}
+                    yearSemesterList={props.yearSemesterList}
+                    specializationList={props.specializationList}
+                    groupNumberList={props.groupNumberList}
+                    groupIDList={props.groupIDList}
+                    setGroupIDList={props.setGroupIDList}
+                    groupid={props.groupid}
+                    yearSemesterInit={props.yearSemesterInit}
+                    specializationInit={props.specializationInit}
+                    groupNumberInit={props.groupNumberInit}
+                    subGroupNumberList={props.subGroupNumberList}
+                    subGroupIDList={props.subGroupIDList}
+                    setSubGroupIDList={props.setSubGroupIDList}
                 />
             ),
         });
@@ -37,7 +59,7 @@ function Label(props) {
                 <div className="p-2 bd-highlight">
                     <button
                         className="sm-ctrl-btn sm-ctrl-btn-upt"
-                        onClick={() => editMethod(props.tagName, props.id)}
+                        onClick={onEditClick}
                     >
                         <IoMdCreate />
                     </button>

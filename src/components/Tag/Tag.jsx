@@ -13,7 +13,20 @@ function Tag(props) {
             buttons: false,
             content: (
                 <DeleteConfirmationDialogBox
-                    deleteEventHandler={deleteMethod}
+                    deleteEventWithIdHandler={deleteMethod}
+                    itemName={props.tagName}
+                    itemId={props.id}
+                />
+            ),
+        });
+    };
+
+    const onEditClick = () => {
+        swal({
+            buttons: false,
+            content: (
+                <props.component
+                    editEventHandler={editMethod}
                     itemName={props.tagName}
                     id={props.id}
                 />
@@ -39,7 +52,8 @@ function Tag(props) {
                 <div className="p-2 bd-highlight">
                     <button
                         className="sm-ctrl-btn sm-ctrl-btn-upt"
-                        onClick={() => editMethod(props.tagName, props.id)}
+                        // onClick={() => editMethod(props.tagName, props.id)}
+                        onClick={onEditClick}
                     >
                         <IoMdCreate />
                     </button>
