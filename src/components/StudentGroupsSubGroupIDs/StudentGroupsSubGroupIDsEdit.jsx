@@ -18,18 +18,6 @@ function StudentGroupsSubGroupIDsEdit(props) {
     const [year, setYear] = useState(props.year);
     const [semester, setSemester] = useState(props.semester);
 
-    useEffect(() => {
-        // console.log('Group ID: '+ props.groupIDInit)
-        // console.log('Sub Group Number: '+ props.subGroupNumberInit)
-        // console.log('Year: '+ props.year)
-        // console.log('Semester: '+ props.semester)
-        // console.log('--------------------')
-        // console.log('Group ID: '+ groupID)
-        // console.log('Sub Group Number: '+ subGroupNumber)
-        // console.log('Year: '+ year)
-        // console.log('Semester: '+ semester)
-    }, []);
-
     const onInputChangeYear = (e) => {
         setYear(e.target.value);
         console.log(year);
@@ -63,23 +51,22 @@ function StudentGroupsSubGroupIDsEdit(props) {
                 }
             });
 
-            //put validations here
-
             if (!isExist) {
-
                 axios
-                    .patch(`http://localhost:8000/api/v1/subgroupids/${props.id}`, {
-                        // groupid: groupID,
-                        subgroupnumber: subGroupNumber,
-                    })
+                    .patch(
+                        `http://localhost:8000/api/v1/subgroupids/${props.id}`,
+                        {
+                            subgroupnumber: subGroupNumber,
+                        }
+                    )
                     .then(function (response) {
                         props.setSubGroupIDList((prevlist) =>
                             prevlist.map((listItem) =>
-                            props.id === listItem._id
+                                props.id === listItem._id
                                     ? {
-                                        ...listItem,
-                                        // groupid: groupID,
-                                        subgroupnumber: subGroupNumber,
+                                          ...listItem,
+                                          // groupid: groupID,
+                                          subgroupnumber: subGroupNumber,
                                       }
                                     : listItem
                             )
@@ -94,33 +81,9 @@ function StudentGroupsSubGroupIDsEdit(props) {
     };
 
     return (
-        <div className="row">
-            {/* <div className="col-12">
-                <Label>{'Year'}</Label>
-                <select
-                    className="custom-select"
-                    value={year}
-                    onChange={onInputChangeYear}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-            </div>
+        <div>
             <div className="col-12">
-                <Label>{'Semester'}</Label>
-                <select
-                    className="custom-select"
-                    value={semester}
-                    onChange={onInputChangeSemester}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-            </div> */}
-            <div className="col-12">
-                <Label>{'Group ID'}</Label>
+                <h5>{'Group ID'}</h5>
                 <select
                     style={{ borderRadius: 0 }}
                     className="custom-select"
@@ -142,8 +105,9 @@ function StudentGroupsSubGroupIDsEdit(props) {
                     )}
                 </select>
             </div>
+            <br />
             <div className="col-12">
-                <Label>{'Sub-Group Number'}</Label>
+                <h5>{'Sub-Group Number'}</h5>
 
                 <select
                     style={{ borderRadius: 0 }}
@@ -158,6 +122,7 @@ function StudentGroupsSubGroupIDsEdit(props) {
                     ))}
                 </select>
             </div>
+
             <div className="col-12">
                 <Label style={{ color: 'transparent' }}>{'.'}</Label> <br />
                 <button
