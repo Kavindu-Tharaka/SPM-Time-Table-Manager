@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
-import StudentGroupsSubGroupIDsEdit from './StudentGroupsSubGroupIDsEdit';
 import UpdateSubGroupIDsDialogBox from './UpdateSubGroupIDsDialogBox';
 
 function StudentGroupsSubGroupIDs(props) {
