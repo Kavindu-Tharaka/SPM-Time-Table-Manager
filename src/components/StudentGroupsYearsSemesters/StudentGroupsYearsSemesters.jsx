@@ -116,16 +116,6 @@ function StudentGroupsYearsSemesters(props) {
     };
 
     const deleteYearSemester = (yearsemesterId) => {
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     // icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#205374',
-        //     // cancelButtonColor: '#3085d6',
-        //     confirmButtonText: 'Delete',
-        // }).then((result) => {
-        //     if (result.value) {
         axios
             .delete(
                 `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
@@ -141,32 +131,11 @@ function StudentGroupsYearsSemesters(props) {
             .catch((err) => {
                 console.log(err);
             });
-        //     }
-        // });
     };
 
     const editYearSemester = (inputText, id) => {
         Swal.fire({
-            // title: 'Edit Year Semester',
-            html:
-                // '<div class="container">' +
-                // '<div class="row">' +
-                // '<div class="col-5">' +
-                // `<div class="row"> Year<input class="swal2-input" id="swal-input1" type="text" class="form-control" value=${inputText.substring(
-                //     0,
-                //     2
-                // )} > </div>` +
-                // '</div>' +
-                // '<div class="col-1"></div>' +
-                // '<div class="col-5">' +
-                // `<div class="row"> Semester<input class="swal2-input" id="swal-input2" type="text" class="form-control" value=${inputText.substring(
-                //     3,
-                //     5
-                // )} > </div>` +
-                // '</div>' +
-                // '</div>' +
-                // '</div>',
-                `<h4>Year</h4>
+            html: `<h4>Year</h4>
                 <input class="swal2-input" id="swal-input1" value=${inputText.substring(
                     0,
                     2
@@ -180,7 +149,7 @@ function StudentGroupsYearsSemesters(props) {
             focusConfirm: true,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
-            showCancelButton: true,
+            showCancelButton: false,
             preConfirm: () => {
                 const editedYear = document.getElementById('swal-input1').value;
                 const editedSemester = document.getElementById('swal-input2')
@@ -302,15 +271,10 @@ function StudentGroupsYearsSemesters(props) {
 
             <div
                 style={{
-                    // position: 'fixed',
-                    // width: '95%',
                     textAlign: 'center',
                     marginTop: '10%',
-                    // left: '50%',
                     padding: '10px',
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
                 }}
                 className="row"
             >

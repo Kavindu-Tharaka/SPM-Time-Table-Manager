@@ -10,18 +10,18 @@ function Tag(props) {
     const deleteMethod = props.deleteMethod;
 
     const onDeleteClick = () => {
-		swal({
-			buttons: false,
-			content: (
-				<DeleteConfirmationDialogBox
-					deleteEventHandler={deleteMethod}
+        swal({
+            buttons: false,
+            content: (
+                <DeleteConfirmationDialogBox
+                    deleteEventHandler={deleteMethod}
                     itemName={props.tagName}
                     id={props.id}
-				/>
-			),
-		});
+                />
+            ),
+        });
     };
-    
+
     return (
         <Fragment>
             <div
@@ -35,52 +35,24 @@ function Tag(props) {
                 }}
             >
                 <div className="mr-auto p-2 bd-highlight">
-                    <h6
-                        style={{ display: 'inline' }}
-                        // className="card-title mr-auto p-2 bd-highlight"
-                    >
-                        {props.tagName}
-                    </h6>
+                    <h6 style={{ display: 'inline' }}>{props.tagName}</h6>
                 </div>
                 <div className="p-2 bd-highlight">
                     <button
-                        className='sm-ctrl-btn sm-ctrl-btn-upt'
+                        className="sm-ctrl-btn sm-ctrl-btn-upt"
                         onClick={() => editMethod(props.tagName, props.id)}
                     >
                         <IoMdCreate />
                     </button>
                     <button
-                    style={{
-                        marginLeft:5
-                    }}
-                        className='sm-ctrl-btn sm-ctrl-btn-dlt'
+                        style={{
+                            marginLeft: 5,
+                        }}
+                        className="sm-ctrl-btn sm-ctrl-btn-dlt"
                         onClick={onDeleteClick}
                     >
                         <IoMdClose />
                     </button>
-                    {/* <MdModeEdit
-                        style={{
-                            display: 'inline',
-                            backgroundColor: 'gainsboro',
-                            padding: 3,
-                            borderRadius: 50,
-                            marginRight: 5,
-                        }}
-                        size="25px"
-                        color="#205374"
-                        onClick={() => editMethod(props.tagName, props.id)}
-                    />
-                    <MdDelete
-                        style={{
-                            display: 'inline',
-                            backgroundColor: 'gainsboro',
-                            padding: 3,
-                            borderRadius: 50,
-                        }}
-                        size="25px"
-                        color="#205374"
-                        onClick={onDeleteClick}
-                    /> */}
                 </div>
             </div>
         </Fragment>

@@ -82,16 +82,6 @@ function TagContent(props) {
     };
 
     const deleteTagName = (tagId) => {
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     // icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#205374',
-        //     // cancelButtonColor: '#3085d6',
-        //     confirmButtonText: 'Delete',
-        // }).then((result) => {
-        //     if (result.value) {
         axios
             .delete(`http://localhost:8000/api/v1/tags/${tagId}`)
             .then((res) => {
@@ -105,8 +95,6 @@ function TagContent(props) {
             .catch((err) => {
                 console.log(err);
             });
-        //     }
-        // });
     };
 
     const editTagName = (tagName, id) => {
@@ -115,7 +103,7 @@ function TagContent(props) {
             inputValue: tagName,
             confirmButtonText: 'Edit',
             confirmButtonColor: '#205374',
-            showCancelButton: true,
+            showCancelButton: false,
         })
             .queue([
                 {
@@ -208,15 +196,10 @@ function TagContent(props) {
 
             <div
                 style={{
-                    // position: 'fixed',
-                    // width: '95%',
                     textAlign: 'center',
                     marginTop: '10%',
-                    // left: '50%',
                     padding: '10px',
-                    // transform: 'translate(-50%, 0)',
                     overflowY: 'auto',
-                    // height: '450px',
                 }}
                 className="row"
             >
