@@ -139,9 +139,9 @@ function StudentGroupsGroupIDsEdit(props) {
                 <button
                     style={{
                         marginRight: 5,
+                        borderRadius: 0
                     }}
                     className="btn btn-primary"
-                    style={{ borderRadius: 0 }}
                     onClick={editGroupID}
                 >
                     Edit

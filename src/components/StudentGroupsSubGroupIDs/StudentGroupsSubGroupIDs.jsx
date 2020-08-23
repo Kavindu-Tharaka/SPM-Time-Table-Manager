@@ -324,6 +324,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 </div>
                             );
                         }
+                        else{return null}
                     })
                 )}
             </div>
@@ -388,6 +389,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 </div>
                             );
                         }
+                        else{return null}
                     })
                 )}
             </div>
@@ -452,6 +454,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 </div>
                             );
                         }
+                        else{return null}
                     })
                 )}
             </div>
@@ -516,6 +519,7 @@ function StudentGroupsSubGroupIDs(props) {
                                 </div>
                             );
                         }
+                        else{return null}
                     })
                 )}
             </div>
