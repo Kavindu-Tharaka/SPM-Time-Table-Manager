@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+import UpdateTagsDialogBox from './UpdateTagsDialogBox';
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
@@ -98,60 +99,50 @@ function TagContent(props) {
     };
 
     const editTagName = (tagName, id) => {
-        Swal.mixin({
-            input: 'text',
-            inputValue: tagName,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: false,
-        })
-            .queue([
-                {
-                    title: 'Edit Tag Name',
-                },
-            ])
-            .then((result) => {
-                if (result.value) {
-                    const editedTagName = result.value[0];
-                    if (tagName !== editedTagName) {
-                        let isExist = false;
 
-                        tagList.forEach((element) => {
-                            if (element.tagname === editedTagName) {
-                                Swal.fire({
-                                    text:
-                                        'The Tag Name You Entered is Already Exists!',
-                                    confirmButtonColor: '#205374',
-                                });
-                                isExist = true;
-                            }
-                        });
+        if (tagName === '') {
+            Swal.fire({
+                text: 'Please Enter a Tag Name!',
+                confirmButtonColor: '#205374',
+            });
+        } else {
+            let isExist = false;
 
-                        if (!isExist) {
-                            axios
-                                .patch(
-                                    `http://localhost:8000/api/v1/tags/${id}`,
-                                    {
-                                        tagname: editedTagName,
-                                    }
-                                )
-                                .then((res) => {
-                                    setTagList((prevlist) =>
-                                        prevlist.map((listItem) =>
-                                            id === listItem._id
-                                                ? {
-                                                      ...listItem,
-                                                      tagname: editedTagName,
-                                                  }
-                                                : listItem
-                                        )
-                                    );
-                                })
-                                .catch((err) => console.log(err));
-                        }
-                    }
+            tagList.forEach((element) => {
+                if (element.tagname === tagName) {
+                    Swal.fire({
+                        text: 'The Tag Name You Entered is Already Exists!',
+                        confirmButtonColor: '#205374',
+                    });
+                    isExist = true;
+                    setTagName('');
                 }
             });
+
+            if (!isExist) {
+                axios
+                    .patch(
+                        `http://localhost:8000/api/v1/tags/${id}`,
+                        {
+                            tagname: tagName,
+                        }
+                    )
+                    .then((res) => {
+                        setTagList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          tagname: tagName,
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        swal.close();
     };
 
     const onInputChange = (e) => {
@@ -220,6 +211,7 @@ function TagContent(props) {
                                     deleteMethod={deleteTagName}
                                     editMethod={editTagName}
                                     tagName={tag.tagname}
+                                    component={UpdateTagsDialogBox}
                                 />
                             </div>
                         </div>
