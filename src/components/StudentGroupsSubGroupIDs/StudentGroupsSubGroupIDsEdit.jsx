@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Label } from 'reactstrap';
 import swal from '@sweetalert/with-react';
 import axios from 'axios';

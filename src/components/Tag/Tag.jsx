@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { MdModeEdit, MdDelete } from 'react-icons/md';
 import swal from '@sweetalert/with-react';
 import './tag.css';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
