@@ -6,6 +6,7 @@ import swal from '@sweetalert/with-react';
 import Label from '../Label/Label';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+import UpdateYearsSemestersDialogBox from './UpdateYearsSemestersDialogBox';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
@@ -133,84 +134,75 @@ function StudentGroupsYearsSemesters(props) {
             });
     };
 
-    const editYearSemester = (inputText, id) => {
-        Swal.fire({
-            html: `<h4>Year</h4>
-                <input class="swal2-input" id="swal-input1" value=${inputText.substring(
-                    0,
-                    2
-                )}
-                ><br/> <br/>
-                <h4>Semester</h4>
-                <input class="swal2-input" id="swal-input2" value=${inputText.substring(
-                    3,
-                    5
-                )}>`,
-            focusConfirm: true,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: false,
-            preConfirm: () => {
-                const editedYear = document.getElementById('swal-input1').value;
-                const editedSemester = document.getElementById('swal-input2')
-                    .value;
-                const editedYearSemester = `${editedYear}.${editedSemester}`;
+    const editYearSemester = (year, semester, id) => {
+        if (
+            year === '' ||
+            semester === '' ||
+            year === '0' ||
+            semester === '0'
+        ) {
+            Swal.fire({
+                text: 'Please Enter Valid Year and Semester!',
+                confirmButtonColor: '#205374',
+            });
+            setYear('');
+            setSemester('');
+        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
+            Swal.fire({
+                text: 'Year and Semster Should be Positive Numbers!',
+                confirmButtonColor: '#205374',
+            });
+            setYear('');
+            setSemester('');
+        } else if (year > 4 || year < 0) {
+            Swal.fire({
+                text: 'Year Should be in Between 1 and 4!',
+                confirmButtonColor: '#205374',
+            });
+            setYear('');
+            setSemester('');
+        } else if (semester > 2 || semester < 0) {
+            Swal.fire({
+                text: 'Semester Should be 1 or 2!',
+                confirmButtonColor: '#205374',
+            });
+            setYear('');
+            setSemester('');
+        } else {
+            let isExist = false;
 
-                if (inputText !== editedYearSemester) {
-                    if (
-                        editedYearSemester.length !== 5 ||
-                        !/(Y[1-4])/g.test(editedYearSemester) ||
-                        !/(S[1-2])/g.test(editedYearSemester)
-                    ) {
-                        Swal.fire({
-                            text:
-                                'Year Semester Text Pattern does not matched! \n\n Should be in Y1.S1 format!',
-                            confirmButtonColor: '#205374',
-                        });
-                    } else {
-                        let isExist = false;
-
-                        yearsemesterList.forEach((element) => {
-                            if (
-                                element.yearsemestername === editedYearSemester
-                            ) {
-                                Swal.fire({
-                                    text:
-                                        'The Year Semester Combination You Entered is Already Exist!',
-                                    confirmButtonColor: '#205374',
-                                });
-                                isExist = true;
-                            }
-                        });
-
-                        if (!isExist) {
-                            if (inputText !== editedYearSemester) {
-                                axios
-                                    .patch(
-                                        `http://localhost:8000/api/v1/yearsemesters/${id}`,
-                                        {
-                                            yearsemestername: editedYearSemester,
-                                        }
-                                    )
-                                    .then((res) => {
-                                        setYearSemesterList((prevlist) =>
-                                            prevlist.map((listItem) =>
-                                                id === listItem._id
-                                                    ? {
-                                                          ...listItem,
-                                                          yearsemestername: editedYearSemester,
-                                                      }
-                                                    : listItem
-                                            )
-                                        );
-                                    })
-                                    .catch((err) => console.log(err));
-                            }
-                        }
-                    }
+            yearsemesterList.forEach((element) => {
+                if (element.yearsemestername === `Y${year}.S${semester}`) {
+                    Swal.fire({
+                        text:
+                            'The Year Semester Combination You Entered is Already Exist!',
+                        confirmButtonColor: '#205374',
+                    });
+                    isExist = true;
                 }
-            },
-        });
+            });
+
+            if (!isExist) {
+                axios
+                    .patch(`http://localhost:8000/api/v1/yearsemesters/${id}`, {
+                        yearsemestername: `Y${year}.S${semester}`,
+                    })
+                    .then((res) => {
+                        setYearSemesterList((prevlist) =>
+                            prevlist.map((listItem) =>
+                                id === listItem._id
+                                    ? {
+                                          ...listItem,
+                                          yearsemestername: `Y${year}.S${semester}`,
+                                      }
+                                    : listItem
+                            )
+                        );
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        swal.close();
     };
 
     const onInputChangeYear = (e) => {
@@ -295,6 +287,7 @@ function StudentGroupsYearsSemesters(props) {
                                     deleteMethod={deleteYearSemester}
                                     editMethod={editYearSemester}
                                     tagName={tag.yearsemestername}
+                                    component={UpdateYearsSemestersDialogBox}
                                 />
                             </div>
                         </div>
