@@ -37,3 +37,15 @@
 .snb-nav-content-link-active {
 	background: #f7f7f7;
 }
+
+.snb-not-availabilities-collapse {
+	text-decoration: none;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	width:100%;
+	text-align: left;
+	outline: none;
+	box-shadow: none;
+}
