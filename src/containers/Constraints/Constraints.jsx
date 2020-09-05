@@ -13,13 +13,21 @@ import ConstraintsLecturers from '../../components/ConstraintsLecturers/Constrai
 import ConstraintsSessions from '../../components/ConstraintsSessions/ConstraintsSessions'
 import ConstraintsGroups from '../../components/ConstraintsGroups/ConstraintsGroups'
 import ConstraintsSubGroups from '../../components/ConstraintsSubGroups/ConstraintsSubGroups'
+import SubSubNavLink from '../../models/SubSubNavLink';
 
 function Constraints(props) {
 	const links = [
-		new SubNavLink('Not Availabilities', '/constraints/not-availabilities/lecturers', 'notAvailabilities'),
-		new SubNavLink('Consecutive Sessions', '/constraints/consecutive-sessions', 'consecutiveSessions'),
-		new SubNavLink('Parallel Sessions', '/constraints/parallel-sessions', 'parallelSessions'),
-		new SubNavLink('Un-Overlap Sessions', '/constraints/un-overlap-sessions', 'unOverlapSessions'),
+		new SubNavLink('Not Availabilities', '/constraints/lecturers', 'not-availabilities'),
+		new SubNavLink('Consecutive Sessions', '/constraints/consecutive-sessions', 'consecutive-sessions'),
+		new SubNavLink('Parallel Sessions', '/constraints/parallel-sessions', 'parallel-sessions'),
+		new SubNavLink('Un-Overlap Sessions', '/constraints/un-overlap-sessions', 'un-overlap-sessions'),
+	];
+
+	const sublinks = [
+		new SubSubNavLink('Lecturers', '/constraints/lecturers', 'lecturers'),
+		new SubSubNavLink('Sessions', '/constraints/sessions', 'sessions'),
+		new SubSubNavLink('Student Groups', '/constraints/groups', 'groups'),
+		new SubSubNavLink('Student Sub-Groups', '/constraints/sub-groups', 'sub-groups'),
 	];
 
 	useEffect(() => {
@@ -28,22 +36,22 @@ function Constraints(props) {
 
 	return (
 		<Fragment>
-			<SubNavigationBar links={links} header='Constraints' />
+			<SubNavigationBar links={links} sublinks={sublinks} header='Constraints' />
 			<Switch>
 				<Route
-					path='/constraints/not-availabilities/lecturers'
+					path='/constraints/lecturers'
 					component={ConstraintsLecturers}
 				/>
 				<Route
-					path='/constraints/not-availabilities/sessions'
+					path='/constraints/sessions'
 					component={ConstraintsSessions}
 				/>
 				<Route
-					path='/constraints/not-availabilities/groups'
+					path='/constraints/groups'
 					component={ConstraintsGroups}
 				/>
 				<Route
-					path='/constraints/not-availabilities/sub-groups'
+					path='/constraints/sub-groups'
 					component={ConstraintsSubGroups}
 				/>
 				<Route

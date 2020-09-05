@@ -129,7 +129,7 @@ const MainNavigationBar = (props) => {
 				</div>
 			</Link>
 
-			<Link to='/constraints/not-availabilities/lecturers'>
+			<Link to='/constraints/lecturers'>
 				<div
 					className={`mnb-nav-link-container ${
 						props.selectedMainLink === 'constraints'
