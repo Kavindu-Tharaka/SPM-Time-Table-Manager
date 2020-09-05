@@ -22,6 +22,7 @@ a {
 
 .btn-primary {
 	min-width: 120px;
+	height: 38px !important;
 	background: #205374 !important;
 	outline: none;
 	border: none !important;
@@ -103,12 +104,14 @@ select:focus {
 	outline: none;
 }
 
-.sm-ctrl-btn-dlt:hover, .md-ctrl-btn-dlt:hover {
+.sm-ctrl-btn-dlt:hover,
+.md-ctrl-btn-dlt:hover {
 	background: #205374;
 	color: #fff;
 }
 
-.sm-ctrl-btn-upt:hover, .md-ctrl-btn-upt:hover{
+.sm-ctrl-btn-upt:hover,
+.md-ctrl-btn-upt:hover {
 	background: #205374;
 	color: #fff;
 }

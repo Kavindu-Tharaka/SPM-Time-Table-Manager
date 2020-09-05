@@ -17,15 +17,24 @@ const LocationContent = (props) => {
 	const [updateComponent, setUpdateComponent] = useState(0);
 	const [loading, setLoading] = useState(true);
 
+	// Validation Classes
+	const [isBuildingNameValid, setIsBuildingNameValid] = useState(true);
+
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
 	};
 
 	const onBuildingNameChange = (e) => {
 		setBuildingName(e.target.value);
+		setIsBuildingNameValid(true);
 	};
 
 	const onAddClick = (e) => {
+		if (buildingName === '') {
+			setIsBuildingNameValid(false);
+			return;
+		}
+
 		axios
 			.post('http://localhost:8000/api/v1/buildings', { buildingName })
 			.then((res) => {
@@ -52,16 +61,26 @@ const LocationContent = (props) => {
 
 	return (
 		<div>
-			<PreLoader loading={loading} hasSideBar={false}/>
+			<PreLoader loading={loading} hasSideBar={false} />
 			<ContentHeader header='Buildings' />
 			<div className='single-input-container d-flex'>
-				<input
-					type='text'
-					className='form-control'
-					placeholder='Building Name'
-					onChange={onBuildingNameChange}
-					value={buildingName}
-				/>
+				<div class='col'>
+					<input
+						type='text'
+						className={
+							isBuildingNameValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
+						placeholder='Building Name'
+						onChange={onBuildingNameChange}
+						value={buildingName}
+					/>
+					<div class='invalid-feedback'>
+						Please provide a building name
+					</div>
+				</div>
+
 				<button
 					className='btn btn-primary form-element-left-margin'
 					onClick={onAddClick}
