@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+
 import BuildingCards from '../BuildingCards/BuildingCards';
 import Rooms from '../Rooms/Rooms';
+import PreLoader from '../PreLoader/PreLoader';
 
 const LocationContent = (props) => {
 	// Inputs
@@ -13,6 +15,7 @@ const LocationContent = (props) => {
 	const [buildings, setBuildings] = useState([]);
 
 	const [updateComponent, setUpdateComponent] = useState(0);
+	const [loading, setLoading] = useState(true);
 
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
@@ -39,14 +42,17 @@ const LocationContent = (props) => {
 			.get('http://localhost:8000/api/v1/buildings')
 			.then((res) => {
 				setBuildings(res.data.data.buildings);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err.response);
+				setLoading(false);
 			});
 	}, [updateComponent]);
 
 	return (
 		<div>
+			<PreLoader loading={loading} hasSideBar={false}/>
 			<ContentHeader header='Buildings' />
 			<div className='single-input-container d-flex'>
 				<input

@@ -1,0 +1,29 @@
+.loader-container-wsb {
+	position: absolute;
+	top: 0;
+	left: 305px;
+	width: calc(100% - 305px);
+	height: 100%;
+	display: grid;
+	align-items: center;
+	z-index: 1000;
+	background: #f8f8f8;
+	opacity: 1;
+}
+
+.loader-container-nsb {
+	position: absolute;
+	top: 0;
+	left: 80px;
+	width: calc(100% - 80px);
+	height: 100%;
+	display: grid;
+	align-items: center;
+	z-index: 1000;
+	background: #f8f8f8;
+	opacity: 1;
+}
+
+.loader-inner-container {
+	text-align: center;
+}
