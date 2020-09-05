@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './subNavigationBar.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { Fragment } from 'react';
 
 const SubNavigationBar = (props) => {
     let url = window.location.href;
@@ -11,6 +12,8 @@ const SubNavigationBar = (props) => {
 
     useEffect(() => {
         setSelectedMenu(url.substring(url.lastIndexOf('/') + 1));
+
+        console.log(url.substring(url.lastIndexOf('/') + 1));
     }, [url]);
 
     return (
@@ -20,126 +23,41 @@ const SubNavigationBar = (props) => {
             </div>
             <div className="snb-nav-content">
                 {props.links.map((link) => {
-                    if (link.id === 'notAvailabilities') {
+                    if (link.id === 'not-availabilities') {
                         return (
-                            // <div key={link.name}>
-                            //     <button
-                            //         data-toggle="collapse"
-                            //         href="#collapseExample"
-                            //         role="button"
-                            //         aria-expanded="false"
-                            //         aria-controls="collapseExample"
-                            //         className="btn btn-link"
-                            //         style={{
-                            //             textDecoration: 'none',
-                            //             background: 'none',
-                            //             border: 'none',
-                            //             padding: 0,
-                            //             cursor: 'pointer',
-                            //             width: '100%',
-                            //             textAlign: 'left',
-                            //             outline: 'none',
-                            //             boxShadow: 'none',
-                            //         }}
-                            //     >
-                            //         <p
-                            //             className={
-                            //                 selectedMenu === link.id
-                            //                     ? 'snb-nav-content-link-active'
-                            //                     : null
-                            //             }
-                            //         >
-                            //             {link.name}
-                            //         </p>
-                            //     </button>
+                            <Fragment key={link.name}>
+                                <Link to={link.url} key={link.name}>
+                                    <p
+                                        // className={
+                                        //     // selectedMenu === 'lecturers' || 'sessions' || 'groups' || 'sub-groups'
+                                        //     selectedMenu === 'lecturers' || 'sessions' || 'groups' || 'sub-groups'
+                                        //         ? 'snb-nav-content-link-active'
+                                        //         : null
+                                        // }
+                                    >
+                                        {link.name}
+                                    </p>
+                                </Link>
 
-                            //     <div
-                            //         style={{ color: '#881212' }}
-                            //         className="collapse"
-                            //         id="collapseExample"
-                            //     >
-                            //         <ul className="list-group">
-                            //             <Link to={'lecturers'}>
-                            //                 <li className="list-group-item">
-                            //                     Lecturers
-                            //                 </li>
-                            //             </Link>
-
-                            //             <Link to={'sessions'}>
-                            //                 <li className="list-group-item">
-                            //                     Sessions
-                            //                 </li>
-                            //             </Link>
-
-                            //             <Link to={'groups'}>
-                            //                 <li className="list-group-item">
-                            //                     Groups
-                            //                 </li>
-                            //             </Link>
-
-                            //             <Link to={'sub-group'}>
-                            //                 <li className="list-group-item">
-                            //                     Sub-Groups
-                            //                 </li>
-                            //             </Link>
-                            //         </ul>
-                            //     </div>
-							// </div>
-							
-							<div key={link.name}>
-							<button
-								className="btn btn-link"
-								style={{
-									textDecoration: 'none',
-									background: 'none',
-									border: 'none',
-									padding: 0,
-									cursor: 'pointer',
-									width: '100%',
-									textAlign: 'left',
-									outline: 'none',
-									boxShadow: 'none',
-								}}
-							>
-								<p
-									className={
-										selectedMenu === link.id
-											? 'snb-nav-content-link-active'
-											: null
-									}
-								>
-									{link.name}
-								</p>
-							</button>
-
-							<div>
-								<ul className="list-group">
-									<Link to={'lecturers'}>
-										<li style={{ color: '#444', border: 'none', fontSize:15 }} className="list-group-item">
-											Lecturers
-										</li>
-									</Link>
-
-									<Link to={'sessions'}>
-										<li style={{ color: '#444', border: 'none', fontSize:15 }} className="list-group-item">
-											Sessions
-										</li>
-									</Link>
-
-									<Link to={'groups'}>
-										<li style={{ color: '#444', border: 'none', fontSize:15 }} className="list-group-item">
-                                            Student Groups
-										</li>
-									</Link>
-
-									<Link to={'sub-groups'}>
-										<li style={{ color: '#444', border: 'none', fontSize:15 }} className="list-group-item">
-                                            Student Sub-Groups
-										</li>
-									</Link>
-								</ul>
-							</div>
-						</div>
+                                {props.sublinks.map((sublink) => {
+                                    return (
+                                        <Link
+                                            to={sublink.url}
+                                            key={sublink.name}
+                                        >
+                                            <div
+                                                className={
+                                                    selectedMenu === sublink.id
+                                                        ? 'snb-sub-sub-nav-content-link-active'
+                                                        : 'snb-sub-sub-nav-content-link'
+                                                }
+                                            >
+                                                {sublink.name}
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </Fragment>
                         );
                     } else {
                         return (

@@ -49,3 +49,24 @@
 	outline: none;
 	box-shadow: none;
 }
+
+.snb-sub-sub-nav-content-link-active {
+	background: #f7f7f7d8;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	width:100%;
+	padding-left: 30px;
+	padding-top:5px;
+	padding-bottom:5px
+}
+
+.snb-sub-sub-nav-content-link {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	width:100%;
+	padding-left: 30px;
+	padding-top:5px;
+	padding-bottom:5px
+}
