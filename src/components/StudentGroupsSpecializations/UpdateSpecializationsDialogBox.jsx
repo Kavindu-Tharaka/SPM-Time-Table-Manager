@@ -17,13 +17,21 @@ const UpdateSpecializationsDialogBox = (props) => {
 
     const onSpecializationChange = (e) => {
         setSpecialization(e.target.value);
+        setSpecializationErrorMsg('');
     };
 
     const editSpecializationName = (specializationName, id) => {
         if (specializationName === '') {
             setIsSpecializationNameValid(false);
             setSpecializationErrorMsg('Please Enter a Specialization!');
-        } else {
+        } 
+        else if (!/^[a-zA-Z]+$/.test(specializationName)) {
+            setIsSpecializationNameValid(false);
+            setSpecializationErrorMsg('Specialization can not include numbers!');
+            setSpecialization('');
+			return;
+        } 
+        else {
             if (props.itemName !== specializationName) {
                 let isExist = false;
 
