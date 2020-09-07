@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import BuildingCards from '../BuildingCards/BuildingCards';
 import Rooms from '../Rooms/Rooms';
@@ -17,8 +20,10 @@ const LocationContent = (props) => {
 	const [updateComponent, setUpdateComponent] = useState(0);
 	const [loading, setLoading] = useState(true);
 
-	// Validation Classes
+	// Validation
 	const [isBuildingNameValid, setIsBuildingNameValid] = useState(true);
+
+	const [isAddingBuilding, setIsAddingBuilding] = useState(false);
 
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
@@ -35,14 +40,19 @@ const LocationContent = (props) => {
 			return;
 		}
 
+		setIsAddingBuilding(true);
+
 		axios
 			.post('http://localhost:8000/api/v1/buildings', { buildingName })
 			.then((res) => {
 				setBuildings([...buildings, res.data.data.building]);
+				setIsAddingBuilding(false);
 				setBuildingName('');
+				store.addNotification(buildToast());
 			})
 			.catch((err) => {
 				console.log(err.response);
+				setIsAddingBuilding(false);
 			});
 	};
 
@@ -64,7 +74,7 @@ const LocationContent = (props) => {
 			<PreLoader loading={loading} hasSideBar={false} />
 			<ContentHeader header='Buildings' />
 			<div className='single-input-container d-flex'>
-				<div class='col'>
+				<div className='col'>
 					<input
 						type='text'
 						className={
@@ -76,7 +86,7 @@ const LocationContent = (props) => {
 						onChange={onBuildingNameChange}
 						value={buildingName}
 					/>
-					<div class='invalid-feedback'>
+					<div className='invalid-feedback'>
 						Please provide a building name
 					</div>
 				</div>
@@ -85,7 +95,7 @@ const LocationContent = (props) => {
 					className='btn btn-primary form-element-left-margin'
 					onClick={onAddClick}
 				>
-					Add
+					{isAddingBuilding ? <FaSpinner className='spin' /> : 'Add'}
 				</button>
 			</div>
 			{buildings.length === 0 ? (
@@ -97,7 +107,7 @@ const LocationContent = (props) => {
 				/>
 			)}
 			<br /> <br />
-			<Rooms />
+			<Rooms buildings={buildings} />
 		</div>
 	);
 };
