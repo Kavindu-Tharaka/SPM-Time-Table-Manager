@@ -52,7 +52,14 @@ function StudentGroupsSpecializations(props) {
             setIsSpecializationNameValid(false);
             setErrorMsg('Please Enter a Specialization!');
 			return;
-        } else {
+        } 
+        else if (!/^[a-zA-Z]+$/.test(specializationName)) {
+            setIsSpecializationNameValid(false);
+            setErrorMsg('Specialization can not include numbers!');
+            setSpecializationName('');
+			return;
+        } 
+        else {
             let isExist = false;
 
             specializationList.forEach((element) => {
@@ -107,6 +114,8 @@ function StudentGroupsSpecializations(props) {
 
     const onInputChange = (e) => {
         setSpecializationName(e.target.value);
+        setErrorMsg('');
+        setIsSpecializationNameValid(true);
     };
 
     return (
