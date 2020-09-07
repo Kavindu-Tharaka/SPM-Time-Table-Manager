@@ -21,6 +21,8 @@ function StudentGroupsSubGroupIDs(props) {
     const [year, setYear] = useState('1');
     const [semester, setSemester] = useState('1');
 
+    const [errorMsg, setErrorMsg] = useState('');
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
@@ -85,15 +87,19 @@ function StudentGroupsSubGroupIDs(props) {
 
     const onInputChangeYear = (e) => {
         setYear(e.target.value);
+        setErrorMsg('');
     };
     const onInputChangeSemester = (e) => {
         setSemester(e.target.value);
+        setErrorMsg('');
     };
     const onInputChangeGroupID = (e) => {
         setGroupID(e.target.value);
+        setErrorMsg('');
     };
     const onInputChangeSubGroupNumber = (e) => {
         setSubGroupNumber(e.target.value);
+        setErrorMsg('');
     };
 
     const addSubGroupID = (e) => {
@@ -106,7 +112,8 @@ function StudentGroupsSubGroupIDs(props) {
                 `${element.groupid}.${element.subgroupnumber}` ===
                 `${groupID}.${subGroupNumber}`
             ) {
-                Swal.fire('The Sub Group ID You Entered is Already Exists!!');
+                // Swal.fire('The Sub Group ID You Entered is Already Exists!');
+                setErrorMsg('The Sub Group ID You Entered is Already Exists!');
                 isExist = true;
             }
         });
@@ -181,7 +188,7 @@ function StudentGroupsSubGroupIDs(props) {
                 }}
                 className=""
             >
-                <div className="row">
+                <div className="form-row">
                     <div className="col-2">
                         <Label>{'Year'}</Label>
                         <select
@@ -262,6 +269,9 @@ function StudentGroupsSubGroupIDs(props) {
                         </button>
                     </div>
                 </div>
+                <div style={{color:'crimson', fontSize: 13}}>
+                    {errorMsg}
+                </div>
             </div>
             <br />
             <ContentHeader label={'1st Year'} />
@@ -272,7 +282,7 @@ function StudentGroupsSubGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -342,7 +352,7 @@ function StudentGroupsSubGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -412,7 +422,7 @@ function StudentGroupsSubGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -482,7 +492,7 @@ function StudentGroupsSubGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"

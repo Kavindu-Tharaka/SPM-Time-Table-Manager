@@ -18,11 +18,10 @@ const UpdateTagsDialogBox = (props) => {
 
 			<div className='form-row'>
 				<div className='form-group col-12'>
-					<label className='dialog-label'>Tag</label>
 					<input
 						type='text'
 						className='form-control'
-						placeholder='00'
+						placeholder='Tag name'
 						onChange={onTagChange}
 						value={tag}
 					/>

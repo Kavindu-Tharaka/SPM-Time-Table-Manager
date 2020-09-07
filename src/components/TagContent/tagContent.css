@@ -1,0 +1,14 @@
+.tc-red-class{
+    color: red;
+}
+
+.tc-invisible-class{
+    color: transparent;
+}
+
+.tc-input-container {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: auto;
+	margin-right: auto;
+}
