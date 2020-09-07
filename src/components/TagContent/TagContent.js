@@ -7,10 +7,15 @@ import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import UpdateTagsDialogBox from './UpdateTagsDialogBox';
+import './tagContent.css';
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
     const [tagList, setTagList] = useState([]);
+
+	const [isTagNameValid, setIsTagNameValid] = useState(true);
+	const [errorMsg, setErrorMsg] = useState('');
+
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -47,19 +52,25 @@ function TagContent(props) {
         e.preventDefault();
 
         if (tagName === '') {
-            Swal.fire({
-                text: 'Please Enter a Tag Name!',
-                confirmButtonColor: '#205374',
-            });
+            // Swal.fire({
+            //     text: 'Please Enter a Tag Name!',
+            //     confirmButtonColor: '#205374',
+            // });
+            setIsTagNameValid(false);
+            setErrorMsg('Please Enter a valid Tag name!');
+			return;
+            
         } else {
             let isExist = false;
 
             tagList.forEach((element) => {
                 if (element.tagname === tagName) {
-                    Swal.fire({
-                        text: 'The Tag Name You Entered is Already Exists!',
-                        confirmButtonColor: '#205374',
-                    });
+                    // Swal.fire({
+                    //     text: 'The Tag Name You Entered is Already Exists!',
+                    //     confirmButtonColor: '#205374',
+                    // });
+                    setIsTagNameValid(false);
+                    setErrorMsg('The Tag Name You Entered is Already Exists!');
                     isExist = true;
                     setTagName('');
                 }
@@ -98,97 +109,57 @@ function TagContent(props) {
             });
     };
 
-    const editTagName = (tagName, id) => {
-
-        if (tagName === '') {
-            Swal.fire({
-                text: 'Please Enter a Tag Name!',
-                confirmButtonColor: '#205374',
-            });
-        } else {
-            let isExist = false;
-
-            tagList.forEach((element) => {
-                if (element.tagname === tagName) {
-                    Swal.fire({
-                        text: 'The Tag Name You Entered is Already Exists!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                    setTagName('');
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(
-                        `http://localhost:8000/api/v1/tags/${id}`,
-                        {
-                            tagname: tagName,
-                        }
-                    )
-                    .then((res) => {
-                        setTagList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          tagname: tagName,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChange = (e) => {
         setTagName(e.target.value);
+        setIsTagNameValid(true);
+        setErrorMsg('');
     };
 
     return (
         <div>
             <ContentHeader header={'Tags'} />
-            <div
-                style={{
-                    position: 'fixed',
-                    width: '30%',
-                    textAlign: 'center',
-                    left: '50%',
-                    padding: '20px',
-                    transform: 'translate(-50%, 0)',
-                }}
-                className="input-group mb-3"
-            >
-                <input
-                    style={{ borderRadius: 0 }}
-                    type="text"
-                    className="form-control"
-                    placeholder="Tag Name"
-                    onChange={onInputChange}
-                    onKeyDown={handleKeyDown}
-                    value={tagName}
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Tag can be a text like Lecture, Tutorial..."
-                />
-                <button
-                    style={{ marginLeft: 20, borderRadius: 0 }}
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={addTagName}
-                >
-                    Add
-                </button>
-            </div>
+
+            <form style={{
+                marginLeft:'35%',
+                marginTop:'3%',
+            }}>
+                <div className="form-row">
+                    <div className="col-md-4 mb-3">
+                        {/* <label>First name</label> */}
+                        <input
+                            type='text'
+                            className={
+                                isTagNameValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder='Tag Name'
+                            onChange={onInputChange}
+                            onKeyDown={handleKeyDown}
+                            value={tagName}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Tag can be a text like Lecture, Tutorial..."
+					    />
+                        <div className='invalid-feedback'>
+                            {errorMsg}
+					    </div>
+                    </div>
+                    <div className="col-md-2 mb-3">
+                    <button
+                        className='btn btn-primary'
+                        onClick={addTagName}
+				    >
+					    Add
+				    </button>                    
+                </div>
+                </div>
+            </form>
 
             <div
                 style={{
                     textAlign: 'center',
-                    marginTop: '10%',
+                    marginTop: '5%',
                     padding: '10px',
                     overflowY: 'auto',
                 }}
@@ -209,9 +180,10 @@ function TagContent(props) {
                                 <Tag
                                     id={tag._id}
                                     deleteMethod={deleteTagName}
-                                    editMethod={editTagName}
                                     tagName={tag.tagname}
                                     component={UpdateTagsDialogBox}
+                                    itemList={tagList}
+                                    setItemList={setTagList}
                                 />
                             </div>
                         </div>
