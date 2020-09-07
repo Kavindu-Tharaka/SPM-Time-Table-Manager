@@ -16,6 +16,11 @@ const Rooms = (props) => {
 
 	const [updateComponent, setUpdateComponent] = useState(0);
 
+	// Validation
+	const [isRoomNameValid, setIsRoomNameValid] = useState(true);
+	const [isFloorValid, setIsFloorValid] = useState(true);
+	const [isCapacityValid, setIsCapacityValid] = useState(true);
+
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
 	};
@@ -25,18 +30,46 @@ const Rooms = (props) => {
 	};
 
 	const onRoomNameChange = (e) => {
+		setIsRoomNameValid(true);
 		setRoomName(e.target.value);
 	};
 
 	const onFloorChange = (e) => {
-		setFloor(e.target.value);
+		setIsFloorValid(true);
+		if (e.target.value >= 0) {
+			setFloor(e.target.value);
+		}
 	};
 
 	const onCapacityChange = (e) => {
-		setCapacity(e.target.value);
+		setIsCapacityValid(true);
+		if (e.target.value >= 0) {
+			setCapacity(e.target.value);
+		}
 	};
 
 	const onAddClick = (e) => {
+		let hasErrorDetected = false;
+
+		if (roomName === '') {
+			setIsRoomNameValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (floor === '') {
+			setIsFloorValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (capacity === '') {
+			setIsCapacityValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (hasErrorDetected) {
+			return;
+		}
+
 		axios
 			.post('http://localhost:8000/api/v1/rooms', {
 				building: buildingName,
@@ -75,7 +108,7 @@ const Rooms = (props) => {
 			.catch((err) => {
 				console.log(err.response);
 			});
-	}, [updateComponent]);
+	}, [updateComponent, props.buildings]);
 
 	return (
 		<div>
@@ -101,31 +134,52 @@ const Rooms = (props) => {
 					<label>Room Name</label>
 					<input
 						type='text'
-						className='form-control'
+						className={
+							isRoomNameValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='Room Name'
 						onChange={onRoomNameChange}
 						value={roomName}
 					/>
+					<div className='invalid-feedback'>
+						Please provide a room name
+					</div>
 				</div>
 				<div className='form-group col-md-1'>
 					<label>Floor</label>
 					<input
 						type='number'
-						className='form-control'
+						className={
+							isFloorValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='00'
 						onChange={onFloorChange}
 						value={floor}
 					/>
+					<div className='invalid-feedback'>
+						Please provide floor number
+					</div>
 				</div>
 				<div className='form-group col-md-1'>
 					<label>Capacity</label>
 					<input
 						type='number'
-						className='form-control'
+						className={
+							isCapacityValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='00'
 						onChange={onCapacityChange}
 						value={capacity}
 					/>
+					<div className='invalid-feedback'>
+						Please provide the capacity
+					</div>
 				</div>
 				<div className='form-group col-md-3'>
 					<label>Room Type</label>

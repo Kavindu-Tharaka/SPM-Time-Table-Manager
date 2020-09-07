@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js';
+import 'react-notifications-component/dist/theme.css'
 
 ReactDOM.render(
   <React.StrictMode>
