@@ -230,7 +230,7 @@ function StudentGroupsGroupIDs(props) {
                         </button>
                     </div>
                 </div>
-                <div style={{color:'crimson', fontSize: 13}}>
+                <div style={{color:'crimson', fontSize: 14}}>
                     {errorMsg}
                 </div>
             </div>

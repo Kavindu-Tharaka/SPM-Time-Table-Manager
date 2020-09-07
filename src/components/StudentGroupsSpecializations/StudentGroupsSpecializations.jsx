@@ -105,55 +105,6 @@ function StudentGroupsSpecializations(props) {
             });
     };
 
-    const editSpecializationName = (specializationName, id) => {
-        if (specializationName === '') {
-            Swal.fire({
-                text: 'Please Enter a Specialization Name!',
-                confirmButtonColor: '#205374',
-            });
-        } else {
-            let isExist = false;
-
-            specializationList.forEach((element) => {
-                if (
-                    element.specializationname ===
-                    specializationName.toUpperCase()
-                ) {
-                    Swal.fire({
-                        text: 'The Group Number You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    setSpecializationName('');
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(
-                        `http://localhost:8000/api/v1/specializations/${id}`,
-                        {
-                            specializationname: specializationName.toUpperCase(),
-                        }
-                    )
-                    .then((res) => {
-                        setSpecializationList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          specializationname: specializationName.toUpperCase(),
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChange = (e) => {
         setSpecializationName(e.target.value);
     };
@@ -256,9 +207,10 @@ function StudentGroupsSpecializations(props) {
                                 <Tag
                                     id={tag._id}
                                     deleteMethod={deleteSpecializationName}
-                                    editMethod={editSpecializationName}
                                     tagName={tag.specializationname}
                                     component={UpdateSpecializationsDialogBox}
+                                    itemList={specializationList}
+                                    setItemList={setSpecializationList}
                                 />
                             </div>
                         </div>

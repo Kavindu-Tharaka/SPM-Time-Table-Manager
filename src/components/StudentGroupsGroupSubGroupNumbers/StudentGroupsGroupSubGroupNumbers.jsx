@@ -87,7 +87,9 @@ function StudentGroupsGroupSubGroupNumbers() {
             groupNumberList.forEach((element) => {
                 if (parseInt(element.groupnumber) === parseInt(groupNumber)) {
                     setIsGroupNumberValid(false);
-                    setGroupNumberErrorMsg('The Group Number You Entered is Already Exist!');
+                    setGroupNumberErrorMsg(
+                        'The Group Number You Entered is Already Exist!'
+                    );
                     isExist = true;
                 }
             });
@@ -121,7 +123,9 @@ function StudentGroupsGroupSubGroupNumbers() {
             setGroupNumber('');
         } else if (!/^[+]?\d+([.]\d+)?$/.test(subGroupNumber)) {
             setIsSubGroupNumberValid(false);
-            setSubGroupNumberErrorMsg('Sub Group Number Should be a Positive Number!');
+            setSubGroupNumberErrorMsg(
+                'Sub Group Number Should be a Positive Number!'
+            );
             setSubGroupNumber('');
         } else {
             let isExist = false;
@@ -132,7 +136,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                     parseInt(subGroupNumber)
                 ) {
                     setIsSubGroupNumberValid(false);
-                    setSubGroupNumberErrorMsg('The Sub Group Number You Entered is Already Exist!');
+                    setSubGroupNumberErrorMsg(
+                        'The Sub Group Number You Entered is Already Exist!'
+                    );
                     isExist = true;
                 }
             });
@@ -194,114 +200,8 @@ function StudentGroupsGroupSubGroupNumbers() {
             });
     };
 
-    const editGroupNumber = (groupNumber, id) => {
-        if (groupNumber === '' || groupNumber === '0') {
-            Swal.fire({
-                text: 'Please Enter a Valid Group Number!',
-                confirmButtonColor: '#205374',
-            });
-            setGroupNumber('');
-        } else if (!/^[+]?\d+([.]\d+)?$/.test(groupNumber)) {
-            Swal.fire({
-                text: 'Group Number Should be a Positive Number!',
-                confirmButtonColor: '#205374',
-            });
-            setGroupNumber('');
-        } else {
-            let isExist = false;
-
-            groupNumberList.forEach((element) => {
-                if (parseInt(element.groupnumber) === parseInt(groupNumber)) {
-                    Swal.fire({
-                        text: 'The Group Number You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(`http://localhost:8000/api/v1/groupnumbers/${id}`, {
-                        groupnumber: groupNumber,
-                    })
-                    .then((res) => {
-                        setGroupNumberList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          groupnumber: groupNumber,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
-    const editSubGroupNumber = (subGroupNumber, id) => {
-        if (subGroupNumber === '' || subGroupNumber === '0') {
-            Swal.fire({
-                text: 'Please Enter a Valid Sub Group Number!',
-                confirmButtonColor: '#205374',
-            });
-            setGroupNumber('');
-        } else if (!/^[+]?\d+([.]\d+)?$/.test(subGroupNumber)) {
-            Swal.fire({
-                text: 'Group Number Should be a Positive Number!',
-                confirmButtonColor: '#205374',
-            });
-            setSubGroupNumber('');
-        } else {
-            let isExist = false;
-
-            subGroupNumberList.forEach((element) => {
-                if (
-                    parseInt(element.subgroupnumber) ===
-                    parseInt(subGroupNumber)
-                ) {
-                    Swal.fire({
-                        text:
-                            'The Sub Group Number You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(
-                        `http://localhost:8000/api/v1/subgroupnumbers/${id}`,
-                        {
-                            subgroupnumber: subGroupNumber,
-                        }
-                    )
-                    .then((res) => {
-                        setSubGroupNumberList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          subgroupnumber: subGroupNumber,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChangeGroupNumber = (e) => {
-
-        if(e.target.value > 0 || e.target.value === '')
+        if (e.target.value > 0 || e.target.value === '')
             setGroupNumber(e.target.value);
 
         setIsGroupNumberValid(true);
@@ -309,8 +209,7 @@ function StudentGroupsGroupSubGroupNumbers() {
     };
 
     const onInputChangeSubGroupNumber = (e) => {
-
-        if(e.target.value > 0 || e.target.value === '')
+        if (e.target.value > 0 || e.target.value === '')
             setSubGroupNumber(e.target.value);
 
         setIsSubGroupNumberValid(true);
@@ -323,12 +222,12 @@ function StudentGroupsGroupSubGroupNumbers() {
                 <ContentHeader header={'Group Numbers'} />
                 <form
                     style={{
-                        marginLeft: '35%',
+                        marginLeft: '30%',
                         marginTop: '3%',
                     }}
                 >
                     <div className="form-row">
-                        <div className="col-md-5 mb-3">
+                        <div className="col-md-6 mb-3">
                             {/* <label>First name</label> */}
                             <input
                                 type="number"
@@ -345,7 +244,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                                 data-placement="top"
                                 title="Group number can be a positive number"
                             />
-                            <div className="invalid-feedback">{groupNumberErrorMsg}</div>
+                            <div className="invalid-feedback">
+                                {groupNumberErrorMsg}
+                            </div>
                         </div>
                         <div className="col-md-2 mb-3">
                             <button
@@ -357,37 +258,6 @@ function StudentGroupsGroupSubGroupNumbers() {
                         </div>
                     </div>
                 </form>
-                {/* <div
-                    style={{
-                        width: '40%',
-                        textAlign: 'center',
-                        left: '50%',
-                        padding: '20px',
-                        transform: 'translate(-50%, 0)',
-                    }}
-                    className="input-group mb-3"
-                >
-                    <input
-                        style={{ borderRadius: 0 }}
-                        type="text"
-                        className="form-control"
-                        placeholder="Group Number"
-                        onChange={onInputChangeGroupNumber}
-                        onKeyDown={handleKeyDownGroupNumber}
-                        value={groupNumber}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Group number can be a positive number"
-                    />
-                    <button
-                        style={{ marginLeft: 20, borderRadius: 0 }}
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={addGroupNumber}
-                    >
-                        Add
-                    </button>
-                </div> */}
 
                 <div
                     style={{
@@ -414,13 +284,14 @@ function StudentGroupsGroupSubGroupNumbers() {
                                     <Label
                                         id={tag._id}
                                         deleteMethod={deleteGroupNumber}
-                                        editMethod={editGroupNumber}
                                         tagName={
                                             tag.groupnumber < 10
                                                 ? `${0}${tag.groupnumber}`
                                                 : tag.groupnumber
                                         }
                                         component={UpdateGroupNumbersDialogBox}
+                                        groupNumberList={groupNumberList}
+                                        setGroupNumberList={setGroupNumberList}
                                     />
                                 </div>
                             </div>
@@ -436,12 +307,12 @@ function StudentGroupsGroupSubGroupNumbers() {
                 <ContentHeader header={'Sub-Group Numbers'} />
                 <form
                     style={{
-                        marginLeft: '35%',
+                        marginLeft: '30%',
                         marginTop: '3%',
                     }}
                 >
                     <div className="form-row">
-                        <div className="col-md-5 mb-3">
+                        <div className="col-md-6 mb-3">
                             {/* <label>First name</label> */}
                             <input
                                 type="number"
@@ -458,7 +329,9 @@ function StudentGroupsGroupSubGroupNumbers() {
                                 data-placement="top"
                                 title="Sub Group number can be a positive number"
                             />
-                            <div className="invalid-feedback">{subGroupNumberErrorMsg}</div>
+                            <div className="invalid-feedback">
+                                {subGroupNumberErrorMsg}
+                            </div>
                         </div>
                         <div className="col-md-2 mb-3">
                             <button
@@ -525,10 +398,13 @@ function StudentGroupsGroupSubGroupNumbers() {
                                     <Label
                                         id={tag._id}
                                         deleteMethod={deleteSubGroupNumber}
-                                        editMethod={editSubGroupNumber}
                                         tagName={tag.subgroupnumber}
                                         component={
                                             UpdateSubGroupNumbersDialogBox
+                                        }
+                                        subGroupNumberList={subGroupNumberList}
+                                        setSubGroupNumberList={
+                                            setSubGroupNumberList
                                         }
                                     />
                                 </div>

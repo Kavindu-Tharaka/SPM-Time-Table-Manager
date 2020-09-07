@@ -148,76 +148,7 @@ function StudentGroupsYearsSemesters(props) {
             });
     };
 
-    const editYearSemester = (year, semester, id) => {
-        if (
-            year === '' ||
-            semester === '' ||
-            year === '0' ||
-            semester === '0'
-        ) {
-            Swal.fire({
-                text: 'Please Enter Valid Year and Semester!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire({
-                text: 'Year and Semster Should be Positive Numbers!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (year > 4 || year < 0) {
-            Swal.fire({
-                text: 'Year Should be in Between 1 and 4!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (semester > 2 || semester < 0) {
-            Swal.fire({
-                text: 'Semester Should be 1 or 2!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else {
-            let isExist = false;
 
-            yearsemesterList.forEach((element) => {
-                if (element.yearsemestername === `Y${year}.S${semester}`) {
-                    Swal.fire({
-                        text:
-                            'The Year Semester Combination You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(`http://localhost:8000/api/v1/yearsemesters/${id}`, {
-                        yearsemestername: `Y${year}.S${semester}`,
-                    })
-                    .then((res) => {
-                        setYearSemesterList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          yearsemestername: `Y${year}.S${semester}`,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
 
     const onInputChangeYear = (e) => {
         if(e.target.value > 0 || e.target.value === '')
@@ -363,9 +294,10 @@ function StudentGroupsYearsSemesters(props) {
                                 <Label
                                     id={tag._id}
                                     deleteMethod={deleteYearSemester}
-                                    editMethod={editYearSemester}
                                     tagName={tag.yearsemestername}
                                     component={UpdateYearsSemestersDialogBox}
+                                    yearSemesterList={yearsemesterList}
+                                    setYearSemesterList={setYearSemesterList}
                                 />
                             </div>
                         </div>
