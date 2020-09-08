@@ -4,7 +4,7 @@ import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import axios from "axios";
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
-
+import PreLoader from '../PreLoader/PreLoader';
 
 import './SubjectContent.css';
 
@@ -21,6 +21,7 @@ const SubjectContent = () => {
     const [subjectData, setSubjectData] = useState([]);
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState();
+    const [loading,setloading] = useState(true);
 
     const onOfferedYearChange = (e) => {
         setOfferedYear(e.target.value)
@@ -102,9 +103,11 @@ const SubjectContent = () => {
             .get("http://localhost:8000/api/v1/subjects")
             .then((result) => {
                 setSubjectData(result.data.data.subjects);
+                setloading(false);
             })
             .catch((e) => {
                 console.error(e);
+                setloading(false);
             });
     }
 
@@ -204,6 +207,7 @@ const SubjectContent = () => {
     ];
     return (
         <div>
+            <PreLoader loading={loading} />
             <ContentHeader header={'Subjects'} />
             <br />
             <form onSubmit={onSubmit}>

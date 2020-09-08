@@ -5,6 +5,7 @@ import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import './LecturerContent.css';
 import axios from "axios";
 import Swal from 'sweetalert2';
+import PreLoader from '../PreLoader/PreLoader';
 
 const LecturerContent = () => {
 
@@ -20,6 +21,7 @@ const LecturerContent = () => {
     const [rankVal, setRankVal] = useState("");
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState("");
+    const [loading,setloading] = useState(true);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -77,10 +79,12 @@ const LecturerContent = () => {
             .get("http://localhost:8000/api/v1/lecturers")
             .then((result) => {
                 setLecturerDetails(result.data.data.lecturers);
+                setloading(false);
 
             })
             .catch((e) => {
                 console.error(e);
+                setloading(false);
             });
     };
     const deleteLecturer = (rowID) => {
@@ -230,6 +234,7 @@ const LecturerContent = () => {
     ];
     return (
         <div>
+            <PreLoader loading={loading} />
             <div>
                 <ContentHeader header={'Lecturers'} />
                 <br />
