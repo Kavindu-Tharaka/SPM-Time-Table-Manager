@@ -3,6 +3,9 @@ import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import axios from 'axios';
 import RoomsTable from './RoomsTable';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const Rooms = (props) => {
 	const [buildings, setBuildings] = useState([]);
@@ -20,6 +23,9 @@ const Rooms = (props) => {
 	const [isRoomNameValid, setIsRoomNameValid] = useState(true);
 	const [isFloorValid, setIsFloorValid] = useState(true);
 	const [isCapacityValid, setIsCapacityValid] = useState(true);
+
+	// Loading
+	const [isAddingRoom, setIsAddingRoom] = useState(false);
 
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
@@ -70,6 +76,8 @@ const Rooms = (props) => {
 			return;
 		}
 
+		setIsAddingRoom(true);
+
 		axios
 			.post('http://localhost:8000/api/v1/rooms', {
 				building: buildingName,
@@ -79,8 +87,18 @@ const Rooms = (props) => {
 				roomType,
 			})
 			.then((res) => {
-				setRooms([...rooms, res.data.data.room]);
-				// TODO: Clear input fields
+				refreshComponent();
+
+				setRoomName('');
+				setFloor('');
+				setCapacity('');
+				setRoomType('lecture-hall');
+
+				setIsAddingRoom(false);
+
+				store.addNotification(
+					buildToast('success', 'Success', 'Room Added Successfully')
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -227,7 +245,13 @@ const Rooms = (props) => {
 						className='btn btn-primary float-right mt-4'
 						onClick={onAddClick}
 					>
-						Add
+						{isAddingRoom ? (
+							<div>
+								Adding <FaSpinner className='spin' />
+							</div>
+						) : (
+							'Add'
+						)}
 					</button>
 				</div>
 			</div>

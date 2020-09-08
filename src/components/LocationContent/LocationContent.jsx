@@ -23,6 +23,7 @@ const LocationContent = (props) => {
 	// Validation
 	const [isBuildingNameValid, setIsBuildingNameValid] = useState(true);
 
+	// Loading
 	const [isAddingBuilding, setIsAddingBuilding] = useState(false);
 
 	const refreshComponent = () => {
@@ -48,7 +49,13 @@ const LocationContent = (props) => {
 				setBuildings([...buildings, res.data.data.building]);
 				setIsAddingBuilding(false);
 				setBuildingName('');
-				store.addNotification(buildToast('success', 'Success', 'Building Added Successfully'));
+				store.addNotification(
+					buildToast(
+						'success',
+						'Success',
+						'Building Added Successfully'
+					)
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -95,7 +102,13 @@ const LocationContent = (props) => {
 					className='btn btn-primary form-element-left-margin'
 					onClick={onAddClick}
 				>
-					{isAddingBuilding ? <FaSpinner className='spin' /> : 'Add'}
+					{isAddingBuilding ? (
+						<div>
+							Adding <FaSpinner className='spin' />
+						</div>
+					) : (
+						'Add'
+					)}
 				</button>
 			</div>
 			{buildings.length === 0 ? (
