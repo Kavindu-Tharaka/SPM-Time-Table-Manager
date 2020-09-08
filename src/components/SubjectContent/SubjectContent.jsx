@@ -69,7 +69,8 @@ const SubjectContent = () => {
                 numberOfLabHrs,
                 numberOfEveluationHrs
             }).then((res) => {
-                window.location.reload()
+                window.location.reload();
+                store.addNotification(buildToast('success', '', 'Subject Added Successfully'));
             }).catch((err) => {
                 console.err(err);
             });
@@ -89,6 +90,7 @@ const SubjectContent = () => {
                 .then((res) => {
                     setUpdate(false);
                     window.location.reload();
+                    store.addNotification(buildToast('warning', '', 'Subject Updated'));
                 })
                 .catch((e) => {
                     console.err(e);
@@ -135,6 +137,7 @@ const SubjectContent = () => {
                 setSubjectData(
                     subjectData.filter(subject => { return subject._id !== id })
                 );
+                store.addNotification(buildToast('danger', '', 'Subject Deleted'));
             })
             .catch((e) => console.error(e));
     }
