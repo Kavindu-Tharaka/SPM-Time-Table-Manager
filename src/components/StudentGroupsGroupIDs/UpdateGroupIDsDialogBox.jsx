@@ -6,8 +6,6 @@ import './updateGroupIDsDialogBox.css';
 
 const UpdateGroupIDsDialogBox = (props) => {
 
-	console.log(props.itemName)
-
     const [yearSemester, setYearSemester] = useState(
         `${props.itemName.split('.')[0]}.${props.itemName.split('.')[1]}`
     );
@@ -16,28 +14,42 @@ const UpdateGroupIDsDialogBox = (props) => {
         props.itemName.split('.')[2]
     );
 
-    const [groupNumber, setGroupNumber] = useState(
+    let [groupNumber, setGroupNumber] = useState(
         parseInt(props.itemName.split('.')[3])
     );
 
+    const [isGroupIDValid, setIsGroupIDValid] = useState(true);
+
     const onInputChangeYearSemester = (e) => {
         setYearSemester(e.target.value);
+        setIsGroupIDValid(true);
         console.log(yearSemester);
     };
     const onInputChangeSpecialization = (e) => {
         setSpecialization(e.target.value);
+        setIsGroupIDValid(true);
         console.log(specialization);
     };
     const onInputChangeGroupNumber = (e) => {
         setGroupNumber(e.target.value);
+        setIsGroupIDValid(true);
         console.log(groupNumber);
     };
 
     const editGroupID = () => {
-        if (
-            `${yearSemester}.${specialization}.${groupNumber}` !==
-                props.itemName 
-        ) {
+        
+        let yearSemesterGroupNumber = `${yearSemester}.${specialization}.0${groupNumber}`;
+
+        if(groupNumber < 10){
+            yearSemesterGroupNumber = `${yearSemester}.${specialization}.0${groupNumber}`
+        }
+        else{
+            yearSemesterGroupNumber = `${yearSemester}.${specialization}.${groupNumber}`
+        }
+
+        console.log(props.itemName === yearSemesterGroupNumber);
+
+        if (yearSemesterGroupNumber !== props.itemName) {
             let isExist = false;
 
             props.groupIDList.forEach((element) => {
@@ -45,7 +57,7 @@ const UpdateGroupIDsDialogBox = (props) => {
                     `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
                     `${yearSemester}.${specialization}.${groupNumber}`
                 ) {
-                    Swal.fire('The Group ID You Entered is Already Exists!!');
+                    setIsGroupIDValid(false);
                     isExist = true;
                 }
             });
@@ -73,19 +85,34 @@ const UpdateGroupIDsDialogBox = (props) => {
                                     : listItem
                             )
                         );
+                        swal.close();
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             }
         }
-        swal.close();
+        else{
+            swal.close();
+        }
     };
 
     return (
         <div className="dcdb-dialog-container">
             <h5 className="text-left m-0">{'Update Year & Semester'}</h5>
             <hr />
+
+            {!isGroupIDValid ? (
+                <div
+                    style={{
+                        color: 'crimson',
+                        textAlign: 'left',
+                        fontSize: 14,
+                    }}
+                >
+                    The Group ID You Entered is Already Exists!
+                </div>
+            ) : null}
 
             <div className="form-row">
                 <div className="form-group col">

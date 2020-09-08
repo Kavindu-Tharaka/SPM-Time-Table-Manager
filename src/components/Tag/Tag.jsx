@@ -5,7 +5,6 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Tag(props) {
-    const editMethod = props.editMethod;
     const deleteMethod = props.deleteMethod;
 
     const onDeleteClick = () => {
@@ -26,9 +25,10 @@ function Tag(props) {
             buttons: false,
             content: (
                 <props.component
-                    editEventHandler={editMethod}
                     itemName={props.tagName}
                     id={props.id}
+                    itemList={props.itemList}
+                    setItemList={props.setItemList}
                 />
             ),
         });

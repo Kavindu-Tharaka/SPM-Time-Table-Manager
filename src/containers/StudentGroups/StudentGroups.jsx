@@ -12,11 +12,11 @@ import StudentGroupsGroupSubGroupNumbers from '../../components/StudentGroupsGro
 
 function StudentGroups(props) {
 	const links = [
-		new SubNavLink('Years & Semesters', '/student-groups/years-semesters', 'yearsSemesters'),
+		new SubNavLink('Years & Semesters', '/student-groups/years-semesters', 'years-semesters'),
 		new SubNavLink('Specializations', '/student-groups/specializations', 'specializations'),
-		new SubNavLink('Group & Sub-Group Numbers', '/student-groups/group-sub-group-numbers', 'groupNumbers'),
-		new SubNavLink('Generate Group IDs', '/student-groups/group-ids', 'groupIds'),
-		new SubNavLink('Generate Sub-Group IDs', '/student-groups/sub-group-ids', 'subgroupIds'),
+		new SubNavLink('Group & Sub-Group Numbers', '/student-groups/group-sub-group-numbers', 'group-sub-group-numbers'),
+		new SubNavLink('Generate Group IDs', '/student-groups/group-ids', 'group-ids'),
+		new SubNavLink('Generate Sub-Group IDs', '/student-groups/sub-group-ids', 'sub-group-ids'),
 	];
 
 	useEffect(() => {

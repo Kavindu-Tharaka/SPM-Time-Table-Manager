@@ -26,8 +26,10 @@ function Label(props) {
                     itemName={props.tagName}
                     id={props.id}
                     yearSemesterList={props.yearSemesterList}
+                    setYearSemesterList={props.setYearSemesterList}
                     specializationList={props.specializationList}
                     groupNumberList={props.groupNumberList}
+                    setGroupNumberList={props.setGroupNumberList}
                     groupIDList={props.groupIDList}
                     setGroupIDList={props.setGroupIDList}
                     groupid={props.groupid}
@@ -35,6 +37,7 @@ function Label(props) {
                     specializationInit={props.specializationInit}
                     groupNumberInit={props.groupNumberInit}
                     subGroupNumberList={props.subGroupNumberList}
+                    setSubGroupNumberList={props.setSubGroupNumberList}
                     subGroupIDList={props.subGroupIDList}
                     setSubGroupIDList={props.setSubGroupIDList}
                 />
