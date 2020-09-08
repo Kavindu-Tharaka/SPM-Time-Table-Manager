@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
 import axios from 'axios';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import './updateGroupNumbersDialogBox.css';
 
@@ -12,6 +15,7 @@ const UpdateGroupNumbersDialogBox = (props) => {
 
     const [isGroupNumberValid, setIsGroupNumberValid] = useState(true);
     const [groupNumberErrorMsg, setGroupNumberErrorMsg] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const onGroupNumberChange = (e) => {
         if (e.target.value > 0 || e.target.value === '')
@@ -32,6 +36,7 @@ const UpdateGroupNumbersDialogBox = (props) => {
         } else {
             if (groupNumber !== props.itemName) {
                 let isExist = false;
+                setIsUpdating(true);
 
                 groupNumberList.forEach((element) => {
                     if (
@@ -42,6 +47,7 @@ const UpdateGroupNumbersDialogBox = (props) => {
                             'The Group Number You Entered is Already Exist!'
                         );
                         setGroupNumber('');
+                        setIsUpdating(false);
                         isExist = true;
                     }
                 });
@@ -65,7 +71,15 @@ const UpdateGroupNumbersDialogBox = (props) => {
                                         : listItem
                                 )
                             );
+                            setIsUpdating(false);
                             swal.close();
+                            store.addNotification(
+                                buildToast(
+                                    'info',
+                                    'Updated',
+                                    'Group number Updated Successfully'
+                                )
+                            );
                         })
                         .catch((err) => console.log(err));
                 }
@@ -105,7 +119,13 @@ const UpdateGroupNumbersDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={() => editGroupNumber(groupNumber, props.id)}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"

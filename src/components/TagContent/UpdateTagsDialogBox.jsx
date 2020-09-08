@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
 import axios from 'axios';
-
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 import './updateTagsDialogBox.css';
 
 const UpdateTagsDialogBox = (props) => {
@@ -13,23 +15,29 @@ const UpdateTagsDialogBox = (props) => {
     const [isTagNameValid, setIsTagNameValid] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
 
+    const [isUpdating, setIsUpdating] = useState(false);
+
     const onTagChange = (e) => {
         setTag(e.target.value);
     };
 
     const editTagName = (tagName, id) => {
         if (tagName === '') {
-			setIsTagNameValid(false);
-			setErrorMsg('Please Enter a Tag Name!');
+            setIsTagNameValid(false);
+            setErrorMsg('Please Enter a Tag Name!');
         } else {
             if (props.itemName !== tagName) {
                 let isExist = false;
+                setIsUpdating(true);
 
                 tagList.forEach((element) => {
                     if (element.tagname === tagName) {
-						setIsTagNameValid(false);
-						setErrorMsg('The Tag Name You Entered is Already Exists!');
+                        setIsTagNameValid(false);
+                        setErrorMsg(
+                            'The Tag Name You Entered is Already Exists!'
+                        );
                         isExist = true;
+                        setIsUpdating(false);
                         setTag('');
                     }
                 });
@@ -51,13 +59,20 @@ const UpdateTagsDialogBox = (props) => {
                                 )
                             );
                             swal.close();
+                            setIsUpdating(false);
+                            store.addNotification(
+                                buildToast(
+                                    'info',
+                                    'Updated',
+                                    'Tag Updated Successfully'
+                                )
+                            );
                         })
                         .catch((err) => console.log(err));
                 }
-			}
-			else{
-				swal.close();				
-			}
+            } else {
+                swal.close();
+            }
         }
     };
 
@@ -70,18 +85,21 @@ const UpdateTagsDialogBox = (props) => {
                 <div className="form-group col-12">
                     <input
                         type="text"
-						className={
-							isTagNameValid
-								? 'form-control'
-								: 'form-control is-invalid'
-						}
+                        className={
+                            isTagNameValid
+                                ? 'form-control'
+                                : 'form-control is-invalid'
+                        }
                         placeholder="Tag name"
                         onChange={onTagChange}
                         value={tag}
                     />
-					<div style={{textAlign:'left'}} className='invalid-feedback'>
-                            {errorMsg}
-					</div>
+                    <div
+                        style={{ textAlign: 'left' }}
+                        className="invalid-feedback"
+                    >
+                        {errorMsg}
+                    </div>
                 </div>
             </div>
 
@@ -89,7 +107,13 @@ const UpdateTagsDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={() => editTagName(tag, props.id)}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"
