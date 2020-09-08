@@ -9,6 +9,7 @@ import UpdateSpecializationsDialogBox from './UpdateSpecializationsDialogBox';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
@@ -20,6 +21,7 @@ function StudentGroupsSpecializations(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
     const [loading, setLoading] = useState(true);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -67,6 +69,7 @@ function StudentGroupsSpecializations(props) {
             return;
         } else {
             let isExist = false;
+            setIsAdding(true);
 
             specializationList.forEach((element) => {
                 if (
@@ -78,6 +81,7 @@ function StudentGroupsSpecializations(props) {
                         'The Specialization You Entered is Already Exist!'
                     );
                     setSpecializationName('');
+                    setIsAdding(false);
                     isExist = true;
                 }
             });
@@ -93,8 +97,15 @@ function StudentGroupsSpecializations(props) {
                             ...specializationList,
                             response.data.data.specialization,
                         ]);
+                        setIsAdding(false);
                         setSpecializationName('');
-                        store.addNotification(buildToast('success', 'Success', 'Specialization Added Successfully'));
+                        store.addNotification(
+                            buildToast(
+                                'success',
+                                'Success',
+                                'Specialization Added Successfully'
+                            )
+                        );
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -115,7 +126,13 @@ function StudentGroupsSpecializations(props) {
                         return specializationId !== item._id;
                     })
                 );
-                store.addNotification(buildToast('danger', 'Deleted', 'Specialization Deleted Successfully'));
+                store.addNotification(
+                    buildToast(
+                        'danger',
+                        'Deleted',
+                        'Specialization Deleted Successfully'
+                    )
+                );
             })
             .catch((err) => {
                 console.log(err);
@@ -164,7 +181,13 @@ function StudentGroupsSpecializations(props) {
                             className="btn btn-primary"
                             onClick={addSpecializationName}
                         >
-                            Add
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
                         </button>
                     </div>
                 </div>

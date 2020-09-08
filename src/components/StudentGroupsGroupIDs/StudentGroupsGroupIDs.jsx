@@ -9,6 +9,7 @@ import UpdateGroupIDsDialogBox from './UpdateGroupIDsDialogBox';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
 
 function StudentGroupsGroupIDs(props) {
     const [yearSemester, setYearSemester] = useState('');
@@ -25,6 +26,7 @@ function StudentGroupsGroupIDs(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
     const [loading, setLoading] = useState(true);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -88,22 +90,18 @@ function StudentGroupsGroupIDs(props) {
 
             axios
                 .all([
-                    axios
-                .get('http://localhost:8000/api/v1/yearsemesters', {
-                    cancelToken: source.token,
-                }),
-                axios
-                .get('http://localhost:8000/api/v1/groupnumbers', {
-                    cancelToken: source.token,
-                }),
-                axios
-                .get('http://localhost:8000/api/v1/specializations', {
-                    cancelToken: source.token,
-                }),
-                axios
-                .get('http://localhost:8000/api/v1/groupids', {
-                    cancelToken: source.token,
-                })
+                    axios.get('http://localhost:8000/api/v1/yearsemesters', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/groupnumbers', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/specializations', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/groupids', {
+                        cancelToken: source.token,
+                    }),
                 ])
                 .then((response) => {
                     setYearSemesterList(response[0].data.data.yearsemesters);
@@ -116,9 +114,12 @@ function StudentGroupsGroupIDs(props) {
                         response[1].data.data.groupnumbers[0].groupnumber
                     );
 
-                    setSpecializationList(response[2].data.data.specializations);
+                    setSpecializationList(
+                        response[2].data.data.specializations
+                    );
                     setSpecialization(
-                        response[2].data.data.specializations[0].specializationname
+                        response[2].data.data.specializations[0]
+                            .specializationname
                     );
 
                     setGroupIDList(response[3].data.data.groupids);
@@ -157,6 +158,8 @@ function StudentGroupsGroupIDs(props) {
     const addGroupID = (e) => {
         e.preventDefault();
 
+        setIsAdding(true);
+
         let isExist = false;
 
         groupIDList.forEach((element) => {
@@ -167,6 +170,7 @@ function StudentGroupsGroupIDs(props) {
                 // Swal.fire('The Group ID You Entered is Already Exists!');
                 setErrorMsg('The Group ID You Entered is Already Exists!');
                 isExist = true;
+                setIsAdding(false);
             }
         });
 
@@ -183,7 +187,14 @@ function StudentGroupsGroupIDs(props) {
                         ...groupIDList,
                         response.data.data.groupid,
                     ]);
-                    store.addNotification(buildToast('success', 'Success', 'Group ID Added Successfully'));
+                    setIsAdding(false);
+                    store.addNotification(
+                        buildToast(
+                            'success',
+                            'Success',
+                            'Group ID Added Successfully'
+                        )
+                    );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -201,7 +212,13 @@ function StudentGroupsGroupIDs(props) {
                         return id !== item._id;
                     })
                 );
-                store.addNotification(buildToast('danger', 'Deleted', 'Group ID Deleted Successfully'));
+                store.addNotification(
+                    buildToast(
+                        'danger',
+                        'Deleted',
+                        'Group ID Deleted Successfully'
+                    )
+                );
             })
             .catch(function (error) {
                 console.log(error);
@@ -277,7 +294,13 @@ function StudentGroupsGroupIDs(props) {
                             className="btn btn-primary"
                             onClick={addGroupID}
                         >
-                            Add
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
                         </button>
                     </div>
                 </div>
