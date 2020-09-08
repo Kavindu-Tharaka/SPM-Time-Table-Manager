@@ -20,6 +20,8 @@ function StudentGroupsGroupIDs(props) {
 
     const [groupIDList, setGroupIDList] = useState([]);
 
+    const [errorMsg, setErrorMsg] = useState('');
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
@@ -90,14 +92,17 @@ function StudentGroupsGroupIDs(props) {
 
     const onInputChangeYearSemester = (e) => {
         setYearSemester(e.target.value);
+        setErrorMsg('');
         console.log(yearSemester);
     };
     const onInputChangeSpecialization = (e) => {
         setSpecialization(e.target.value);
+        setErrorMsg('');
         console.log(specialization);
     };
     const onInputChangeGroupNumber = (e) => {
         setGroupNumber(e.target.value);
+        setErrorMsg('');
         console.log(groupNumber);
     };
 
@@ -111,7 +116,8 @@ function StudentGroupsGroupIDs(props) {
                 `${element.yearsemestername}.${element.specializationname}.${element.groupnumber}` ===
                 `${yearSemester}.${specialization}.${groupNumber}`
             ) {
-                Swal.fire('The Group ID You Entered is Already Exists!!');
+                // Swal.fire('The Group ID You Entered is Already Exists!');
+                setErrorMsg('The Group ID You Entered is Already Exists!');
                 isExist = true;
             }
         });
@@ -163,11 +169,10 @@ function StudentGroupsGroupIDs(props) {
                     paddingRight: '25%',
                 }}
             >
-                <div className="row">
+                <div className="form-row">
                     <div className="col-4">
                         <Label>{'Year & Semester'}</Label>
                         <select
-                            style={{ borderRadius: 0 }}
                             className="custom-select"
                             value={yearSemester}
                             onChange={onInputChangeYearSemester}
@@ -185,7 +190,6 @@ function StudentGroupsGroupIDs(props) {
                     <div className="col-4">
                         <Label>{'Specialization'}</Label>
                         <select
-                            style={{ borderRadius: 0 }}
                             className="custom-select"
                             value={specialization}
                             onChange={onInputChangeSpecialization}
@@ -204,7 +208,6 @@ function StudentGroupsGroupIDs(props) {
                         <Label>{'Group Number'}</Label>
 
                         <select
-                            style={{ borderRadius: 0 }}
                             className="custom-select"
                             value={groupNumber}
                             onChange={onInputChangeGroupNumber}
@@ -221,12 +224,14 @@ function StudentGroupsGroupIDs(props) {
                         <br />
                         <button
                             className="btn btn-primary"
-                            style={{ borderRadius: 0 }}
                             onClick={addGroupID}
                         >
                             Add
                         </button>
                     </div>
+                </div>
+                <div style={{color:'crimson', fontSize: 14}}>
+                    {errorMsg}
                 </div>
             </div>
             <br />
@@ -238,7 +243,7 @@ function StudentGroupsGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -300,7 +305,7 @@ function StudentGroupsGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -362,7 +367,7 @@ function StudentGroupsGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"
@@ -424,7 +429,7 @@ function StudentGroupsGroupIDs(props) {
                     marginTop: '2%',
                     paddingLeft: '7%',
                     overflowY: 'auto',
-                    maxHeight: '100px',
+                    maxHeight: '160px',
                     marginBottom: '3%',
                 }}
                 className="row"

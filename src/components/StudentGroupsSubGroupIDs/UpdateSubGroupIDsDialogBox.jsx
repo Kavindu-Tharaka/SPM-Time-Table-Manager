@@ -18,15 +18,16 @@ const UpdateSubGroupIDsDialogBox = (props) => {
         props.subGroupNumberList
     );
 
-    const [year, setYear] = useState(props.year);
-    const [semester, setSemester] = useState(props.semester);
+    const [isSubGroupIDValid, setIsSubGroupIDValid] = useState(true);
 
     const onInputChangeGroupID = (e) => {
         setGroupID(e.target.value);
+        setIsSubGroupIDValid(true);
         console.log(groupID);
     };
     const onInputChangeSubGroupNumber = (e) => {
         setSubGroupNumber(e.target.value);
+        setIsSubGroupIDValid(true);
         console.log(subGroupNumber);
     };
 
@@ -46,9 +47,8 @@ const UpdateSubGroupIDsDialogBox = (props) => {
                         }.${element.subgroupnumber}` ===
                             `${groupID}.${subGroupNumber}`)
                 ) {
-                    Swal.fire(
-                        'The Sub Group ID You Entered is Already Exists!!'
-                    );
+                    setIsSubGroupIDValid(false);
+
                     isExist = true;
                 }
             });
@@ -73,19 +73,33 @@ const UpdateSubGroupIDsDialogBox = (props) => {
                                     : listItem
                             )
                         );
+                        swal.close();
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             }
+        } else {
+            swal.close();
         }
-        swal.close();
     };
 
     return (
         <div className="dcdb-dialog-container">
             <h5 className="text-left m-0">{'Update Year & Semester'}</h5>
             <hr />
+
+            {!isSubGroupIDValid ? (
+                <div
+                    style={{
+                        color: 'crimson',
+                        textAlign: 'left',
+                        fontSize: 14,
+                    }}
+                >
+                    The Sub Group ID You Entered is Already Exists!
+                </div>
+            ) : null}
 
             <div className="form-row">
                 <div className="form-group col">
