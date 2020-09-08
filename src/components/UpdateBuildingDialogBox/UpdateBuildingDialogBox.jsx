@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
+import { FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
 
 const UpdateBuildingDialogBox = (props) => {
+	const [isUpdatingBuilding, setIsUpdatingBuilding] = useState(false);
+
 	const [buildingName, setBuildingName] = useState(
 		props.building.buildingName
 	);
@@ -12,14 +15,16 @@ const UpdateBuildingDialogBox = (props) => {
 	};
 
 	const onUpdateClick = () => {
+		setIsUpdatingBuilding(true);
 		axios
 			.patch(
 				`http://localhost:8000/api/v1/buildings/${props.building._id}`,
 				{ buildingName }
 			)
 			.then((res) => {
-				swal.close();
 				props.refreshComponent();
+				setIsUpdatingBuilding(false);
+				swal.close();
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -47,7 +52,13 @@ const UpdateBuildingDialogBox = (props) => {
 				className='btn btn-info float-right mb-4'
 				onClick={onUpdateClick}
 			>
-				Update
+				{isUpdatingBuilding ? (
+					<div>
+						Updating <FaSpinner className='spin' />
+					</div>
+				) : (
+					'Update'
+				)}
 			</button>
 			<button
 				className='btn btn-secondary float-right mb-4 mr-2'

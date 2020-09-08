@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
+import { FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
 
 import './updateRoomDialogBox.css';
@@ -10,6 +11,9 @@ const UpdateRoomDialogBox = (props) => {
 	const [floor, setFloor] = useState(props.room.floor);
 	const [capacity, setCapacity] = useState(props.room.capacity);
 	const [roomType, setRoomType] = useState(props.room.roomType);
+
+	// loading
+	const [isUpdatingRoom, setIsUpdatingRoom] = useState(false);
 
 	const onBuildingChange = (e) => {
 		setBuildingName(e.target.value);
@@ -28,6 +32,7 @@ const UpdateRoomDialogBox = (props) => {
 	};
 
 	const onUpdateClick = (e) => {
+		setIsUpdatingRoom(true);
 		axios
 			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
 				building: buildingName,
@@ -37,8 +42,9 @@ const UpdateRoomDialogBox = (props) => {
 				roomType,
 			})
 			.then((res) => {
-				swal.close();
 				props.refreshComponent();
+				swal.close();
+				setIsUpdatingRoom(false);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -150,7 +156,13 @@ const UpdateRoomDialogBox = (props) => {
 				className='btn btn-info float-right mb-4'
 				onClick={onUpdateClick}
 			>
-				Update
+				{isUpdatingRoom ? (
+					<div>
+						Updating <FaSpinner className='spin' />
+					</div>
+				) : (
+					'Update'
+				)}
 			</button>
 			<button
 				className='btn btn-secondary float-right mb-4 mr-2'
