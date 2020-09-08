@@ -8,8 +8,7 @@ exports.buildToast = (type, title, message) => {
 		animationIn: ['animated', 'fadeIn'],
 		animationOut: ['animated', 'fadeOut'],
 		dismiss: {
-			duration: 3000,
-			onScreen: true,
+			duration: 2000
 		},
 	};
 };
