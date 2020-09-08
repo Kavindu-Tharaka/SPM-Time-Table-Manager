@@ -48,7 +48,7 @@ const LocationContent = (props) => {
 				setBuildings([...buildings, res.data.data.building]);
 				setIsAddingBuilding(false);
 				setBuildingName('');
-				store.addNotification(buildToast());
+				store.addNotification(buildToast('success', 'Success', 'Building Added Successfully'));
 			})
 			.catch((err) => {
 				console.log(err.response);
