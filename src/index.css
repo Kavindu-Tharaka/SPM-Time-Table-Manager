@@ -22,6 +22,7 @@ a {
 
 .btn-primary {
 	min-width: 120px;
+	height: 38px !important;
 	background: #205374 !important;
 	outline: none;
 	border: none !important;
@@ -103,12 +104,14 @@ select:focus {
 	outline: none;
 }
 
-.sm-ctrl-btn-dlt:hover, .md-ctrl-btn-dlt:hover {
+.sm-ctrl-btn-dlt:hover,
+.md-ctrl-btn-dlt:hover {
 	background: #205374;
 	color: #fff;
 }
 
-.sm-ctrl-btn-upt:hover, .md-ctrl-btn-upt:hover{
+.sm-ctrl-btn-upt:hover,
+.md-ctrl-btn-upt:hover {
 	background: #205374;
 	color: #fff;
 }
@@ -121,4 +124,28 @@ select:focus {
 
 .btn {
 	border-radius: 0 !important;
+}
+
+.spin {
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+	margin-left: 10px;
+}
+
+@-webkit-keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
