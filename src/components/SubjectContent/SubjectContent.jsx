@@ -5,6 +5,8 @@ import axios from "axios";
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
 import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import './SubjectContent.css';
 

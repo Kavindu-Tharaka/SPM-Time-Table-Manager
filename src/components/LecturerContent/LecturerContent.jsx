@@ -6,6 +6,8 @@ import './LecturerContent.css';
 import axios from "axios";
 import Swal from 'sweetalert2';
 import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const LecturerContent = () => {
 
@@ -94,6 +96,7 @@ const LecturerContent = () => {
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
+                store.addNotification(buildToast('danger','' , 'Lecturer deleted'));
             })
             .catch((e) => console.error(e));
     }
@@ -139,8 +142,9 @@ const LecturerContent = () => {
                 building,
                 rankVal
             }).then((res) => {
-                window.location.reload()
+                window.location.reload();
                 //console.log("data added", res);
+                store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
             }).catch((err) => {
                 console.log("err is: ", err);
             });
@@ -158,9 +162,10 @@ const LecturerContent = () => {
             })
                 .then((res) => {
                     console.log(res.data);
-                    console.log("lecturer update executed succesfully")
+                    // console.log("lecturer update executed succesfully")
                     setUpdate(false);
                     window.location.reload();
+                    store.addNotification(buildToast('warning','', 'Lecturer Updated Successfully'));
                 })
                 .catch((e) => {
                     console.err(e);
