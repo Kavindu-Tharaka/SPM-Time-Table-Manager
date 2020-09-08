@@ -1,11 +1,30 @@
 import React from 'react';
 import swal from '@sweetalert/with-react';
+import { FaSpinner } from 'react-icons/fa';
 
 import './deleteConfirmationDialogBox.css';
+import { useState } from 'react';
 
 const DeleteConfirmationDialogBox = (props) => {
+	// Loading
+	const [isDeleting, setIsDeleting] = useState(false);
+
 	const onDeleteClick = () => {
-		props.deleteEventHandler();
+		if (
+			props.deleteEventHandler !== undefined &&
+			props.deleteEventWithIdHandler === undefined
+		) {
+			setIsDeleting(true);
+			props.deleteEventHandler();
+		}
+
+		if (
+			props.deleteEventWithIdHandler !== undefined &&
+			props.itemId !== undefined
+		) {
+			setIsDeleting(true);
+			props.deleteEventWithIdHandler(props.itemId);
+		}
 	};
 
 	return (
@@ -23,7 +42,13 @@ const DeleteConfirmationDialogBox = (props) => {
 				className='btn btn-info float-right mb-4'
 				onClick={onDeleteClick}
 			>
-				Delete
+				{isDeleting ? (
+					<div>
+						Deleting <FaSpinner className='spin' />
+					</div>
+				) : (
+					'Delete'
+				)}
 			</button>
 			<button
 				className='btn btn-secondary float-right mb-4 mr-2'

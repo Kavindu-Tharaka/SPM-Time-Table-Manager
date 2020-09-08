@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
-import swal from '@sweetalert/with-react'; 
-// import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../../util/toast';
 
 import './buildingCard.css';
 import DeleteConfirmationDialogBox from '../../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
@@ -17,6 +18,7 @@ const BuildingCard = (props) => {
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
+				store.addNotification(buildToast('danger', 'Deleted', 'Building Deleted Successfully'))
 			})
 			.catch((err) => {
 				console.log(err.response);

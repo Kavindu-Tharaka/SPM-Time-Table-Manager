@@ -37,3 +37,36 @@
 .snb-nav-content-link-active {
 	background: #f7f7f7;
 }
+
+.snb-not-availabilities-collapse {
+	text-decoration: none;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	width:100%;
+	text-align: left;
+	outline: none;
+	box-shadow: none;
+}
+
+.snb-sub-sub-nav-content-link-active {
+	background: #f7f7f7d8;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	width:100%;
+	padding-left: 30px;
+	padding-top:5px;
+	padding-bottom:5px
+}
+
+.snb-sub-sub-nav-content-link {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	width:100%;
+	padding-left: 30px;
+	padding-top:5px;
+	padding-bottom:5px
+}

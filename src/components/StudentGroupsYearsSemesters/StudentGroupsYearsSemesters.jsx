@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import Label from '../Label/Label';
 import ContentHeader from '../ContentHeader/ContentHeader';
+import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
+import UpdateYearsSemestersDialogBox from './UpdateYearsSemestersDialogBox';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
     const [yearsemesterList, setYearSemesterList] = useState([]);
+
+    const [isYearValid, setIsYearValid] = useState(true);
+    const [yearErrorMsg, setYearErrorMsg] = useState('');
+    const [isSemesterValid, setIsSemesterValid] = useState(true);
+    const [semesterErrorMsg, setSemesterErrorMsg] = useState('');
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -43,180 +51,181 @@ function StudentGroupsYearsSemesters(props) {
 
     const addYearSemester = async (e) => {
         e.preventDefault();
-        if (year === '' || semester === '' || year === '0' || semester === '0') {
-            Swal.fire('Please Enter Valid Year and Semester!');
+        if ((year === '' || year === '0' || year === 'e') && (semester === '' || semester === '0' || semester === 'e')) {
+            setIsYearValid(false);
+            setYearErrorMsg('Please Enter Valid Year!');
             setYear('');
+
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Please Enter Valid Semester!');
             setSemester('');
-        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire('Year and Semster Should be Numbers!');
+        } if (year === '' || year === '0' || year === 'e') {
+            setIsYearValid(false);
+            setYearErrorMsg('Please Enter Valid Year!');
             setYear('');
+        } else if (semester === '' || semester === '0' || semester === 'e') {
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Please Enter Valid Semester!');
             setSemester('');
-        } else if (year > 4 || year < 0) {
-            Swal.fire('Year Should be in Between 1 and 4!');
+        } 
+
+
+        else if (!(/^\d+$/.test(year))) {
+            setIsYearValid(false);
+            setYearErrorMsg('Year Should be a Positive Number!');
             setYear('');
+        } 
+        else if (!(/^\d+$/.test(semester))) {
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Semester Should be a Positive Number!');
             setSemester('');
+        } 
+
+
+        else if (year > 4 || year < 0) {
+            setIsYearValid(false);
+            setYearErrorMsg('Year Should be in Between 1 and 4!');
+            setYear('');
         } else if (semester > 2 || semester < 0) {
-            Swal.fire('Semester Should be 1 or 2!');
-            setYear('');
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Semester Should be 1 or 2!');
             setSemester('');
-        } else {
-            axios
-                .get(
-                    `http://localhost:8000/api/v1/yearsemesters/yearSemesterByName/?yearSemester=Y${year}.S${semester}`
-                )
-                .then(function (response) {
-                    console.log(response.data.data.yearsemester.length);
-                    if (response.data.data.yearsemester.length > 0) {
-                        Swal.fire(
-                            'The Year and Semester Combination You Entered is Already Exist!'
-                        );
-                    } else if (response.data.data.yearsemester.length === 0) {
-                        axios
-                            .post(
-                                'http://localhost:8000/api/v1/yearsemesters',
-                                {
-                                    yearsemestername: `Y${year}.S${semester}`,
-                                }
-                            )
-                            .then(function (response) {
-                                console.log(response.data.data.yearsemester);
-                                setYearSemesterList([
-                                    ...yearsemesterList,
-                                    response.data.data.yearsemester,
-                                ]);
-                                setYear('');
-                                setSemester('');
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+        } 
+        
+        
+        else {
+            let isExist = false;
+
+            yearsemesterList.forEach((element) => {
+                if (element.yearsemestername === `Y${year}.S${semester}`) {
+                    setIsYearValid(false);
+                    setIsSemesterValid(false);
+                    setYearErrorMsg(
+                        'The Year Semester Combination You Entered is Already Exist!'
+                    );
+                    isExist = true;
+                    setYear('');
+                    setSemester('');
+                }
+            });
+
+            if (!isExist) {
+                axios
+                    .post('http://localhost:8000/api/v1/yearsemesters', {
+                        yearsemestername: `Y${year}.S${semester}`,
+                    })
+                    .then(function (response) {
+                        console.log(response.data.data.yearsemester);
+                        setYearSemesterList([
+                            ...yearsemesterList,
+                            response.data.data.yearsemester,
+                        ]);
+                        setYear('');
+                        setSemester('');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         }
     };
 
     const deleteYearSemester = (yearsemesterId) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            // icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#205374',
-            // cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Delete',
-        }).then((result) => {
-            if (result.value) {
-                axios
-                    .delete(
-                        `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
-                    )
-                    .then((res) => {
-                        setYearSemesterList(
-                            yearsemesterList.filter((item) => {
-                                return yearsemesterId !== item._id;
-                            })
-                        );
+        axios
+            .delete(
+                `http://localhost:8000/api/v1/yearsemesters/${yearsemesterId}`
+            )
+            .then((res) => {
+                swal.close();
+                setYearSemesterList(
+                    yearsemesterList.filter((item) => {
+                        return yearsemesterId !== item._id;
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        });
-    };
-
-    const editYearSemester = (inputText, id) => {
-        Swal.mixin({
-            input: 'text',
-            inputValue: inputText,
-            confirmButtonText: 'Edit',
-            confirmButtonColor: '#205374',
-            showCancelButton: true,
-        })
-            .queue([
-                {
-                    title: 'Edit Year Semester Combination',
-                },
-            ])
-            .then((result) => {
-                if (result.value) {
-                    const editedYearSemester = result.value[0];
-                    if (inputText !== editedYearSemester) {
-                        if (
-                            editedYearSemester.length !== 5 ||
-                            !/(Y[1-4]\.S[1-2])/g.test(editedYearSemester)
-                        ) {
-                            Swal.fire(
-                                'Year Semester Text Pattern does not matched! \n\n Should be in Y1.S1 format!'
-                            );
-                        } else {
-                            axios
-                                .get(
-                                    `http://localhost:8000/api/v1/yearsemesters/yearSemesterByName/?yearSemester=${editedYearSemester}`
-                                )
-                                .then(function (response) {
-                                    console.log(
-                                        response.data.data.yearsemester.length
-                                    );
-                                    if (
-                                        response.data.data.yearsemester.length >
-                                        0
-                                    ) {
-                                        Swal.fire(
-                                            'The Year and Semester Combination You Entered is Already Exist!'
-                                        );
-                                    } else if (
-                                        response.data.data.yearsemester
-                                            .length === 0
-                                    ) {
-                                        axios
-                                            .patch(
-                                                `http://localhost:8000/api/v1/yearsemesters/${id}`,
-                                                {
-                                                    yearsemestername: editedYearSemester,
-                                                }
-                                            )
-                                            .then((res) => {
-                                                setYearSemesterList(
-                                                    (prevlist) =>
-                                                        prevlist.map(
-                                                            (listItem) =>
-                                                                id ===
-                                                                listItem._id
-                                                                    ? {
-                                                                          ...listItem,
-                                                                          yearsemestername: editedYearSemester,
-                                                                      }
-                                                                    : listItem
-                                                        )
-                                                );
-                                            })
-                                            .catch((err) => console.log(err));
-                                    }
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                        }
-                    }
-                }
+                );
+            })
+            .catch((err) => {
+                console.log(err);
             });
     };
 
+
+
     const onInputChangeYear = (e) => {
-        setYear(e.target.value);
+        if(e.target.value > 0 || e.target.value === '')
+            setYear(e.target.value);
+        setIsYearValid(true);
+        setYearErrorMsg('');
     };
 
     const onInputChangeSemester = (e) => {
-        setSemester(e.target.value);
+        if(e.target.value > 0 || e.target.value === '')
+            setSemester(e.target.value);
+        setIsSemesterValid(true);
+        setSemesterErrorMsg('');
     };
 
     return (
-        <div className="container">
+        <div>
             <ContentHeader header={'Years & Semesters'} />
-            <div
+
+            <form
+                style={{
+                    marginLeft: '15%',
+                    marginTop: '3%',
+                }}
+            >
+                <div className="form-row">
+                    <div className="col-md-4 mb-3">
+                        {/* <label>First name</label> */}
+                        <input
+                            type="number"
+                            className={
+                                isYearValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder="Year"
+                            onChange={onInputChangeYear}
+                            onKeyDown={handleKeyDown}
+                            value={year}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Year can be a positive number between 1 and 4"
+                        />
+                        <div className="invalid-feedback">{yearErrorMsg}</div>
+                    </div>
+                    <div className="col-md-4 mb-3">
+                        <input
+                            type="number"
+                            className={
+                                isSemesterValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder="Semester"
+                            onChange={onInputChangeSemester}
+                            onKeyDown={handleKeyDown}
+                            value={semester}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Semester can be number 1 or 2"
+                        />
+                        <div className="invalid-feedback">
+                            {semesterErrorMsg}
+                        </div>
+                    </div>
+                    <div className="col-md-2 mb-3">
+                        <button
+                            className="btn btn-primary"
+                            onClick={addYearSemester}
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {/* <div
                 style={{
                     position: 'fixed',
                     width: '35%',
@@ -235,6 +244,9 @@ function StudentGroupsYearsSemesters(props) {
                     onChange={onInputChangeYear}
                     onKeyDown={handleKeyDown}
                     value={year}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Year can be a positive number between 1 and 4"
                 />
                 <input
                     style={{ marginLeft: 20, borderRadius: 0 }}
@@ -244,6 +256,9 @@ function StudentGroupsYearsSemesters(props) {
                     onChange={onInputChangeSemester}
                     onKeyDown={handleKeyDown}
                     value={semester}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Semester can be number 1 or 2"
                 />
                 <button
                     style={{ marginLeft: 20, borderRadius: 0 }}
@@ -253,42 +268,41 @@ function StudentGroupsYearsSemesters(props) {
                 >
                     Add
                 </button>
-            </div>
+            </div> */}
 
             <div
                 style={{
-                    position: 'fixed',
-                    // width: '95%',
                     textAlign: 'center',
-                    top: '25%',
-                    // left: '50%',
-                    padding: '20px',
-                    // transform: 'translate(-50%, 0)',
+                    marginTop: '5%',
+                    padding: '10px',
                     overflowY: 'auto',
-                    height: '450px',
                 }}
                 className="row"
             >
                 {yearsemesterList.length === 0 ? (
-                    <div className="col">
-                        {' '}
-                        <h1 style={{ fontSize: 20, marginTop: '5%' }}>
-                            {' '}
-                            There are no year semester combinations in the database!{' '}
-                        </h1>{' '}
+                    <div
+                        style={{
+                            width: '100%',
+                        }}
+                    >
+                        <EmptyDataPlaceholder message="Year Semester List is Currently Empty" />
                     </div>
-                ) : yearsemesterList.map((tag) => (
-                    <div key={tag._id}>
-                        <div className="col">
-                            <Label
-                                id={tag._id}
-                                deleteMethod={deleteYearSemester}
-                                editMethod={editYearSemester}
-                                tagName={tag.yearsemestername}
-                            />
+                ) : (
+                    yearsemesterList.map((tag) => (
+                        <div key={tag._id}>
+                            <div className="col">
+                                <Label
+                                    id={tag._id}
+                                    deleteMethod={deleteYearSemester}
+                                    tagName={tag.yearsemestername}
+                                    component={UpdateYearsSemestersDialogBox}
+                                    yearSemesterList={yearsemesterList}
+                                    setYearSemesterList={setYearSemesterList}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

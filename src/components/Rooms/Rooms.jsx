@@ -3,6 +3,9 @@ import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import axios from 'axios';
 import RoomsTable from './RoomsTable';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const Rooms = (props) => {
 	const [buildings, setBuildings] = useState([]);
@@ -16,6 +19,14 @@ const Rooms = (props) => {
 
 	const [updateComponent, setUpdateComponent] = useState(0);
 
+	// Validation
+	const [isRoomNameValid, setIsRoomNameValid] = useState(true);
+	const [isFloorValid, setIsFloorValid] = useState(true);
+	const [isCapacityValid, setIsCapacityValid] = useState(true);
+
+	// Loading
+	const [isAddingRoom, setIsAddingRoom] = useState(false);
+
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
 	};
@@ -25,18 +36,48 @@ const Rooms = (props) => {
 	};
 
 	const onRoomNameChange = (e) => {
+		setIsRoomNameValid(true);
 		setRoomName(e.target.value);
 	};
 
 	const onFloorChange = (e) => {
-		setFloor(e.target.value);
+		setIsFloorValid(true);
+		if (e.target.value >= 0) {
+			setFloor(e.target.value);
+		}
 	};
 
 	const onCapacityChange = (e) => {
-		setCapacity(e.target.value);
+		setIsCapacityValid(true);
+		if (e.target.value >= 0) {
+			setCapacity(e.target.value);
+		}
 	};
 
 	const onAddClick = (e) => {
+		let hasErrorDetected = false;
+
+		if (roomName === '') {
+			setIsRoomNameValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (floor === '') {
+			setIsFloorValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (capacity === '') {
+			setIsCapacityValid(false);
+			hasErrorDetected = true;
+		}
+
+		if (hasErrorDetected) {
+			return;
+		}
+
+		setIsAddingRoom(true);
+
 		axios
 			.post('http://localhost:8000/api/v1/rooms', {
 				building: buildingName,
@@ -46,8 +87,18 @@ const Rooms = (props) => {
 				roomType,
 			})
 			.then((res) => {
-				setRooms([...rooms, res.data.data.room]);
-				// TODO: Clear input fields
+				refreshComponent();
+
+				setRoomName('');
+				setFloor('');
+				setCapacity('');
+				setRoomType('lecture-hall');
+
+				setIsAddingRoom(false);
+
+				store.addNotification(
+					buildToast('success', 'Success', 'Room Added Successfully')
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -75,7 +126,7 @@ const Rooms = (props) => {
 			.catch((err) => {
 				console.log(err.response);
 			});
-	}, [updateComponent]);
+	}, [updateComponent, props.buildings]);
 
 	return (
 		<div>
@@ -101,31 +152,52 @@ const Rooms = (props) => {
 					<label>Room Name</label>
 					<input
 						type='text'
-						className='form-control'
+						className={
+							isRoomNameValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='Room Name'
 						onChange={onRoomNameChange}
 						value={roomName}
 					/>
+					<div className='invalid-feedback'>
+						Please provide a room name
+					</div>
 				</div>
 				<div className='form-group col-md-1'>
 					<label>Floor</label>
 					<input
 						type='number'
-						className='form-control'
+						className={
+							isFloorValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='00'
 						onChange={onFloorChange}
 						value={floor}
 					/>
+					<div className='invalid-feedback'>
+						Please provide floor number
+					</div>
 				</div>
 				<div className='form-group col-md-1'>
 					<label>Capacity</label>
 					<input
 						type='number'
-						className='form-control'
+						className={
+							isCapacityValid
+								? 'form-control'
+								: 'form-control is-invalid'
+						}
 						placeholder='00'
 						onChange={onCapacityChange}
 						value={capacity}
 					/>
+					<div className='invalid-feedback'>
+						Please provide the capacity
+					</div>
 				</div>
 				<div className='form-group col-md-3'>
 					<label>Room Type</label>
@@ -136,7 +208,8 @@ const Rooms = (props) => {
 								id='lecture-hall'
 								name='room-type'
 								className='custom-control-input'
-								onClick={() => {
+								checked={roomType === 'lecture-hall'}
+								onChange={() => {
 									setRoomType('lecture-hall');
 								}}
 							/>
@@ -153,6 +226,7 @@ const Rooms = (props) => {
 								id='laboratory'
 								name='room-type'
 								className='custom-control-input'
+								checked={roomType === 'laboratory'}
 								onChange={() => {
 									setRoomType('laboratory');
 								}}
@@ -171,7 +245,13 @@ const Rooms = (props) => {
 						className='btn btn-primary float-right mt-4'
 						onClick={onAddClick}
 					>
-						Add
+						{isAddingRoom ? (
+							<div>
+								Adding <FaSpinner className='spin' />
+							</div>
+						) : (
+							'Add'
+						)}
 					</button>
 				</div>
 			</div>
@@ -180,7 +260,11 @@ const Rooms = (props) => {
 			{rooms.length === 0 ? (
 				<EmptyDataPlaceholder message='Room list is currently empty' />
 			) : (
-				<RoomsTable rooms={rooms} buildings={buildings}/>
+				<RoomsTable
+					rooms={rooms}
+					buildings={buildings}
+					refreshComponent={refreshComponent}
+				/>
 			)}
 		</div>
 	);

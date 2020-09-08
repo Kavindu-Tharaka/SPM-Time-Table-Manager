@@ -1,11 +1,38 @@
 import React, { Fragment } from 'react';
-import { MdModeEdit, MdDelete } from 'react-icons/md';
-
+import swal from '@sweetalert/with-react';
 import './tag.css';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 function Tag(props) {
-    const editMethod = props.editMethod;
     const deleteMethod = props.deleteMethod;
+
+    const onDeleteClick = () => {
+        swal({
+            buttons: false,
+            content: (
+                <DeleteConfirmationDialogBox
+                    deleteEventWithIdHandler={deleteMethod}
+                    itemName={props.tagName}
+                    itemId={props.id}
+                />
+            ),
+        });
+    };
+
+    const onEditClick = () => {
+        swal({
+            buttons: false,
+            content: (
+                <props.component
+                    itemName={props.tagName}
+                    id={props.id}
+                    itemList={props.itemList}
+                    setItemList={props.setItemList}
+                />
+            ),
+        });
+    };
 
     return (
         <Fragment>
@@ -20,37 +47,25 @@ function Tag(props) {
                 }}
             >
                 <div className="mr-auto p-2 bd-highlight">
-                    <h6
-                        style={{ display: 'inline' }}
-                        // className="card-title mr-auto p-2 bd-highlight"
-                    >
-                        {props.tagName}
-                    </h6>
+                    <h6 style={{ display: 'inline' }}>{props.tagName}</h6>
                 </div>
                 <div className="p-2 bd-highlight">
-                    <MdModeEdit
+                    <button
+                        className="sm-ctrl-btn sm-ctrl-btn-upt"
+                        // onClick={() => editMethod(props.tagName, props.id)}
+                        onClick={onEditClick}
+                    >
+                        <IoMdCreate />
+                    </button>
+                    <button
                         style={{
-                            display: 'inline',
-                            backgroundColor: 'gainsboro',
-                            padding: 3,
-                            borderRadius: 50,
-                            marginRight: 5,
+                            marginLeft: 5,
                         }}
-                        size="25px"
-                        color="#205374"
-                        onClick={() => editMethod(props.tagName, props.id)}
-                    />
-                    <MdDelete
-                        style={{
-                            display: 'inline',
-                            backgroundColor: 'gainsboro',
-                            padding: 3,
-                            borderRadius: 50,
-                        }}
-                        size="25px"
-                        color="#205374"
-                        onClick={() => deleteMethod(props.id)}
-                    />
+                        className="sm-ctrl-btn sm-ctrl-btn-dlt"
+                        onClick={onDeleteClick}
+                    >
+                        <IoMdClose />
+                    </button>
                 </div>
             </div>
         </Fragment>
