@@ -48,6 +48,11 @@ const RoomsTable = (props) => {
 	const columns = [
 		{ name: 'ID', selector: '_id', omit: true },
 		{ name: 'Building', selector: 'building', omit: true },
+		{
+			name: 'Building',
+			selector: 'buildingObj[0].buildingName',
+			sortable: true,
+		},
 		{ name: 'Room Name', selector: 'roomName', sortable: true },
 		{ name: 'Floor', selector: 'floor', sortable: true },
 		{ name: 'Capacity', selector: 'capacity', sortable: true },
