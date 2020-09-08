@@ -19,12 +19,13 @@ function WorkingHoursComponent() {
   const [dayOfWork, setDayOfWork] = useState("");
   const [fromTime, setFromTime] = useState("00:00");
   const [toTime, setToTime] = useState("00:00");
+  const [updateComponent, setUpdateComponent] = useState(0);
 
   //useEffect
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [updateComponent]);
 
   const getData = () => {
     axios
@@ -37,6 +38,12 @@ function WorkingHoursComponent() {
         console.log(e);
       });
   };
+
+	const refreshComponent = () => {
+		setUpdateComponent(Math.random());
+	};
+
+
 
   const ondayTypeChange = (value) => {
     setDayType(value);
@@ -60,9 +67,7 @@ function WorkingHoursComponent() {
   };
 
   const onSubmitHandler = (e) => {
-    // console.log( getDayTypeCount())
     e.preventDefault();
-    // setId(Math.round(Math.random() * 10));
     if (
       dayType == "" ||
       workingHours == "" ||
@@ -112,41 +117,8 @@ function WorkingHoursComponent() {
                 .catch((err) => {
                   console.log(err);
                 });
-            } else {
-              console.log("Im editing");
-              const updateDay = {
-                dayType,
-                noOfWorkingDays,
-                workingHours,
-                workingMins,
-                dayOfWork,
-                fromTime,
-                toTime,
-              };
-
-              axios
-                .patch(`http://localhost:8000/api/v1/workingDays/${id}`, {
-                  dayType,
-                  noOfWorkingDays,
-                  workingHours,
-                  workingMins,
-                  dayOfWork,
-                  fromTime,
-                  toTime,
-                })
-                .then((res) => {
-                  console.log(res.data);
-                  editWorkingDay(res.data);
-                  setEdit(false);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-
-              Swal.fire("Updated!", "Your Entry has been updated.", "success");
-
-              clear();
-            }
+            } 
+            
           } else {
             console.log(res.data);
             Swal.fire({
@@ -166,64 +138,7 @@ function WorkingHoursComponent() {
     setWorkingDay([...workingDay, values]);
   };
 
-  const editWorkingDay = (updateDay) => {
-    console.log("UPDATE DAY = ", updateDay);
-    setWorkingDay(
-      workingDay.map((day) => {
-        console.log(day);
-        if (day._id === updateDay._id) {
-          day.dayType = updateDay.dayType;
-          day.noOfWorkingDays = updateDay.noOfWorkingDays;
-          day.workingHours = updateDay.workingHours;
-          day.workingMins = updateDay.workingMins;
-          day.dayOfWork = updateDay.dayOfWork;
-        }
-        console.log("updated day ==== ", day);
-        return day;
-      })
-    );
-  };
 
-  const updateWorkingDay = (value, e) => {
-    setId(value._id);
-    setDayType(value.dayType);
-    setNoOfWorkingDays(value.noOfWorkingDays);
-    setWorkingHours(value.workingHours);
-    setWorkingMins(value.workingMins);
-    setDayOfWork(value.dayOfWork);
-    setFromTime(value.fromTime);
-    setToTime(value.toTime);
-    setEdit(true);
-  };
-
-  //deleting a working day
-  const deleteWorkingDay = (rowID) => {
-    console.log(rowID);
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.value) {
-        axios
-          .delete(`http://localhost:8000/api/v1/workingDays/${rowID}`)
-          .then((res) => {
-            console.log(res);
-            setWorkingDay(
-              workingDay.filter((day) => {
-                return day._id !== rowID;
-              })
-            );
-          })
-          .catch((e) => console.log(e));
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-      }
-    });
-  };
 
   const clear = () => {
     setDayType("");
@@ -237,8 +152,7 @@ function WorkingHoursComponent() {
 
   return (
     <div>
-      {/* <WorkingHoursModal/>*/}
-      {/* <HeaderComponent title={"Working Time"} /> */}
+
       <ContentHeader header={"Working Time"} />
 
       <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>
@@ -418,7 +332,7 @@ function WorkingHoursComponent() {
                   type="radio"
                   name="day"
                   value="sunday"
-                  checked={dayOfWork === "sunday" ? true : false} // (dayType === 'weekend' ? false : true)
+                  checked={dayOfWork === "sunday" ? true : false} 
                   onChange={(e) => onWorkingDayChange(e.target.value)}
                   disabled={dayType === "weekday" ? true : false}
                 />{" "}
@@ -438,8 +352,8 @@ function WorkingHoursComponent() {
       <WorkingHoursForm addWorkingDay={addWorkingDay} />
       <WorkingHoursTable
         workingDay={workingDay}
-        updateWorkingDay={updateWorkingDay}
-        deleteWorkingDay={deleteWorkingDay}
+
+        refreshComponent = {refreshComponent}
       />
     </div>
   );

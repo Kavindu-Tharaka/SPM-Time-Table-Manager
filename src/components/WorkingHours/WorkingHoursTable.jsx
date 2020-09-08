@@ -1,15 +1,60 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios'
 import DataTable from "react-data-table-component";
-import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox'
+import UpdateWorkingHoursDialogBox from '../UpdateWorkingHoursDialogBox/UpdateWorkingHoursDialogBox'
+import swal from '@sweetalert/with-react';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder'
 import './workingHours.css'
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
-import Swal from "sweetalert2";
-function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
+function WorkingHoursTable({ workingDay, refreshComponent }) {
   useEffect(() => {
     console.log(workingDay);
   }, []);
+
+
+    //delete functionality
+    const onDeleteClick = (id) => {
+      swal({
+        buttons: false,
+        content: (
+          <DeleteConfirmationDialogBox
+            deleteEventWithIdHandler={deleteWorkingDay}
+            itemId={id}
+           
+          />
+        ),
+      });
+    }
+
+    const deleteWorkingDay = async (id) => {
+      try {
+        axios
+        .delete(`http://localhost:8000/api/v1/workingDays/${id}`)
+        .then((res) => {
+          swal.close();
+          
+          refreshComponent();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        })
+      } catch (error) {
+        
+      }
+    }
+
+    const updateWorkingDay = (row) => {
+      swal({
+        buttons: false,
+        content: (
+          <UpdateWorkingHoursDialogBox row = {row} workingDay = {workingDay} refreshComponent = {refreshComponent}/>
+        ),
+      });
+   
+    }
+
 
   const columns = [
     {
@@ -57,7 +102,7 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
           <button
             style = {style.button}
             className="sm-ctrl-btn sm-ctrl-btn-dlt"
-            onClick={() => deleteWorkingDay(row._id)}
+            onClick={() => onDeleteClick(row._id)}
           >
          	<IoMdClose />
           </button>
@@ -89,22 +134,12 @@ function WorkingHoursTable({ workingDay, updateWorkingDay, deleteWorkingDay }) {
 
 export default WorkingHoursTable;
 
-// {workingDay.map((day) => (
-//   <div>
-//     <li>{day.dayOfWork}</li>
-//     <li>{day.dayType}</li>
-//     <li>{day.noOfWorkingDays}</li>
-//     <li>{day.workingHours}</li>
-//     <li>{day.workingMins}</li>
-//   </div>
-// ))}
 
 
 const style = {
   button : {
     borderRadius : '50%',
     paddingBottom:10,
-    // backgroundColor : 'lightgray',
     border:'none',
     marginRight:10,
   
