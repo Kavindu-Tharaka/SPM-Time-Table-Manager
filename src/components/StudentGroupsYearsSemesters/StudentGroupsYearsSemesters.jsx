@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import Label from '../Label/Label';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import UpdateYearsSemestersDialogBox from './UpdateYearsSemestersDialogBox';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
     const [yearsemesterList, setYearSemesterList] = useState([]);
+
+    const [isYearValid, setIsYearValid] = useState(true);
+    const [yearErrorMsg, setYearErrorMsg] = useState('');
+    const [isSemesterValid, setIsSemesterValid] = useState(true);
+    const [semesterErrorMsg, setSemesterErrorMsg] = useState('');
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -25,9 +34,11 @@ function StudentGroupsYearsSemesters(props) {
                 .then(function (response) {
                     console.log(response.data.data.yearsemesters);
                     setYearSemesterList(response.data.data.yearsemesters);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -47,48 +58,51 @@ function StudentGroupsYearsSemesters(props) {
     const addYearSemester = async (e) => {
         e.preventDefault();
         if (
-            year === '' ||
-            semester === '' ||
-            year === '0' ||
-            semester === '0'
+            (year === '' || year === '0' || year === 'e') &&
+            (semester === '' || semester === '0' || semester === 'e')
         ) {
-            Swal.fire({
-                text: 'Please Enter Valid Year and Semester!',
-                confirmButtonColor: '#205374',
-            });
+            setIsYearValid(false);
+            setYearErrorMsg('Please Enter Valid Year!');
             setYear('');
+
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Please Enter Valid Semester!');
             setSemester('');
-        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire({
-                text: 'Year and Semster Should be Positive Numbers!',
-                confirmButtonColor: '#205374',
-            });
+        }
+        if (year === '' || year === '0' || year === 'e') {
+            setIsYearValid(false);
+            setYearErrorMsg('Please Enter Valid Year!');
             setYear('');
+        } else if (semester === '' || semester === '0' || semester === 'e') {
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Please Enter Valid Semester!');
+            setSemester('');
+        } else if (!/^\d+$/.test(year)) {
+            setIsYearValid(false);
+            setYearErrorMsg('Year Should be a Positive Number!');
+            setYear('');
+        } else if (!/^\d+$/.test(semester)) {
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Semester Should be a Positive Number!');
             setSemester('');
         } else if (year > 4 || year < 0) {
-            Swal.fire({
-                text: 'Year Should be in Between 1 and 4!',
-                confirmButtonColor: '#205374',
-            });
+            setIsYearValid(false);
+            setYearErrorMsg('Year Should be in Between 1 and 4!');
             setYear('');
-            setSemester('');
         } else if (semester > 2 || semester < 0) {
-            Swal.fire({
-                text: 'Semester Should be 1 or 2!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
+            setIsSemesterValid(false);
+            setSemesterErrorMsg('Semester Should be 1 or 2!');
             setSemester('');
         } else {
             let isExist = false;
 
             yearsemesterList.forEach((element) => {
                 if (element.yearsemestername === `Y${year}.S${semester}`) {
-                    Swal.fire({
-                        text:
-                            'The Year Semester Combination You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
+                    setIsYearValid(false);
+                    setIsSemesterValid(false);
+                    setYearErrorMsg(
+                        'The Year Semester Combination You Entered is Already Exist!'
+                    );
                     isExist = true;
                     setYear('');
                     setSemester('');
@@ -108,6 +122,7 @@ function StudentGroupsYearsSemesters(props) {
                         ]);
                         setYear('');
                         setSemester('');
+                        store.addNotification(buildToast('success', 'Success', 'Year and Semester Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -128,95 +143,90 @@ function StudentGroupsYearsSemesters(props) {
                         return yearsemesterId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Year and Semester Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const editYearSemester = (year, semester, id) => {
-        if (
-            year === '' ||
-            semester === '' ||
-            year === '0' ||
-            semester === '0'
-        ) {
-            Swal.fire({
-                text: 'Please Enter Valid Year and Semester!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (!(/^\d+$/.test(year) && /^\d+$/.test(semester))) {
-            Swal.fire({
-                text: 'Year and Semster Should be Positive Numbers!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (year > 4 || year < 0) {
-            Swal.fire({
-                text: 'Year Should be in Between 1 and 4!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else if (semester > 2 || semester < 0) {
-            Swal.fire({
-                text: 'Semester Should be 1 or 2!',
-                confirmButtonColor: '#205374',
-            });
-            setYear('');
-            setSemester('');
-        } else {
-            let isExist = false;
-
-            yearsemesterList.forEach((element) => {
-                if (element.yearsemestername === `Y${year}.S${semester}`) {
-                    Swal.fire({
-                        text:
-                            'The Year Semester Combination You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(`http://localhost:8000/api/v1/yearsemesters/${id}`, {
-                        yearsemestername: `Y${year}.S${semester}`,
-                    })
-                    .then((res) => {
-                        setYearSemesterList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          yearsemestername: `Y${year}.S${semester}`,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChangeYear = (e) => {
-        setYear(e.target.value);
+        if (e.target.value > 0 || e.target.value === '')
+            setYear(e.target.value);
+        setIsYearValid(true);
+        setYearErrorMsg('');
     };
 
     const onInputChangeSemester = (e) => {
-        setSemester(e.target.value);
+        if (e.target.value > 0 || e.target.value === '')
+            setSemester(e.target.value);
+        setIsSemesterValid(true);
+        setSemesterErrorMsg('');
     };
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Years & Semesters'} />
-            <div
+
+            <form
+                style={{
+                    marginLeft: '15%',
+                    marginTop: '3%',
+                }}
+            >
+                <div className="form-row">
+                    <div className="col-md-4 mb-3">
+                        {/* <label>First name</label> */}
+                        <input
+                            type="number"
+                            className={
+                                isYearValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder="Year"
+                            onChange={onInputChangeYear}
+                            onKeyDown={handleKeyDown}
+                            value={year}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Year can be a positive number between 1 and 4"
+                        />
+                        <div className="invalid-feedback">{yearErrorMsg}</div>
+                    </div>
+                    <div className="col-md-4 mb-3">
+                        <input
+                            type="number"
+                            className={
+                                isSemesterValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder="Semester"
+                            onChange={onInputChangeSemester}
+                            onKeyDown={handleKeyDown}
+                            value={semester}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Semester can be number 1 or 2"
+                        />
+                        <div className="invalid-feedback">
+                            {semesterErrorMsg}
+                        </div>
+                    </div>
+                    <div className="col-md-2 mb-3">
+                        <button
+                            className="btn btn-primary"
+                            onClick={addYearSemester}
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {/* <div
                 style={{
                     position: 'fixed',
                     width: '35%',
@@ -259,12 +269,12 @@ function StudentGroupsYearsSemesters(props) {
                 >
                     Add
                 </button>
-            </div>
+            </div> */}
 
             <div
                 style={{
                     textAlign: 'center',
-                    marginTop: '10%',
+                    marginTop: '5%',
                     padding: '10px',
                     overflowY: 'auto',
                 }}
@@ -285,9 +295,10 @@ function StudentGroupsYearsSemesters(props) {
                                 <Label
                                     id={tag._id}
                                     deleteMethod={deleteYearSemester}
-                                    editMethod={editYearSemester}
                                     tagName={tag.yearsemestername}
                                     component={UpdateYearsSemestersDialogBox}
+                                    yearSemesterList={yearsemesterList}
+                                    setYearSemesterList={setYearSemesterList}
                                 />
                             </div>
                         </div>

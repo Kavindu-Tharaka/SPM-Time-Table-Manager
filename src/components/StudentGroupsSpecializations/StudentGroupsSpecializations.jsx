@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import swal from '@sweetalert/with-react';
 import UpdateSpecializationsDialogBox from './UpdateSpecializationsDialogBox';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
     const [specializationList, setSpecializationList] = useState([]);
+
+    const [isSpecializationNameValid, setIsSpecializationNameValid] = useState(
+        true
+    );
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -24,9 +33,11 @@ function StudentGroupsSpecializations(props) {
                 .then(function (response) {
                     console.log(response.data.data.specializations);
                     setSpecializationList(response.data.data.specializations);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -46,10 +57,14 @@ function StudentGroupsSpecializations(props) {
     const addSpecializationName = (e) => {
         e.preventDefault();
         if (specializationName === '') {
-            Swal.fire({
-                text: 'Please Enter a Specialization Name!',
-                confirmButtonColor: '#205374',
-            });
+            setIsSpecializationNameValid(false);
+            setErrorMsg('Please Enter a Specialization!');
+            return;
+        } else if (!/^[a-zA-Z]+$/.test(specializationName)) {
+            setIsSpecializationNameValid(false);
+            setErrorMsg('Specialization can not include numbers!');
+            setSpecializationName('');
+            return;
         } else {
             let isExist = false;
 
@@ -58,10 +73,10 @@ function StudentGroupsSpecializations(props) {
                     element.specializationname ===
                     specializationName.toUpperCase()
                 ) {
-                    Swal.fire({
-                        text: 'The Group Number You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
+                    setIsSpecializationNameValid(false);
+                    setErrorMsg(
+                        'The Specialization You Entered is Already Exist!'
+                    );
                     setSpecializationName('');
                     isExist = true;
                 }
@@ -79,6 +94,7 @@ function StudentGroupsSpecializations(props) {
                             response.data.data.specialization,
                         ]);
                         setSpecializationName('');
+                        store.addNotification(buildToast('success', 'Success', 'Specialization Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -99,69 +115,62 @@ function StudentGroupsSpecializations(props) {
                         return specializationId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Specialization Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const editSpecializationName = (specializationName, id) => {
-        if (specializationName === '') {
-            Swal.fire({
-                text: 'Please Enter a Specialization Name!',
-                confirmButtonColor: '#205374',
-            });
-        } else {
-            let isExist = false;
-
-            specializationList.forEach((element) => {
-                if (
-                    element.specializationname ===
-                    specializationName.toUpperCase()
-                ) {
-                    Swal.fire({
-                        text: 'The Group Number You Entered is Already Exist!',
-                        confirmButtonColor: '#205374',
-                    });
-                    setSpecializationName('');
-                    isExist = true;
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(
-                        `http://localhost:8000/api/v1/specializations/${id}`,
-                        {
-                            specializationname: specializationName.toUpperCase(),
-                        }
-                    )
-                    .then((res) => {
-                        setSpecializationList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          specializationname: specializationName.toUpperCase(),
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChange = (e) => {
         setSpecializationName(e.target.value);
+        setErrorMsg('');
+        setIsSpecializationNameValid(true);
     };
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Specializations'} />
-            <div
+
+            <form
+                style={{
+                    marginLeft: '30%',
+                    marginTop: '3%',
+                }}
+            >
+                <div className="form-row">
+                    <div className="col-md-5 mb-3">
+                        {/* <label>First name</label> */}
+                        <input
+                            type="text"
+                            className={
+                                isSpecializationNameValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder="Specialization"
+                            onChange={onInputChange}
+                            onKeyDown={handleKeyDown}
+                            value={specializationName}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Enter an acronym of a specialization."
+                        />
+                        <div className="invalid-feedback">{errorMsg}</div>
+                    </div>
+                    <div className="col-md-2 mb-3">
+                        <button
+                            className="btn btn-primary"
+                            onClick={addSpecializationName}
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {/* <div
                 style={{
                     position: 'fixed',
                     width: '30%',
@@ -192,12 +201,12 @@ function StudentGroupsSpecializations(props) {
                 >
                     Add
                 </button>
-            </div>
+            </div> */}
 
             <div
                 style={{
                     textAlign: 'center',
-                    marginTop: '10%',
+                    marginTop: '5%',
                     padding: '10px',
                     overflowY: 'auto',
                 }}
@@ -218,9 +227,10 @@ function StudentGroupsSpecializations(props) {
                                 <Tag
                                     id={tag._id}
                                     deleteMethod={deleteSpecializationName}
-                                    editMethod={editSpecializationName}
                                     tagName={tag.specializationname}
                                     component={UpdateSpecializationsDialogBox}
+                                    itemList={specializationList}
+                                    setItemList={setSpecializationList}
                                 />
                             </div>
                         </div>

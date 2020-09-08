@@ -47,16 +47,10 @@ const RoomsTable = (props) => {
 
 	const columns = [
 		{ name: 'ID', selector: '_id', omit: true },
-		{ name: 'Building', selector: 'building', omit: true },
-		{
-			name: 'Building',
-			selector: 'buildingObj[0].buildingName',
-			sortable: true,
-		},
-		{ name: 'Room Name', selector: 'roomName', sortable: true },
-		{ name: 'Floor', selector: 'floor', sortable: true },
-		{ name: 'Capacity', selector: 'capacity', sortable: true },
-		{ name: 'Room Type', selector: 'roomType', sortable: true },
+		{ name: 'Lecturer Name', selector: 'building', omit: true },
+		{ name: 'Day', selector: 'roomName', sortable: true },
+		{ name: 'From', selector: 'floor', sortable: true },
+		{ name: 'To', selector: 'capacity', sortable: true },
 		{
 			name: 'Action',
 			cell: (row) => (
@@ -91,8 +85,8 @@ const RoomsTable = (props) => {
 
 	return (
 		<DataTable
-			title='Inserted Rooms'
-			data={props.rooms}
+			title="Lecturers' Not Available Times"
+			data={props.lecturers}
 			columns={columns}
 			pagination
 		/>

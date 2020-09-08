@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import UpdateTagsDialogBox from './UpdateTagsDialogBox';
+import './tagContent.css';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
     const [tagList, setTagList] = useState([]);
+
+	const [isTagNameValid, setIsTagNameValid] = useState(true);
+	const [errorMsg, setErrorMsg] = useState('');
+
+	const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -24,9 +32,11 @@ function TagContent(props) {
                 .then(function (response) {
                     // console.log(response.data.data.tags);
                     setTagList(response.data.data.tags);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -47,19 +57,25 @@ function TagContent(props) {
         e.preventDefault();
 
         if (tagName === '') {
-            Swal.fire({
-                text: 'Please Enter a Tag Name!',
-                confirmButtonColor: '#205374',
-            });
+            // Swal.fire({
+            //     text: 'Please Enter a Tag Name!',
+            //     confirmButtonColor: '#205374',
+            // });
+            setIsTagNameValid(false);
+            setErrorMsg('Please Enter a valid Tag name!');
+			return;
+            
         } else {
             let isExist = false;
 
             tagList.forEach((element) => {
                 if (element.tagname === tagName) {
-                    Swal.fire({
-                        text: 'The Tag Name You Entered is Already Exists!',
-                        confirmButtonColor: '#205374',
-                    });
+                    // Swal.fire({
+                    //     text: 'The Tag Name You Entered is Already Exists!',
+                    //     confirmButtonColor: '#205374',
+                    // });
+                    setIsTagNameValid(false);
+                    setErrorMsg('The Tag Name You Entered is Already Exists!');
                     isExist = true;
                     setTagName('');
                 }
@@ -74,6 +90,7 @@ function TagContent(props) {
                         console.log(response.data.data.tag);
                         setTagList([...tagList, response.data.data.tag]);
                         setTagName('');
+				        store.addNotification(buildToast('success', 'Success', 'Tag Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -92,103 +109,65 @@ function TagContent(props) {
                         return tagId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Tag Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const editTagName = (tagName, id) => {
-
-        if (tagName === '') {
-            Swal.fire({
-                text: 'Please Enter a Tag Name!',
-                confirmButtonColor: '#205374',
-            });
-        } else {
-            let isExist = false;
-
-            tagList.forEach((element) => {
-                if (element.tagname === tagName) {
-                    Swal.fire({
-                        text: 'The Tag Name You Entered is Already Exists!',
-                        confirmButtonColor: '#205374',
-                    });
-                    isExist = true;
-                    setTagName('');
-                }
-            });
-
-            if (!isExist) {
-                axios
-                    .patch(
-                        `http://localhost:8000/api/v1/tags/${id}`,
-                        {
-                            tagname: tagName,
-                        }
-                    )
-                    .then((res) => {
-                        setTagList((prevlist) =>
-                            prevlist.map((listItem) =>
-                                id === listItem._id
-                                    ? {
-                                          ...listItem,
-                                          tagname: tagName,
-                                      }
-                                    : listItem
-                            )
-                        );
-                    })
-                    .catch((err) => console.log(err));
-            }
-        }
-        swal.close();
-    };
-
     const onInputChange = (e) => {
         setTagName(e.target.value);
+        setIsTagNameValid(true);
+        setErrorMsg('');
     };
 
     return (
         <div>
+			<PreLoader loading={loading} hasSideBar={false} />
             <ContentHeader header={'Tags'} />
-            <div
-                style={{
-                    position: 'fixed',
-                    width: '30%',
-                    textAlign: 'center',
-                    left: '50%',
-                    padding: '20px',
-                    transform: 'translate(-50%, 0)',
-                }}
-                className="input-group mb-3"
-            >
-                <input
-                    style={{ borderRadius: 0 }}
-                    type="text"
-                    className="form-control"
-                    placeholder="Tag Name"
-                    onChange={onInputChange}
-                    onKeyDown={handleKeyDown}
-                    value={tagName}
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Tag can be a text like Lecture, Tutorial..."
-                />
-                <button
-                    style={{ marginLeft: 20, borderRadius: 0 }}
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={addTagName}
-                >
-                    Add
-                </button>
-            </div>
+
+            <form style={{
+                marginLeft:'35%',
+                marginTop:'3%',
+            }}>
+                <div className="form-row">
+                    <div className="col-md-4 mb-3">
+                        {/* <label>First name</label> */}
+                        <input
+                            type='text'
+                            className={
+                                isTagNameValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
+                            placeholder='Tag Name'
+                            onChange={onInputChange}
+                            onKeyDown={handleKeyDown}
+                            value={tagName}
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Tag can be a text like Lecture, Tutorial..."
+					    />
+                        <div className='invalid-feedback'>
+                            {errorMsg}
+					    </div>
+                    </div>
+                    <div className="col-md-2 mb-3">
+                    <button
+                        className='btn btn-primary'
+                        onClick={addTagName}
+				    >
+					    Add
+				    </button>                    
+                </div>
+                </div>
+            </form>
 
             <div
                 style={{
                     textAlign: 'center',
-                    marginTop: '10%',
+                    marginTop: '5%',
                     padding: '10px',
                     overflowY: 'auto',
                 }}
@@ -209,9 +188,10 @@ function TagContent(props) {
                                 <Tag
                                     id={tag._id}
                                     deleteMethod={deleteTagName}
-                                    editMethod={editTagName}
                                     tagName={tag.tagname}
                                     component={UpdateTagsDialogBox}
+                                    itemList={tagList}
+                                    setItemList={setTagList}
                                 />
                             </div>
                         </div>
