@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import axios from 'axios';
-import LecturerConstraintsTable from './LecturerConstraintsTable';
+import ConstraintsLecturersTable from './ConstraintsLecturersTable';
 
 
 function ConstraintsLecturers() {
@@ -158,7 +158,7 @@ function ConstraintsLecturers() {
             {lecturers.length === 0 ? (
                 <EmptyDataPlaceholder message="Room list is currently empty" />
             ) : (
-                <LecturerConstraintsTable
+                <ConstraintsLecturersTable
                     // rooms={rooms}
                     // buildings={buildings}
                     lecturers={lecturers}

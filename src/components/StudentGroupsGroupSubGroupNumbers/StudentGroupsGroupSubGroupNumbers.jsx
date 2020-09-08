@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import Label from '../Label/Label';
 import UpdateSubGroupNumbersDialogBox from './UpdateSubGroupNumbersDialogBox';
 import UpdateGroupNumbersDialogBox from './UpdateGroupNumbersDialogBox';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function StudentGroupsGroupSubGroupNumbers() {
     const [groupNumber, setGroupNumber] = useState('');
@@ -20,34 +22,60 @@ function StudentGroupsGroupSubGroupNumbers() {
     const [isSubGroupNumberValid, setIsSubGroupNumberValid] = useState(true);
     const [subGroupNumberErrorMsg, setSubGroupNumberErrorMsg] = useState('');
 
+    const [loading, setLoading] = useState(true);
+    
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
         const loadData = () => {
-            axios
+            // axios
+            //     .get('http://localhost:8000/api/v1/groupnumbers', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function (response) {
+            //         console.log(response.data.data.groupnumbers);
+            //         setGroupNumberList(response.data.data.groupnumbers);
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
+            // axios
+            //     .get('http://localhost:8000/api/v1/subgroupnumbers', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function (response) {
+            //         console.log(response.data.data.subgroupnumbers);
+            //         setSubGroupNumberList(response.data.data.subgroupnumbers);
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
+            axios.all([
+                axios
                 .get('http://localhost:8000/api/v1/groupnumbers', {
                     cancelToken: source.token,
-                })
-                .then(function (response) {
-                    console.log(response.data.data.groupnumbers);
-                    setGroupNumberList(response.data.data.groupnumbers);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-            axios
+                }),
+                axios
                 .get('http://localhost:8000/api/v1/subgroupnumbers', {
                     cancelToken: source.token,
                 })
-                .then(function (response) {
-                    console.log(response.data.data.subgroupnumbers);
-                    setSubGroupNumberList(response.data.data.subgroupnumbers);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            ])
+            .then(res => {
+                console.log(res[0].data.data.groupnumbers);
+                setGroupNumberList(res[0].data.data.groupnumbers);
+                
+                console.log(res[1].data.data.subgroupnumbers);
+                setSubGroupNumberList(res[1].data.data.subgroupnumbers);
+
+                setLoading(false);
+            })
+            .catch(err =>{
+                console.log(err);
+                setLoading(false);
+            });
         };
 
         loadData();
@@ -106,6 +134,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                             response.data.data.groupnumber,
                         ]);
                         setGroupNumber('');
+                        store.addNotification(buildToast('success', 'Success', 'Group Number Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -155,6 +184,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                             response.data.data.subgroupnumber,
                         ]);
                         setSubGroupNumber('');
+                        store.addNotification(buildToast('success', 'Success', 'Sub-Group Number Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -176,6 +206,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                         return groupNumberId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Group Number Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
@@ -194,6 +225,7 @@ function StudentGroupsGroupSubGroupNumbers() {
                         return subGroupNumberId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Sub-Group Number Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
@@ -219,6 +251,7 @@ function StudentGroupsGroupSubGroupNumbers() {
     return (
         <div>
             <div>
+			<PreLoader loading={loading} hasSideBar={true} />
                 <ContentHeader header={'Group Numbers'} />
                 <form
                     style={{

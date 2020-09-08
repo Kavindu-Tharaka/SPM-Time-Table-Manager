@@ -18,7 +18,7 @@ const BuildingCard = (props) => {
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
-				store.addNotification(buildToast('danger', 'Deleted', 'Building Deleted Successfully'))
+				store.addNotification(buildToast('danger', 'Deleted', 'Building Deleted Successfully'));
 			})
 			.catch((err) => {
 				console.log(err.response);

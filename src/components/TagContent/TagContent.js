@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import UpdateTagsDialogBox from './UpdateTagsDialogBox';
 import './tagContent.css';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
@@ -16,6 +18,7 @@ function TagContent(props) {
 	const [isTagNameValid, setIsTagNameValid] = useState(true);
 	const [errorMsg, setErrorMsg] = useState('');
 
+	const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -29,9 +32,11 @@ function TagContent(props) {
                 .then(function (response) {
                     // console.log(response.data.data.tags);
                     setTagList(response.data.data.tags);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -85,6 +90,7 @@ function TagContent(props) {
                         console.log(response.data.data.tag);
                         setTagList([...tagList, response.data.data.tag]);
                         setTagName('');
+				        store.addNotification(buildToast('success', 'Success', 'Tag Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -103,6 +109,7 @@ function TagContent(props) {
                         return tagId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Tag Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
@@ -117,6 +124,7 @@ function TagContent(props) {
 
     return (
         <div>
+			<PreLoader loading={loading} hasSideBar={false} />
             <ContentHeader header={'Tags'} />
 
             <form style={{

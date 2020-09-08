@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import Tag from '../Tag/Tag';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import swal from '@sweetalert/with-react';
 import UpdateSpecializationsDialogBox from './UpdateSpecializationsDialogBox';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 function StudentGroupsSpecializations(props) {
     const [specializationName, setSpecializationName] = useState('');
     const [specializationList, setSpecializationList] = useState([]);
 
-    const [isSpecializationNameValid, setIsSpecializationNameValid] = useState(true);
+    const [isSpecializationNameValid, setIsSpecializationNameValid] = useState(
+        true
+    );
     const [errorMsg, setErrorMsg] = useState('');
-    
+
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
@@ -27,9 +33,11 @@ function StudentGroupsSpecializations(props) {
                 .then(function (response) {
                     console.log(response.data.data.specializations);
                     setSpecializationList(response.data.data.specializations);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -51,15 +59,13 @@ function StudentGroupsSpecializations(props) {
         if (specializationName === '') {
             setIsSpecializationNameValid(false);
             setErrorMsg('Please Enter a Specialization!');
-			return;
-        } 
-        else if (!/^[a-zA-Z]+$/.test(specializationName)) {
+            return;
+        } else if (!/^[a-zA-Z]+$/.test(specializationName)) {
             setIsSpecializationNameValid(false);
             setErrorMsg('Specialization can not include numbers!');
             setSpecializationName('');
-			return;
-        } 
-        else {
+            return;
+        } else {
             let isExist = false;
 
             specializationList.forEach((element) => {
@@ -68,7 +74,9 @@ function StudentGroupsSpecializations(props) {
                     specializationName.toUpperCase()
                 ) {
                     setIsSpecializationNameValid(false);
-                    setErrorMsg('The Specialization You Entered is Already Exist!');
+                    setErrorMsg(
+                        'The Specialization You Entered is Already Exist!'
+                    );
                     setSpecializationName('');
                     isExist = true;
                 }
@@ -86,6 +94,7 @@ function StudentGroupsSpecializations(props) {
                             response.data.data.specialization,
                         ]);
                         setSpecializationName('');
+                        store.addNotification(buildToast('success', 'Success', 'Specialization Added Successfully'));
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -106,6 +115,7 @@ function StudentGroupsSpecializations(props) {
                         return specializationId !== item._id;
                     })
                 );
+                store.addNotification(buildToast('danger', 'Deleted', 'Specialization Deleted Successfully'));
             })
             .catch((err) => {
                 console.log(err);
@@ -120,42 +130,43 @@ function StudentGroupsSpecializations(props) {
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Specializations'} />
 
-            <form style={{
-                marginLeft:'30%',
-                marginTop:'3%',
-            }}>
+            <form
+                style={{
+                    marginLeft: '30%',
+                    marginTop: '3%',
+                }}
+            >
                 <div className="form-row">
                     <div className="col-md-5 mb-3">
                         {/* <label>First name</label> */}
                         <input
-                            type='text'
+                            type="text"
                             className={
                                 isSpecializationNameValid
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                            placeholder='Specialization'
+                            placeholder="Specialization"
                             onChange={onInputChange}
                             onKeyDown={handleKeyDown}
                             value={specializationName}
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Enter an acronym of a specialization."
-					    />
-                        <div className='invalid-feedback'>
-                            {errorMsg}
-					    </div>
+                        />
+                        <div className="invalid-feedback">{errorMsg}</div>
                     </div>
                     <div className="col-md-2 mb-3">
-                    <button
-                        className='btn btn-primary'
-                        onClick={addSpecializationName}
-				    >
-					    Add
-				    </button>                    
-                </div>
+                        <button
+                            className="btn btn-primary"
+                            onClick={addSpecializationName}
+                        >
+                            Add
+                        </button>
+                    </div>
                 </div>
             </form>
 
