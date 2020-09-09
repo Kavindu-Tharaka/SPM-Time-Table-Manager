@@ -160,7 +160,6 @@ const UpdateSubjectBox = (props) => {
                         </div>
                     </div>
 
-                    {/* <p className='text-left'>{props.lec.name}</p> */}
                     <button
                         className='btn btn-info float-right mb-4'
                     onClick={onUpdateClick}

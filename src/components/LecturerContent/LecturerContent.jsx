@@ -28,6 +28,7 @@ const LecturerContent = () => {
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState("");
     const [loading, setloading] = useState(true);
+    const [buildings,setBuildings] = useState([]);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -78,7 +79,17 @@ const LecturerContent = () => {
     }
     useEffect(() => {
         loadData();
+        axios
+        .get('http://localhost:8000/api/v1/buildings')
+        .then((res) => {
+            // console.log("lec building: ",res.data.data.buildings)
+            setBuildings(res.data.data.buildings);
+        })
+        .catch((err) => {
+            console.log(err.response);
+        });
     }, []);
+
 
     const loadData = () => {
         axios
@@ -178,26 +189,26 @@ const LecturerContent = () => {
             });
         }
         else {
-            axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
-                name,
-                faculty,
-                center,
-                level,
-                employeeId,
-                department,
-                building,
-                rankVal
-            })
-                .then((res) => {
-                    console.log(res.data);
-                    // console.log("lecturer update executed succesfully")
-                    setUpdate(false);
-                    window.location.reload();
-                    store.addNotification(buildToast('warning', '', 'Lecturer Updated Successfully'));
-                })
-                .catch((e) => {
-                    console.err(e);
-                });
+            // axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
+            //     name,
+            //     faculty,
+            //     center,
+            //     level,
+            //     employeeId,
+            //     department,
+            //     building,
+            //     rankVal
+            // })
+            //     .then((res) => {
+            //         console.log(res.data);
+            //         // console.log("lecturer update executed succesfully")
+            //         setUpdate(false);
+            //         window.location.reload();
+            //         store.addNotification(buildToast('warning', '', 'Lecturer Updated Successfully'));
+            //     })
+            //     .catch((e) => {
+            //         console.err(e);
+            //     });
         }
     }
 
@@ -376,14 +387,18 @@ const LecturerContent = () => {
                         <div id="building-container" className="form-group col">
                             <p className="mb-1">Building</p>
                             <div className="">
-                                {/* <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="custom-select" id="building-select">
-                                    <option value="Main Building">Main Building</option>
-                                    <option value="New Building">New Building</option>
+                                <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
+     
+                            {buildings.length > 0? buildings.map((name)=>{
+                                return <option value={name.buildingName}>{name.buildingName}</option>
+                            }) :   <option>Insert a building!</option>}
+
+                                    {/* <option value="New Building">New Building</option>
                                     <option value="Engineering Building">Engineering Building</option>
                                     <option value="Buisnees Faculty Building">Buisnees Faculty Building</option>
-                                    <option value="CAHM">CAHM</option>
-                                </select> */}
-                                <input value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" />
+                                    <option value="CAHM">CAHM</option> */}
+                                </select>
+                                {/* <input value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" /> */}
                             </div>
                         </div>
 

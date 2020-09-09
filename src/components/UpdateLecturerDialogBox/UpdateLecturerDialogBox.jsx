@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import swal from '@sweetalert/with-react';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
@@ -15,6 +15,7 @@ const UpdateLecturerDialogBox = (props) => {
     const [employeeId, setEmployeeId] = useState(props.lec.employeeId);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
+    const [buildings, setBuildings] = useState([]);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -51,11 +52,11 @@ const UpdateLecturerDialogBox = (props) => {
         setLevel(e.target.value);
         // setRankVal(`${rank}.${employeeId}`);
     }
-    const onEmpIdChange = (e) =>{
+    const onEmpIdChange = (e) => {
         setEmployeeId(e.target.value);
         setRankVal(`${rank}.${employeeId}`);
     }
-    const onDepartmentChange = (e) =>{
+    const onDepartmentChange = (e) => {
         setDepartment(e.target.value)
     }
     const onBuildingChange = (e) => {
@@ -85,6 +86,18 @@ const UpdateLecturerDialogBox = (props) => {
             });
     };
 
+    useEffect(() => {
+        axios
+            .get('http://localhost:8000/api/v1/buildings')
+            .then((res) => {
+                // console.log("lec building: ",res.data.data.buildings)
+                setBuildings(res.data.data.buildings);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+    }, []);
+
     return (
         <div>
             <div className='dcdb-dialog-container'>
@@ -109,7 +122,6 @@ const UpdateLecturerDialogBox = (props) => {
                         <input
                             type='text'
                             className='form-control'
-                            // placeholder='Room Name'
                             value={faculty}
                             onChange={onFacultyChange}
                         />
@@ -132,14 +144,14 @@ const UpdateLecturerDialogBox = (props) => {
                     <div className='form-group col-6'>
                         <label className='dialog-label'>Level</label>
                         <select value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" id="level-select">
-                                    <option value="Professor">Professor</option>
-                                    <option value="Assistant Professor">Assistant Professor</option>
-                                    <option value="Senior Lecturer(HG)">Senior Lecturer(HG)</option>
-                                    <option value="Senior Lecturer">Senior Lecturer</option>
-                                    <option value="Lecturer">Lecturer</option>
-                                    <option value="Assistant Lecturer">Assistant Lecturer</option>
-                                    <option value="Instructor">Instructor</option>
-                                </select>
+                            <option value="Professor">Professor</option>
+                            <option value="Assistant Professor">Assistant Professor</option>
+                            <option value="Senior Lecturer(HG)">Senior Lecturer(HG)</option>
+                            <option value="Senior Lecturer">Senior Lecturer</option>
+                            <option value="Lecturer">Lecturer</option>
+                            <option value="Assistant Lecturer">Assistant Lecturer</option>
+                            <option value="Instructor">Instructor</option>
+                        </select>
                     </div>
 
                 </div>
@@ -169,17 +181,15 @@ const UpdateLecturerDialogBox = (props) => {
 
                     <div className='form-group col-6'>
                         <label className='dialog-label'>Building</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            // placeholder='00'
-                            onChange={onBuildingChange}
-                            value={building}
-                        />
+                        <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
+
+                            {buildings.length > 0 ? buildings.map((name) => {
+                                return <option value={name.buildingName}>{name.buildingName}</option>
+                            }) : <option>Insert a building!</option>}
+                        </select>
                     </div>
                 </div>
 
-                {/* <p className='text-left'>{props.lec.name}</p> */}
                 <button
                     className='btn btn-info float-right mb-4'
                     onClick={onUpdateClick}

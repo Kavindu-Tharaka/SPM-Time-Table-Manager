@@ -93,24 +93,24 @@ const SubjectContent = () => {
         }
         else {
 
-            axios.patch(`http://localhost:8000/api/v1/subjects/${id}`, {
-                subjectCode,
-                offeredYear,
-                offeredSemester,
-                subjectName,
-                numberOfLecHrs,
-                numberOfTutorialHrs,
-                numberOfLabHrs,
-                numberOfEveluationHrs
-            })
-                .then((res) => {
-                    setUpdate(false);
-                    window.location.reload();
-                    store.addNotification(buildToast('warning', '', 'Subject Updated'));
-                })
-                .catch((e) => {
-                    console.err(e);
-                });
+            // axios.patch(`http://localhost:8000/api/v1/subjects/${id}`, {
+            //     subjectCode,
+            //     offeredYear,
+            //     offeredSemester,
+            //     subjectName,
+            //     numberOfLecHrs,
+            //     numberOfTutorialHrs,
+            //     numberOfLabHrs,
+            //     numberOfEveluationHrs
+            // })
+            //     .then((res) => {
+            //         setUpdate(false);
+            //         window.location.reload();
+            //         store.addNotification(buildToast('warning', '', 'Subject Updated'));
+            //     })
+            //     .catch((e) => {
+            //         console.err(e);
+            //     });
         }
     }
 
