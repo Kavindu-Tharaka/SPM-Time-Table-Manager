@@ -390,7 +390,7 @@ const LecturerContent = () => {
                                 <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
      
                             {buildings.length > 0? buildings.map((name)=>{
-                                return <option value={name.buildingName}>{name.buildingName}</option>
+                                return <option key={name._id} value={name.buildingName}>{name.buildingName}</option>
                             }) :   <option>Insert a building!</option>}
 
                                     {/* <option value="New Building">New Building</option>
