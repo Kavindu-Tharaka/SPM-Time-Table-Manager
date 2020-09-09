@@ -232,8 +232,8 @@ const LecturerContent = () => {
             cell:
                 (row) => (
                     <div className="d-flex">
-                        <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>&nbsp;
-                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => deleteLecturer(row._id)}><IoMdClose /></button>
+                        <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>{""}
+                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => deleteLecturer(row._id)}><IoMdClose/></button>
                     </div>
                 )
         },
