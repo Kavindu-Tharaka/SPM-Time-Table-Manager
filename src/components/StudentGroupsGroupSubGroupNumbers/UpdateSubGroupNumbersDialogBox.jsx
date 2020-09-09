@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
 import axios from 'axios';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import './updateSubGroupNumbersDialogBox.css';
 
@@ -12,6 +15,7 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
 
     const [isSubGroupNumberValid, setIsSubGroupNumberValid] = useState(true);
     const [subGroupNumberErrorMsg, setSubGroupNumberErrorMsg] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const onSubGroupNumberChange = (e) => {
         if (e.target.value > 0 || e.target.value === '')
@@ -34,6 +38,7 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
         } else {
             if (subGroupNumber !== props.itemName) {
                 let isExist = false;
+                setIsUpdating(true);
 
                 subGroupNumberList.forEach((element) => {
                     if (
@@ -45,6 +50,7 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
                             'The Sub Group Number You Entered is Already Exist!'
                         );
                         setSubGroupNumber('');
+                        setIsUpdating(false);
                         isExist = true;
                     }
                 });
@@ -68,7 +74,15 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
                                         : listItem
                                 )
                             );
+                            setIsUpdating(false);
                             swal.close();
+                            store.addNotification(
+                                buildToast(
+                                    'info',
+                                    'Updated',
+                                    'Sub-Group number Updated Successfully'
+                                )
+                            );
                         })
                         .catch((err) => console.log(err));
                 }
@@ -96,7 +110,7 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
                         onChange={onSubGroupNumberChange}
                         value={subGroupNumber}
                     />
-					                    <div
+                    <div
                         style={{ textAlign: 'left' }}
                         className="invalid-feedback"
                     >
@@ -110,7 +124,13 @@ const UpdateSubGroupNumbersDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={() => editSubGroupNumber(subGroupNumber, props.id)}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"

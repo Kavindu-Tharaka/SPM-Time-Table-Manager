@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
 import axios from 'axios';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import './updateYearsSemestersDialogBox.css';
 
@@ -17,6 +20,7 @@ const UpdateYearsSemestersDialogBox = (props) => {
     const [yearErrorMsg, setYearErrorMsg] = useState('');
     const [isSemesterValid, setIsSemesterValid] = useState(true);
     const [semesterErrorMsg, setSemesterErrorMsg] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const editYearSemester = (year, semester, id) => {
         if (
@@ -61,6 +65,7 @@ const UpdateYearsSemestersDialogBox = (props) => {
                 props.itemName.substring(4, 5) !== semester
             ) {
                 let isExist = false;
+                setIsUpdating(true);
 
                 yearsemesterList.forEach((element) => {
                     if (element.yearsemestername === `Y${year}.S${semester}`) {
@@ -71,6 +76,7 @@ const UpdateYearsSemestersDialogBox = (props) => {
                         );
                         isExist = true;
                         setYear('');
+                        setIsUpdating(false);
                         setSemester('');
                     }
                 });
@@ -94,7 +100,15 @@ const UpdateYearsSemestersDialogBox = (props) => {
                                         : listItem
                                 )
                             );
+                            setIsUpdating(false);
                             swal.close();
+                            store.addNotification(
+                                buildToast(
+                                    'info',
+                                    'Updated',
+                                    'Year and Semester Updated Successfully'
+                                )
+                            );
                         })
                         .catch((err) => console.log(err));
                 }
@@ -105,19 +119,19 @@ const UpdateYearsSemestersDialogBox = (props) => {
     };
 
     const onYearChange = (e) => {
-		if(e.target.value > 0 || e.target.value === '')
-			setYear(e.target.value);
-			
-		setIsYearValid(true);
-		setYearErrorMsg('');
+        if (e.target.value > 0 || e.target.value === '')
+            setYear(e.target.value);
+
+        setIsYearValid(true);
+        setYearErrorMsg('');
     };
 
     const onSemesterChange = (e) => {
-		if(e.target.value > 0 || e.target.value === '')
-			setSemester(e.target.value);
+        if (e.target.value > 0 || e.target.value === '')
+            setSemester(e.target.value);
 
-		setIsSemesterValid(true);
-		setSemesterErrorMsg('');
+        setIsSemesterValid(true);
+        setSemesterErrorMsg('');
     };
 
     return (
@@ -128,8 +142,8 @@ const UpdateYearsSemestersDialogBox = (props) => {
             <div className="form-row">
                 <div className="form-group col-6">
                     <input
-						type="number"
-						placeholder="Year"
+                        type="number"
+                        placeholder="Year"
                         className={
                             isYearValid
                                 ? 'form-control'
@@ -147,8 +161,8 @@ const UpdateYearsSemestersDialogBox = (props) => {
                 </div>
                 <div className="form-group col-6">
                     <input
-						type="number"
-						placeholder="Semester"
+                        type="number"
+                        placeholder="Semester"
                         className={
                             isSemesterValid
                                 ? 'form-control'
@@ -171,7 +185,13 @@ const UpdateYearsSemestersDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={() => editYearSemester(year, semester, props.id)}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"

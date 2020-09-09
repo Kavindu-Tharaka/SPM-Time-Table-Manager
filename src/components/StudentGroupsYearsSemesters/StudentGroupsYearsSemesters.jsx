@@ -9,6 +9,7 @@ import UpdateYearsSemestersDialogBox from './UpdateYearsSemestersDialogBox';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
 
 function StudentGroupsYearsSemesters(props) {
     const [year, setYear] = useState('');
@@ -21,6 +22,7 @@ function StudentGroupsYearsSemesters(props) {
     const [semesterErrorMsg, setSemesterErrorMsg] = useState('');
 
     const [loading, setLoading] = useState(true);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -94,6 +96,8 @@ function StudentGroupsYearsSemesters(props) {
             setSemesterErrorMsg('Semester Should be 1 or 2!');
             setSemester('');
         } else {
+            setIsAdding(true);
+
             let isExist = false;
 
             yearsemesterList.forEach((element) => {
@@ -106,6 +110,7 @@ function StudentGroupsYearsSemesters(props) {
                     isExist = true;
                     setYear('');
                     setSemester('');
+                    setIsAdding(false);
                 }
             });
 
@@ -122,7 +127,15 @@ function StudentGroupsYearsSemesters(props) {
                         ]);
                         setYear('');
                         setSemester('');
-                        store.addNotification(buildToast('success', 'Success', 'Year and Semester Added Successfully'));
+                        setIsAdding(false);
+
+                        store.addNotification(
+                            buildToast(
+                                'success',
+                                'Success',
+                                'Year and Semester Added Successfully'
+                            )
+                        );
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -143,7 +156,13 @@ function StudentGroupsYearsSemesters(props) {
                         return yearsemesterId !== item._id;
                     })
                 );
-                store.addNotification(buildToast('danger', 'Deleted', 'Year and Semester Deleted Successfully'));
+                store.addNotification(
+                    buildToast(
+                        'danger',
+                        'Deleted',
+                        'Year and Semester Deleted Successfully'
+                    )
+                );
             })
             .catch((err) => {
                 console.log(err);
@@ -220,7 +239,13 @@ function StudentGroupsYearsSemesters(props) {
                             className="btn btn-primary"
                             onClick={addYearSemester}
                         >
-                            Add
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
                         </button>
                     </div>
                 </div>

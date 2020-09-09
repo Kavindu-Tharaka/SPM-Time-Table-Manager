@@ -5,6 +5,9 @@ import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import './LecturerContent.css';
 import axios from "axios";
 import Swal from 'sweetalert2';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const LecturerContent = () => {
 
@@ -20,6 +23,7 @@ const LecturerContent = () => {
     const [rankVal, setRankVal] = useState("");
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState("");
+    const [loading,setloading] = useState(true);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -77,10 +81,12 @@ const LecturerContent = () => {
             .get("http://localhost:8000/api/v1/lecturers")
             .then((result) => {
                 setLecturerDetails(result.data.data.lecturers);
+                setloading(false);
 
             })
             .catch((e) => {
                 console.error(e);
+                setloading(false);
             });
     };
     const deleteLecturer = (rowID) => {
@@ -90,6 +96,7 @@ const LecturerContent = () => {
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
+                store.addNotification(buildToast('danger','' , 'Lecturer deleted'));
             })
             .catch((e) => console.error(e));
     }
@@ -135,8 +142,9 @@ const LecturerContent = () => {
                 building,
                 rankVal
             }).then((res) => {
-                window.location.reload()
+                window.location.reload();
                 //console.log("data added", res);
+                store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
             }).catch((err) => {
                 console.log("err is: ", err);
             });
@@ -154,9 +162,10 @@ const LecturerContent = () => {
             })
                 .then((res) => {
                     console.log(res.data);
-                    console.log("lecturer update executed succesfully")
+                    // console.log("lecturer update executed succesfully")
                     setUpdate(false);
                     window.location.reload();
+                    store.addNotification(buildToast('warning','', 'Lecturer Updated Successfully'));
                 })
                 .catch((e) => {
                     console.err(e);
@@ -230,6 +239,7 @@ const LecturerContent = () => {
     ];
     return (
         <div>
+            <PreLoader loading={loading} />
             <div>
                 <ContentHeader header={'Lecturers'} />
                 <br />

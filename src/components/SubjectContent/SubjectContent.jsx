@@ -4,7 +4,9 @@ import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import axios from "axios";
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
-
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 import './SubjectContent.css';
 
@@ -21,6 +23,7 @@ const SubjectContent = () => {
     const [subjectData, setSubjectData] = useState([]);
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState();
+    const [loading,setloading] = useState(true);
 
     const onOfferedYearChange = (e) => {
         setOfferedYear(e.target.value)
@@ -66,7 +69,8 @@ const SubjectContent = () => {
                 numberOfLabHrs,
                 numberOfEveluationHrs
             }).then((res) => {
-                window.location.reload()
+                window.location.reload();
+                store.addNotification(buildToast('success', '', 'Subject Added Successfully'));
             }).catch((err) => {
                 console.err(err);
             });
@@ -86,6 +90,7 @@ const SubjectContent = () => {
                 .then((res) => {
                     setUpdate(false);
                     window.location.reload();
+                    store.addNotification(buildToast('warning', '', 'Subject Updated'));
                 })
                 .catch((e) => {
                     console.err(e);
@@ -102,9 +107,11 @@ const SubjectContent = () => {
             .get("http://localhost:8000/api/v1/subjects")
             .then((result) => {
                 setSubjectData(result.data.data.subjects);
+                setloading(false);
             })
             .catch((e) => {
                 console.error(e);
+                setloading(false);
             });
     }
 
@@ -130,6 +137,7 @@ const SubjectContent = () => {
                 setSubjectData(
                     subjectData.filter(subject => { return subject._id !== id })
                 );
+                store.addNotification(buildToast('danger', '', 'Subject Deleted'));
             })
             .catch((e) => console.error(e));
     }
@@ -204,6 +212,7 @@ const SubjectContent = () => {
     ];
     return (
         <div>
+            <PreLoader loading={loading} />
             <ContentHeader header={'Subjects'} />
             <br />
             <form onSubmit={onSubmit}>

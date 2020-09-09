@@ -9,6 +9,7 @@ import UpdateSubGroupIDsDialogBox from './UpdateSubGroupIDsDialogBox';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
 
 function StudentGroupsSubGroupIDs(props) {
     let groupIdTemp;
@@ -26,7 +27,8 @@ function StudentGroupsSubGroupIDs(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
     const [loading, setLoading] = useState(true);
-    
+    const [isAdding, setIsAdding] = useState(false);
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
@@ -81,23 +83,19 @@ function StudentGroupsSubGroupIDs(props) {
             //         console.log(error);
             //     });
 
-                axios
+            axios
                 .all([
-                    axios
-                    .get('http://localhost:8000/api/v1/groupids', {
+                    axios.get('http://localhost:8000/api/v1/groupids', {
                         cancelToken: source.token,
                     }),
-                    axios
-                    .get('http://localhost:8000/api/v1/subgroupids', {
+                    axios.get('http://localhost:8000/api/v1/subgroupids', {
                         cancelToken: source.token,
                     }),
-                    axios
-                    .get('http://localhost:8000/api/v1/subgroupnumbers', {
+                    axios.get('http://localhost:8000/api/v1/subgroupnumbers', {
                         cancelToken: source.token,
-                    })
+                    }),
                 ])
                 .then((response) => {
-
                     setGroupIDList(response[0].data.data.groupids);
 
                     groupIdTemp = response[0].data.data.groupids.find(
@@ -112,7 +110,9 @@ function StudentGroupsSubGroupIDs(props) {
 
                     setSubGroupIDList(response[1].data.data.subgroupids);
 
-                    setSubGroupNumberList(response[2].data.data.subgroupnumbers);
+                    setSubGroupNumberList(
+                        response[2].data.data.subgroupnumbers
+                    );
                     setSubGroupNumber(
                         response[2].data.data.subgroupnumbers[0].subgroupnumber
                     );
@@ -153,6 +153,7 @@ function StudentGroupsSubGroupIDs(props) {
         e.preventDefault();
 
         let isExist = false;
+        setIsAdding(true);
 
         subGroupIDList.forEach((element) => {
             if (
@@ -161,6 +162,7 @@ function StudentGroupsSubGroupIDs(props) {
             ) {
                 // Swal.fire('The Sub Group ID You Entered is Already Exists!');
                 setErrorMsg('The Sub Group ID You Entered is Already Exists!');
+                setIsAdding(false);
                 isExist = true;
             }
         });
@@ -177,7 +179,15 @@ function StudentGroupsSubGroupIDs(props) {
                         ...subGroupIDList,
                         response.data.data.subgroupid,
                     ]);
-                    store.addNotification(buildToast('success', 'Success', 'Sub-Group ID Added Successfully'));
+                    setIsAdding(false);
+
+                    store.addNotification(
+                        buildToast(
+                            'success',
+                            'Success',
+                            'Sub-Group ID Added Successfully'
+                        )
+                    );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -195,7 +205,13 @@ function StudentGroupsSubGroupIDs(props) {
                         return tagId !== item._id;
                     })
                 );
-                store.addNotification(buildToast('danger', 'Deleted', 'Sub-Group ID Deleted Successfully'));
+                store.addNotification(
+                    buildToast(
+                        'danger',
+                        'Deleted',
+                        'Sub-Group ID Deleted Successfully'
+                    )
+                );
             })
             .catch(function (error) {
                 console.log(error);
@@ -227,7 +243,7 @@ function StudentGroupsSubGroupIDs(props) {
 
     return (
         <div>
-			<PreLoader loading={loading} hasSideBar={true} />
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Generate Sub-Group IDs'} />
             <div
                 style={{
@@ -315,13 +331,17 @@ function StudentGroupsSubGroupIDs(props) {
                             style={{ borderRadius: 0 }}
                             onClick={addSubGroupID}
                         >
-                            Add
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
                         </button>
                     </div>
                 </div>
-                <div style={{color:'crimson', fontSize: 13}}>
-                    {errorMsg}
-                </div>
+                <div style={{ color: 'crimson', fontSize: 13 }}>{errorMsg}</div>
             </div>
             <br />
             <ContentHeader label={'1st Year'} />
@@ -379,17 +399,24 @@ function StudentGroupsSubGroupIDs(props) {
                                                           )[3]
                                                       }.${item.subgroupnumber}`
                                             }
-                                            component={UpdateSubGroupIDsDialogBox}
+                                            component={
+                                                UpdateSubGroupIDsDialogBox
+                                            }
                                             groupIDList={groupIDList}
-                                            subGroupNumberList={subGroupNumberList}
+                                            subGroupNumberList={
+                                                subGroupNumberList
+                                            }
                                             subGroupIDList={subGroupIDList}
-                                            setSubGroupIDList={setSubGroupIDList}
+                                            setSubGroupIDList={
+                                                setSubGroupIDList
+                                            }
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -449,17 +476,24 @@ function StudentGroupsSubGroupIDs(props) {
                                                           )[3]
                                                       }.${item.subgroupnumber}`
                                             }
-                                            component={UpdateSubGroupIDsDialogBox}
+                                            component={
+                                                UpdateSubGroupIDsDialogBox
+                                            }
                                             groupIDList={groupIDList}
-                                            subGroupNumberList={subGroupNumberList}
+                                            subGroupNumberList={
+                                                subGroupNumberList
+                                            }
                                             subGroupIDList={subGroupIDList}
-                                            setSubGroupIDList={setSubGroupIDList}
+                                            setSubGroupIDList={
+                                                setSubGroupIDList
+                                            }
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -519,17 +553,24 @@ function StudentGroupsSubGroupIDs(props) {
                                                           )[3]
                                                       }.${item.subgroupnumber}`
                                             }
-                                            component={UpdateSubGroupIDsDialogBox}
+                                            component={
+                                                UpdateSubGroupIDsDialogBox
+                                            }
                                             groupIDList={groupIDList}
-                                            subGroupNumberList={subGroupNumberList}
+                                            subGroupNumberList={
+                                                subGroupNumberList
+                                            }
                                             subGroupIDList={subGroupIDList}
-                                            setSubGroupIDList={setSubGroupIDList}
+                                            setSubGroupIDList={
+                                                setSubGroupIDList
+                                            }
                                         />
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
@@ -589,12 +630,17 @@ function StudentGroupsSubGroupIDs(props) {
                                                           )[3]
                                                       }.${item.subgroupnumber}`
                                             }
-
-                                            component={UpdateSubGroupIDsDialogBox}
+                                            component={
+                                                UpdateSubGroupIDsDialogBox
+                                            }
                                             groupIDList={groupIDList}
-                                            subGroupNumberList={subGroupNumberList}
+                                            subGroupNumberList={
+                                                subGroupNumberList
+                                            }
                                             subGroupIDList={subGroupIDList}
-                                            setSubGroupIDList={setSubGroupIDList}
+                                            setSubGroupIDList={
+                                                setSubGroupIDList
+                                            }
                                             // subgroupid={subgroupid}
                                             // groupIDInit={`${subgroupid.split('.')[0]}.${
                                             //     subgroupid.split('.')[1]
@@ -604,8 +650,9 @@ function StudentGroupsSubGroupIDs(props) {
                                     </div>
                                 </div>
                             );
+                        } else {
+                            return null;
                         }
-                        else{return null}
                     })
                 )}
             </div>
