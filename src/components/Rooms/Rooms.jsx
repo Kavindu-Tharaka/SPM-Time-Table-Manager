@@ -97,7 +97,7 @@ const Rooms = (props) => {
 				setIsAddingRoom(false);
 
 				store.addNotification(
-					buildToast('success', 'Success', 'Room Added Successfully')
+					buildToast('success', 'Success', 'Working Time Added Successfully')
 				);
 			})
 			.catch((err) => {

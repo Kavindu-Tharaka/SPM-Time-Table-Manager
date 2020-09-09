@@ -5,6 +5,8 @@ import ContentHeader from "../ContentHeader/ContentHeader";
 import WorkingHoursForm from "../../components/WorkingHours/WorkingHoursForm";
 import WorkingHoursTable from "./WorkingHoursTable";
 import Swal from "sweetalert2";
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 import axios from "axios";
 // import WorkingHoursModal from "./WorkingHoursModal";
 function WorkingHoursComponent() {
@@ -12,14 +14,17 @@ function WorkingHoursComponent() {
   const [workingDay, setWorkingDay] = useState([]);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState();
-  const [dayType, setDayType] = useState("");
+  const [dayType, setDayType] = useState("weekday");
   const [noOfWorkingDays, setNoOfWorkingDays] = useState(0);
-  const [workingHours, setWorkingHours] = useState();
-  const [workingMins, setWorkingMins] = useState();
-  const [dayOfWork, setDayOfWork] = useState("");
+  const [workingHours, setWorkingHours] = useState("");
+  const [workingMins, setWorkingMins] = useState("");
+  const [dayOfWork, setDayOfWork] = useState("monday");
   const [fromTime, setFromTime] = useState("00:00");
   const [toTime, setToTime] = useState("00:00");
   const [updateComponent, setUpdateComponent] = useState(0);
+
+  //validating the time slot
+  const [isTimeSlotValid, setTimeSlotValid] = useState(true);
 
   //useEffect
 
@@ -39,11 +44,9 @@ function WorkingHoursComponent() {
       });
   };
 
-	const refreshComponent = () => {
-		setUpdateComponent(Math.random());
-	};
-
-
+  const refreshComponent = () => {
+    setUpdateComponent(Math.random());
+  };
 
   const ondayTypeChange = (value) => {
     setDayType(value);
@@ -68,6 +71,26 @@ function WorkingHoursComponent() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+
+    let hasErrorDetected = false;
+
+    if (workingHours === "") {
+      setTimeSlotValid(false);
+      hasErrorDetected = true;
+    }
+
+    if (workingMins === "") {
+      setTimeSlotValid(false);
+      hasErrorDetected = true;
+    }
+
+    if (hasErrorDetected) {
+      console.log("error is here ---------------");
+      return;
+    }
+
+    setTimeSlotValid(true);
+
     if (
       dayType == "" ||
       workingHours == "" ||
@@ -80,7 +103,6 @@ function WorkingHoursComponent() {
         title: "Sorry",
         text: `Please Enter the Required Fields`,
       });
-      
     } else {
       axios
         .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
@@ -107,18 +129,15 @@ function WorkingHoursComponent() {
                 .then((res) => {
                   console.log(res);
                   addWorkingDay(res.data);
-                  Swal.fire(
-                    "Submited!",
-                    "Entry has been sucessfuly submited.",
-                    "success"
+                  store.addNotification(
+                    buildToast('success', 'Success', 'Room Added Successfully')
                   );
                   clear();
                 })
                 .catch((err) => {
                   console.log(err);
                 });
-            } 
-            
+            }
           } else {
             console.log(res.data);
             Swal.fire({
@@ -138,21 +157,18 @@ function WorkingHoursComponent() {
     setWorkingDay([...workingDay, values]);
   };
 
-
-
   const clear = () => {
-    setDayType("");
+    setDayType("weekday");
     setNoOfWorkingDays("");
     setWorkingHours();
     setWorkingMins();
-    setDayOfWork(0);
+    setDayOfWork("monday");
     setFromTime("00:00");
     setToTime("00:00");
   };
 
   return (
     <div>
-
       <ContentHeader header={"Working Time"} />
 
       <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>
@@ -220,10 +236,18 @@ function WorkingHoursComponent() {
               />
             </div>
           </div>
-          <div className="col col-md-2">
+          <div className="col col-md-2" >
             <h6>Time Slot</h6>
-            <div className="">
+            <div className="" >
               <input
+              style={{
+                width: "105px",
+                height:'28px',
+                display: 'inline-block'
+              }}
+                className={
+                  isTimeSlotValid ? "form-control" : "form-control is-invalid"
+                }
                 type="number"
                 name=""
                 min={1}
@@ -236,7 +260,17 @@ function WorkingHoursComponent() {
                 }}
                 disabled={edit ? true : false}
               />
+              
               <input
+               style={{
+                width: "105px",
+                height:'28px',
+                display: 'inline-block'
+
+              }}
+                className={
+                  isTimeSlotValid ? "form-control" : "form-control is-invalid"
+                }
                 type="number"
                 name=""
                 min={0}
@@ -250,6 +284,7 @@ function WorkingHoursComponent() {
                 }}
                 disabled={edit ? true : false}
               />
+              <div className="invalid-feedback">Please provide a Valid Time Slot</div>
             </div>
           </div>
         </div>
@@ -332,7 +367,7 @@ function WorkingHoursComponent() {
                   type="radio"
                   name="day"
                   value="sunday"
-                  checked={dayOfWork === "sunday" ? true : false} 
+                  checked={dayOfWork === "sunday" ? true : false}
                   onChange={(e) => onWorkingDayChange(e.target.value)}
                   disabled={dayType === "weekday" ? true : false}
                 />{" "}
@@ -352,8 +387,7 @@ function WorkingHoursComponent() {
       <WorkingHoursForm addWorkingDay={addWorkingDay} />
       <WorkingHoursTable
         workingDay={workingDay}
-
-        refreshComponent = {refreshComponent}
+        refreshComponent={refreshComponent}
       />
     </div>
   );
