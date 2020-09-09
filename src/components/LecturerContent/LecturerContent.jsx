@@ -9,6 +9,8 @@ import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
+import swal from '@sweetalert/with-react';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
 
 const LecturerContent = () => {
 
@@ -90,6 +92,20 @@ const LecturerContent = () => {
                 setloading(false);
             });
     };
+
+    const onDeleteClick = (id, name) => {
+		swal({
+			buttons: false,
+			content: (
+				<DeleteConfirmationDialogBox
+					deleteEventWithIdHandler={deleteLecturer}
+					itemId={id}
+					itemName={name}
+				/>
+			),
+		});
+    };
+    
     const deleteLecturer = (rowID) => {
         axios
             .delete(`http://localhost:8000/api/v1/lecturers/${rowID}`)
@@ -97,6 +113,7 @@ const LecturerContent = () => {
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
+                swal.close()
                 store.addNotification(buildToast('danger', '', 'Lecturer deleted'));
             })
             .catch((e) => console.error(e));
@@ -233,7 +250,7 @@ const LecturerContent = () => {
                 (row) => (
                     <div className="d-flex">
                         <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>{""}
-                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => deleteLecturer(row._id)}><IoMdClose/></button>
+                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => onDeleteClick (row._id,row.name)}><IoMdClose/></button>
                     </div>
                 )
         },
