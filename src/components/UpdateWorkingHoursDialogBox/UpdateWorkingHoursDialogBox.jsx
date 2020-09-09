@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import swal from "@sweetalert/with-react";
 import axios from "axios";
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
   const [id, setId] = useState(row._id);
   const [dayType, setDayType] = useState(row.dayType);
@@ -24,6 +26,9 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
       })
       .then((res) => {
         swal.close();
+        store.addNotification(
+					buildToast('success', 'Updates', 'Working Time Updated Successfully')
+				);
         refreshComponent()
       })
       .catch((e) => {
@@ -36,14 +41,15 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
       <h5 className="text-left m-0">Update Workind Days</h5>
       <hr />
 
-      <div className="form-row">
+      <div className="form-row  mb-3">
         <label className="dialog-label">Room Type</label>
         <div className="custom-control custom-radio custom-control-inline">
           <input
             type="radio"
             name="daytype"
             className="custom-control-input"
-            checked={dayType === "weekday" ? true : false}
+            value= 'weekday'
+            checked={dayType === "weekday" }
             onChange={(e) => setDayType(e.target.value)}
           />
           <label className="custom-control-label" htmlFor="customRadioInline1">
@@ -54,8 +60,9 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
           <input
             type="radio"
             name="daytype"
+            value='weekend'
             className="custom-control-input"
-            checked={dayType === "weekend" ? true : false}
+            checked={dayType === "weekend" }
             onChange={(e) => setDayType(e.target.value)}
           />
           <label className="custom-control-label" htmlFor="customRadioInline2">
@@ -63,7 +70,7 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
           </label>
         </div>
       </div>
-      <div className="form-row">
+      <div className="form-row  mb-3">
         <div className="form-group col">
           <label className="dialog-label">From</label>
           <input
@@ -86,7 +93,7 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
         </div>
       </div>
 
-      <div className="form-row">
+      <div className="form-row  mb-3">
         <div className="form-group col">
           <label className="dialog-label">Working Day</label>
           <select
