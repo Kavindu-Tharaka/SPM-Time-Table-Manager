@@ -104,21 +104,20 @@ const UpdateSubjectBox = (props) => {
                             <input
                                 type='text'
                                 className='form-control'
-                                // placeholder='00'
                                 onChange={onLecHrsChange}
                                 value={numberOfLecHrs}
                             />
                         </div>
+
                         <div className='form-group col'>
                             <label className='dialog-label'>Lab Hrs</label>
                             <input
-                                type="number"
-                                className="from-control"
-                                value={numberOfLabHrs}
+                                type='text'
+                                className='form-control'
                                 onChange={onLabHrsChange}
+                                value={numberOfLabHrs}
                             />
                         </div>
-
                     </div>
 
                     <div className='form-row'>
