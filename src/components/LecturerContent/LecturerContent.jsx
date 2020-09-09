@@ -346,7 +346,7 @@ const LecturerContent = () => {
                                     <option value="Senior Lecturer">Senior Lecturer</option>
                                     <option value="Lecturer">Lecturer</option>
                                     <option value="Assistant Lecturer">Assistant Lecturer</option>
-                                    <option value="Instructor">Instructors</option>
+                                    <option value="Instructor">Instructor</option>
                                 </select>
                                 {/* <input value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" /> */}
                             </div>

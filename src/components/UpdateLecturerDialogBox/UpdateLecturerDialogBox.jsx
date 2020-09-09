@@ -14,7 +14,7 @@ const UpdateLecturerDialogBox = (props) => {
     const [building, setBuilding] = useState(props.lec.building);
     const [employeeId, setEmployeeId] = useState(props.lec.employeeId);
     const [rank, setRank] = useState(1);
-    const [rankVal, setRankVal] = useState("");
+    const [rankVal, setRankVal] = useState(props.lec.rankVal);
     const [buildings, setBuildings] = useState([]);
 
     const onNameChange = (e) => {
@@ -50,11 +50,10 @@ const UpdateLecturerDialogBox = (props) => {
             setRank(7);
         }
         setLevel(e.target.value);
-        // setRankVal(`${rank}.${employeeId}`);
     }
     const onEmpIdChange = (e) => {
         setEmployeeId(e.target.value);
-        setRankVal(`${rank}.${employeeId}`);
+        setRankVal(`${rank}.${e.target.value}`);
     }
     const onDepartmentChange = (e) => {
         setDepartment(e.target.value)
@@ -90,7 +89,6 @@ const UpdateLecturerDialogBox = (props) => {
         axios
             .get('http://localhost:8000/api/v1/buildings')
             .then((res) => {
-                // console.log("lec building: ",res.data.data.buildings)
                 setBuildings(res.data.data.buildings);
             })
             .catch((err) => {
@@ -136,7 +134,6 @@ const UpdateLecturerDialogBox = (props) => {
                         <input
                             type='text'
                             className='form-control'
-                            // placeholder='00'
                             onChange={onCenterChange}
                             value={center}
                         />
@@ -162,7 +159,6 @@ const UpdateLecturerDialogBox = (props) => {
                         <input
                             type='text'
                             className='form-control'
-                            // placeholder='00'
                             onChange={onEmpIdChange}
                             value={employeeId}
                         />
@@ -173,7 +169,6 @@ const UpdateLecturerDialogBox = (props) => {
                         <input
                             type='text'
                             className='form-control'
-                            // placeholder='00'
                             onChange={onDepartmentChange}
                             value={department}
                         />
