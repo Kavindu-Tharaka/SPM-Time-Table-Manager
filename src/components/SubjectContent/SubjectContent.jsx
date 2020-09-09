@@ -10,6 +10,7 @@ import { buildToast } from '../../util/toast';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import UpdateSubjectDialogBox from '../UpdateSubjectDialogBox/UpdateSubjectBox';
 
 import './SubjectContent.css';
 import { wait } from '@testing-library/react';
@@ -54,6 +55,17 @@ const SubjectContent = () => {
         setnumberOfEveluationHrs(e.target.value)
     }
 
+    const onUpdateClick = (data) =>{
+        
+        swal({
+			buttons: false,
+			content: (
+				<UpdateSubjectDialogBox
+					sub={data}
+				/>
+			),
+		});
+    }
 
 
     const onSubmit = (e) => {
@@ -234,7 +246,7 @@ const columns = [
         cell:
             (row) => (
                 <div className="d-flex">
-                    <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => updateSubject(row)}><IoMdCreate /></button>{""}
+                    <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => onUpdateClick(row)}><IoMdCreate /></button>{""}
                     <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => onDeleteClick(row._id, row.subjectName)}><IoMdClose /></button>
                 </div>
             )
