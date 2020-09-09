@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import LabelTag from '../../components/Label/Label';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { Label } from 'reactstrap';
 import UpdateGroupIDsDialogBox from './UpdateGroupIDsDialogBox';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
 
 function StudentGroupsGroupIDs(props) {
     const [yearSemester, setYearSemester] = useState('');
@@ -22,64 +25,110 @@ function StudentGroupsGroupIDs(props) {
 
     const [errorMsg, setErrorMsg] = useState('');
 
+    const [loading, setLoading] = useState(true);
+    const [isAdding, setIsAdding] = useState(false);
+
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
         const loadData = () => {
+            // axios
+            //     .get('http://localhost:8000/api/v1/yearsemesters', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function (response) {
+            //         // console.log(response.data.data.yearsemesters);
+            //         setYearSemesterList(response.data.data.yearsemesters);
+            //         setYearSemester(
+            //             response.data.data.yearsemesters[0].yearsemestername
+            //         );
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
+            // axios
+            //     .get('http://localhost:8000/api/v1/groupnumbers', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function (response) {
+            //         setGroupNumberList(response.data.data.groupnumbers);
+            //         setGroupNumber(
+            //             response.data.data.groupnumbers[0].groupnumber
+            //         );
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
+            // axios
+            //     .get('http://localhost:8000/api/v1/specializations', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function (response) {
+            //         setSpecializationList(response.data.data.specializations);
+            //         setSpecialization(
+            //             response.data.data.specializations[0].specializationname
+            //         );
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
+            // axios
+            //     .get('http://localhost:8000/api/v1/groupids', {
+            //         cancelToken: source.token,
+            //     })
+            //     .then(function async(response) {
+            //         console.log(response.data.data.groupids);
+            //         setGroupIDList(response.data.data.groupids);
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+
             axios
-                .get('http://localhost:8000/api/v1/yearsemesters', {
-                    cancelToken: source.token,
-                })
-                .then(function (response) {
-                    // console.log(response.data.data.yearsemesters);
-                    setYearSemesterList(response.data.data.yearsemesters);
+                .all([
+                    axios.get('http://localhost:8000/api/v1/yearsemesters', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/groupnumbers', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/specializations', {
+                        cancelToken: source.token,
+                    }),
+                    axios.get('http://localhost:8000/api/v1/groupids', {
+                        cancelToken: source.token,
+                    }),
+                ])
+                .then((response) => {
+                    setYearSemesterList(response[0].data.data.yearsemesters);
                     setYearSemester(
-                        response.data.data.yearsemesters[0].yearsemestername
+                        response[0].data.data.yearsemesters[0].yearsemestername
                     );
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
 
-            axios
-                .get('http://localhost:8000/api/v1/groupnumbers', {
-                    cancelToken: source.token,
-                })
-                .then(function (response) {
-                    setGroupNumberList(response.data.data.groupnumbers);
+                    setGroupNumberList(response[1].data.data.groupnumbers);
                     setGroupNumber(
-                        response.data.data.groupnumbers[0].groupnumber
+                        response[1].data.data.groupnumbers[0].groupnumber
                     );
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
 
-            axios
-                .get('http://localhost:8000/api/v1/specializations', {
-                    cancelToken: source.token,
-                })
-                .then(function (response) {
-                    setSpecializationList(response.data.data.specializations);
+                    setSpecializationList(
+                        response[2].data.data.specializations
+                    );
                     setSpecialization(
-                        response.data.data.specializations[0].specializationname
+                        response[2].data.data.specializations[0]
+                            .specializationname
                     );
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
 
-            axios
-                .get('http://localhost:8000/api/v1/groupids', {
-                    cancelToken: source.token,
+                    setGroupIDList(response[3].data.data.groupids);
+
+                    setLoading(false);
                 })
-                .then(function async(response) {
-                    console.log(response.data.data.groupids);
-                    setGroupIDList(response.data.data.groupids);
-                })
-                .catch(function (error) {
-                    console.log(error);
+                .catch((err) => {
+                    console.log(err);
+                    setLoading(false);
                 });
         };
 
@@ -109,6 +158,8 @@ function StudentGroupsGroupIDs(props) {
     const addGroupID = (e) => {
         e.preventDefault();
 
+        setIsAdding(true);
+
         let isExist = false;
 
         groupIDList.forEach((element) => {
@@ -119,6 +170,7 @@ function StudentGroupsGroupIDs(props) {
                 // Swal.fire('The Group ID You Entered is Already Exists!');
                 setErrorMsg('The Group ID You Entered is Already Exists!');
                 isExist = true;
+                setIsAdding(false);
             }
         });
 
@@ -135,6 +187,14 @@ function StudentGroupsGroupIDs(props) {
                         ...groupIDList,
                         response.data.data.groupid,
                     ]);
+                    setIsAdding(false);
+                    store.addNotification(
+                        buildToast(
+                            'success',
+                            'Success',
+                            'Group ID Added Successfully'
+                        )
+                    );
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -152,6 +212,13 @@ function StudentGroupsGroupIDs(props) {
                         return id !== item._id;
                     })
                 );
+                store.addNotification(
+                    buildToast(
+                        'danger',
+                        'Deleted',
+                        'Group ID Deleted Successfully'
+                    )
+                );
             })
             .catch(function (error) {
                 console.log(error);
@@ -160,6 +227,7 @@ function StudentGroupsGroupIDs(props) {
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Generate Group IDs'} />
             <div
                 style={{
@@ -226,13 +294,17 @@ function StudentGroupsGroupIDs(props) {
                             className="btn btn-primary"
                             onClick={addGroupID}
                         >
-                            Add
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
                         </button>
                     </div>
                 </div>
-                <div style={{color:'crimson', fontSize: 14}}>
-                    {errorMsg}
-                </div>
+                <div style={{ color: 'crimson', fontSize: 14 }}>{errorMsg}</div>
             </div>
             <br />
             <ContentHeader label={'1st Year'} />
@@ -241,7 +313,7 @@ function StudentGroupsGroupIDs(props) {
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    paddingLeft: '7%',
+                    paddingLeft: '5%',
                     overflowY: 'auto',
                     maxHeight: '160px',
                     marginBottom: '3%',
@@ -303,7 +375,7 @@ function StudentGroupsGroupIDs(props) {
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    paddingLeft: '7%',
+                    paddingLeft: '5%',
                     overflowY: 'auto',
                     maxHeight: '160px',
                     marginBottom: '3%',
@@ -365,7 +437,7 @@ function StudentGroupsGroupIDs(props) {
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    paddingLeft: '7%',
+                    paddingLeft: '5%',
                     overflowY: 'auto',
                     maxHeight: '160px',
                     marginBottom: '3%',
@@ -427,7 +499,7 @@ function StudentGroupsGroupIDs(props) {
                     width: '100%',
                     textAlign: 'center',
                     marginTop: '2%',
-                    paddingLeft: '7%',
+                    paddingLeft: '5%',
                     overflowY: 'auto',
                     maxHeight: '160px',
                     marginBottom: '3%',
@@ -464,10 +536,11 @@ function StudentGroupsGroupIDs(props) {
                                                     ? `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`
                                                     : `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
                                             }
-                                            
                                             component={UpdateGroupIDsDialogBox}
                                             yearSemesterList={yearSemesterList}
-                                            specializationList={specializationList}
+                                            specializationList={
+                                                specializationList
+                                            }
                                             groupNumberList={groupNumberList}
                                             groupIDList={groupIDList}
                                             setGroupIDList={setGroupIDList}

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
-import Swal from 'sweetalert2';
 import axios from 'axios';
 import './updateSubGroupIDsDialogBox.css';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const UpdateSubGroupIDsDialogBox = (props) => {
     const [groupID, setGroupID] = useState(
@@ -19,6 +21,7 @@ const UpdateSubGroupIDsDialogBox = (props) => {
     );
 
     const [isSubGroupIDValid, setIsSubGroupIDValid] = useState(true);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const onInputChangeGroupID = (e) => {
         setGroupID(e.target.value);
@@ -34,6 +37,7 @@ const UpdateSubGroupIDsDialogBox = (props) => {
     const editSubGroupID = () => {
         if (`${groupID}.${subGroupNumber}` !== props.itemName) {
             let isExist = false;
+            setIsUpdating(true);
 
             props.subGroupIDList.forEach((element) => {
                 if (
@@ -49,6 +53,7 @@ const UpdateSubGroupIDsDialogBox = (props) => {
                 ) {
                     setIsSubGroupIDValid(false);
 
+                    setIsUpdating(false);
                     isExist = true;
                 }
             });
@@ -73,7 +78,15 @@ const UpdateSubGroupIDsDialogBox = (props) => {
                                     : listItem
                             )
                         );
+                        setIsUpdating(false);
                         swal.close();
+                        store.addNotification(
+                            buildToast(
+                                'info',
+                                'Updated',
+                                'Sub-Group ID Updated Successfully'
+                            )
+                        );
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -135,7 +148,13 @@ const UpdateSubGroupIDsDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={editSubGroupID}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"

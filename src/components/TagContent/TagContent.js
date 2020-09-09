@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Tag from '../../components/Tag/Tag';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
 import ContentHeader from '../../components/ContentHeader/ContentHeader';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import UpdateTagsDialogBox from './UpdateTagsDialogBox';
 import './tagContent.css';
+import PreLoader from '../PreLoader/PreLoader';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
+import { FaSpinner } from 'react-icons/fa';
+
 
 function TagContent(props) {
     const [tagName, setTagName] = useState('');
     const [tagList, setTagList] = useState([]);
 
-	const [isTagNameValid, setIsTagNameValid] = useState(true);
-	const [errorMsg, setErrorMsg] = useState('');
+    const [isTagNameValid, setIsTagNameValid] = useState(true);
+    const [errorMsg, setErrorMsg] = useState('');
 
+    const [loading, setLoading] = useState(true);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
@@ -29,9 +35,11 @@ function TagContent(props) {
                 .then(function (response) {
                     // console.log(response.data.data.tags);
                     setTagList(response.data.data.tags);
+                    setLoading(false);
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setLoading(false);
                 });
         };
 
@@ -58,9 +66,10 @@ function TagContent(props) {
             // });
             setIsTagNameValid(false);
             setErrorMsg('Please Enter a valid Tag name!');
-			return;
-            
+            return;
         } else {
+            setIsAdding(true);
+
             let isExist = false;
 
             tagList.forEach((element) => {
@@ -73,6 +82,7 @@ function TagContent(props) {
                     setErrorMsg('The Tag Name You Entered is Already Exists!');
                     isExist = true;
                     setTagName('');
+                    setIsAdding(false);
                 }
             });
 
@@ -85,6 +95,14 @@ function TagContent(props) {
                         console.log(response.data.data.tag);
                         setTagList([...tagList, response.data.data.tag]);
                         setTagName('');
+                        setIsAdding(false);
+                        store.addNotification(
+                            buildToast(
+                                'success',
+                                'Success',
+                                'Tag Added Successfully'
+                            )
+                        );
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -103,6 +121,9 @@ function TagContent(props) {
                         return tagId !== item._id;
                     })
                 );
+                store.addNotification(
+                    buildToast('danger', 'Deleted', 'Tag Deleted Successfully')
+                );
             })
             .catch((err) => {
                 console.log(err);
@@ -117,42 +138,49 @@ function TagContent(props) {
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={false} />
             <ContentHeader header={'Tags'} />
 
-            <form style={{
-                marginLeft:'35%',
-                marginTop:'3%',
-            }}>
+            <form
+                style={{
+                    marginLeft: '35%',
+                    marginTop: '3%',
+                }}
+            >
                 <div className="form-row">
                     <div className="col-md-4 mb-3">
                         {/* <label>First name</label> */}
                         <input
-                            type='text'
+                            type="text"
                             className={
                                 isTagNameValid
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                            placeholder='Tag Name'
+                            placeholder="Tag Name"
                             onChange={onInputChange}
                             onKeyDown={handleKeyDown}
                             value={tagName}
                             data-toggle="tooltip"
                             data-placement="top"
                             title="Tag can be a text like Lecture, Tutorial..."
-					    />
-                        <div className='invalid-feedback'>
-                            {errorMsg}
-					    </div>
+                        />
+                        <div className="invalid-feedback">{errorMsg}</div>
                     </div>
                     <div className="col-md-2 mb-3">
-                    <button
-                        className='btn btn-primary'
-                        onClick={addTagName}
-				    >
-					    Add
-				    </button>                    
-                </div>
+                        <button
+                            className="btn btn-primary"
+                            onClick={addTagName}
+                        >
+                            {isAdding ? (
+                                <div>
+                                    Adding <FaSpinner className="spin" />
+                                </div>
+                            ) : (
+                                'Add'
+                            )}
+                        </button>
+                    </div>
                 </div>
             </form>
 

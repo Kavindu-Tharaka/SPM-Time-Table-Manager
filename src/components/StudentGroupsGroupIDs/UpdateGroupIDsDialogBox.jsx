@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import swal from '@sweetalert/with-react';
-import Swal from 'sweetalert2';
 import axios from 'axios';
 import './updateGroupIDsDialogBox.css';
+import { FaSpinner } from 'react-icons/fa';
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 
 const UpdateGroupIDsDialogBox = (props) => {
-
     const [yearSemester, setYearSemester] = useState(
         `${props.itemName.split('.')[0]}.${props.itemName.split('.')[1]}`
     );
@@ -19,6 +20,7 @@ const UpdateGroupIDsDialogBox = (props) => {
     );
 
     const [isGroupIDValid, setIsGroupIDValid] = useState(true);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const onInputChangeYearSemester = (e) => {
         setYearSemester(e.target.value);
@@ -37,20 +39,19 @@ const UpdateGroupIDsDialogBox = (props) => {
     };
 
     const editGroupID = () => {
-        
         let yearSemesterGroupNumber = `${yearSemester}.${specialization}.0${groupNumber}`;
 
-        if(groupNumber < 10){
-            yearSemesterGroupNumber = `${yearSemester}.${specialization}.0${groupNumber}`
-        }
-        else{
-            yearSemesterGroupNumber = `${yearSemester}.${specialization}.${groupNumber}`
+        if (groupNumber < 10) {
+            yearSemesterGroupNumber = `${yearSemester}.${specialization}.0${groupNumber}`;
+        } else {
+            yearSemesterGroupNumber = `${yearSemester}.${specialization}.${groupNumber}`;
         }
 
         console.log(props.itemName === yearSemesterGroupNumber);
 
         if (yearSemesterGroupNumber !== props.itemName) {
             let isExist = false;
+            setIsUpdating(true);
 
             props.groupIDList.forEach((element) => {
                 if (
@@ -58,6 +59,7 @@ const UpdateGroupIDsDialogBox = (props) => {
                     `${yearSemester}.${specialization}.${groupNumber}`
                 ) {
                     setIsGroupIDValid(false);
+                    setIsUpdating(false);
                     isExist = true;
                 }
             });
@@ -85,14 +87,21 @@ const UpdateGroupIDsDialogBox = (props) => {
                                     : listItem
                             )
                         );
+                        setIsUpdating(false);
                         swal.close();
+                        store.addNotification(
+                            buildToast(
+                                'info',
+                                'Updated',
+                                'Group ID Updated Successfully'
+                            )
+                        );
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             }
-        }
-        else{
+        } else {
             swal.close();
         }
     };
@@ -175,7 +184,13 @@ const UpdateGroupIDsDialogBox = (props) => {
                 className="btn btn-info float-right mb-4"
                 onClick={editGroupID}
             >
-                Update
+                {isUpdating ? (
+                    <div>
+                        Updating <FaSpinner className="spin" />
+                    </div>
+                ) : (
+                    'Update'
+                )}
             </button>
             <button
                 className="btn btn-secondary float-right mb-4 mr-2"
