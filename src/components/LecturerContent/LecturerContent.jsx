@@ -11,6 +11,7 @@ import { buildToast } from '../../util/toast';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import UpdateLecturerDialogBox from '../UpdateLecturerDialogBox/UpdateLecturerDialogBox';
 
 const LecturerContent = () => {
 
@@ -119,15 +120,24 @@ const LecturerContent = () => {
             .catch((e) => console.error(e));
     }
     const updateLecturer = (data) => {
-        setUpdate(true)
-        setId(data._id)
-        setName(data.name)
-        setFaculty(data.faculty)
-        setCenter(data.center)
-        setLevel(data.level)
-        setEmpId(data.employeeId)
-        setDepartment(data.department)
-        setBuilding(data.building)
+        // setUpdate(true)
+        // setId(data._id)
+        // setName(data.name)
+        // setFaculty(data.faculty)
+        // setCenter(data.center)
+        // setLevel(data.level)
+        // setEmpId(data.employeeId)
+        // setDepartment(data.department)
+        // setBuilding(data.building)
+
+        swal({
+			buttons: false,
+			content: (
+				<UpdateLecturerDialogBox
+					lec={data}
+				/>
+			),
+		});
     }
     const onSubmit = (e) => {
         e.preventDefault();
@@ -317,7 +327,7 @@ const LecturerContent = () => {
                         <div id="level-container" className="form-group col">
                             <p className="mb-1">Level</p>
                             <div>
-                                {/* <select value={level} onChange={(e) => onLevelChange(e)} name="level" className="custom-select" id="level-select">
+                                <select value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" id="level-select">
                                     <option value="Professor">Professor</option>
                                     <option value="Assistant Professor">Assistant Professor</option>
                                     <option value="Senior Lecturer(HG)">Senior Lecturer(HG)</option>
@@ -325,8 +335,8 @@ const LecturerContent = () => {
                                     <option value="Lecturer">Lecturer</option>
                                     <option value="Assistant Lecturer">Assistant Lecturer</option>
                                     <option value="Instructor">Instructors</option>
-                                </select> */}
-                                <input value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" />
+                                </select>
+                                {/* <input value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" /> */}
                             </div>
                         </div>
 
