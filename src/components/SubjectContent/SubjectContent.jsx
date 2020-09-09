@@ -216,7 +216,7 @@ const SubjectContent = () => {
             <ContentHeader header={'Subjects'} />
             <br />
             <form onSubmit={onSubmit}>
-                <div className="d-flex justify-content-between">
+                <div className="form-row">
                     <div>
                         <p className="mb-1">{'Offered Year'}</p>
                         <select
@@ -253,7 +253,7 @@ const SubjectContent = () => {
                     </div>
                 </div>
 
-                <div className="d-flex justify-content-between mt-3">
+                <div className="form-row">
                     <div>
                         <p className="mb-1">{'Offered Semester'}</p>
                         <select

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import { IoMdClose, IoMdCreate } from 'react-icons/io';
 
 const LecturerContent = () => {
 
@@ -23,7 +24,7 @@ const LecturerContent = () => {
     const [rankVal, setRankVal] = useState("");
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState("");
-    const [loading,setloading] = useState(true);
+    const [loading, setloading] = useState(true);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -96,7 +97,7 @@ const LecturerContent = () => {
                 setLecturerDetails(
                     lecturerDetails.filter(lec => { return lec._id !== rowID })
                 );
-                store.addNotification(buildToast('danger','' , 'Lecturer deleted'));
+                store.addNotification(buildToast('danger', '', 'Lecturer deleted'));
             })
             .catch((e) => console.error(e));
     }
@@ -165,7 +166,7 @@ const LecturerContent = () => {
                     // console.log("lecturer update executed succesfully")
                     setUpdate(false);
                     window.location.reload();
-                    store.addNotification(buildToast('warning','', 'Lecturer Updated Successfully'));
+                    store.addNotification(buildToast('warning', '', 'Lecturer Updated Successfully'));
                 })
                 .catch((e) => {
                     console.err(e);
@@ -231,8 +232,8 @@ const LecturerContent = () => {
             cell:
                 (row) => (
                     <div className="d-flex">
-                        <button id="btn-edit" className="btn rounded-circle border-none btn-sm" onClick={() => updateLecturer(row)}><FaPencilAlt color="#1a1aff" /></button>&nbsp;
-                        <button id="btn-remove" className="btn rounded-circle border-none btn-sm" onClick={() => deleteLecturer(row._id)}><FaTrashAlt color="#1a1aff" /></button>
+                        <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>&nbsp;
+                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => deleteLecturer(row._id)}><IoMdClose /></button>
                     </div>
                 )
         },
@@ -244,21 +245,22 @@ const LecturerContent = () => {
                 <ContentHeader header={'Lecturers'} />
                 <br />
                 <form onSubmit={onSubmit}>
-                    <div className="d-flex ">
+                    <div className="form-row"> 
 
-                        <div>
+                        <div className="form-group col">
                             <p className="mb-1">Name</p>
                             <input
                                 type="text"
                                 name="name"
                                 value={name}
+                                className="form-control"
                                 onChange={(e) => onNameChange(e)} />
                         </div>
 
-                        <div id="faculty-container">
+                        <div id="faculty-container" className="form-group col">
                             <p className="mb-1">Faculty</p>
                             <div className="">
-                                <select onChange={(e) => onfacultyChange(e)} value={faculty} name="faculty" className="custom-select" id="faculty-select">
+                                {/* <select onChange={(e) => onfacultyChange(e)} value={faculty} name="faculty" className="custom-select" id="faculty-select">
                                     <option value="Computing">Computing</option>
                                     <option value="Engineering">Engineering</option>
                                     <option value="Business">Business</option>
@@ -267,14 +269,22 @@ const LecturerContent = () => {
                                     <option value="School of Architecture">School of Architecture</option>
                                     <option value="School of Law">School of Law</option>
                                     <option value="School of Hospitality & Culinary">School of Hospitality & Culinary</option>
-                                </select>
+                                </select> */}
+
+                                <input 
+                                onChange={(e) => onfacultyChange(e)} 
+                                value={faculty} name="faculty" 
+                                className="form-control" 
+                                // id="faculty-select"
+                                 />
+                                     
                             </div>
                         </div>
 
-                        <div id="center-container">
+                        <div id="center-container" className="form-group col">
                             <p className="mb-1">Center</p>
                             <div className="">
-                                <select onChange={(e) => onCenterChange(e)} value={center} name="center" className="custom-select" id="center-select">
+                                {/* <select onChange={(e) => onCenterChange(e)} value={center} name="center" className="custom-select" id="center-select">
                                     <option value="malabe">Malabe</option>
                                     <option value="Metro Campus">Metro Campus</option>
                                     <option value="SLIIT Academy">SLIIT Academy</option>
@@ -282,14 +292,15 @@ const LecturerContent = () => {
                                     <option value="Kandy">Kandy</option>
                                     <option value="Kurunagala">Kurunagala</option>
                                     <option value="Jaffna">Jaffna</option>
-                                </select>
+                                </select> */}
+                                <input onChange={(e) => onCenterChange(e)} value={center} name="center" className="form-control"/>
                             </div>
                         </div>
 
-                        <div id="level-container">
+                        <div id="level-container" className="form-group col">
                             <p className="mb-1">Level</p>
                             <div>
-                                <select value={level} onChange={(e) => onLevelChange(e)} name="level" className="custom-select" id="level-select">
+                                {/* <select value={level} onChange={(e) => onLevelChange(e)} name="level" className="custom-select" id="level-select">
                                     <option value="Professor">Professor</option>
                                     <option value="Assistant Professor">Assistant Professor</option>
                                     <option value="Senior Lecturer(HG)">Senior Lecturer(HG)</option>
@@ -297,28 +308,30 @@ const LecturerContent = () => {
                                     <option value="Lecturer">Lecturer</option>
                                     <option value="Assistant Lecturer">Assistant Lecturer</option>
                                     <option value="Instructor">Instructors</option>
-                                </select>
+                                </select> */}
+                                <input value={level} onChange={(e) => onLevelChange(e)} name="level" className="form-control" />
                             </div>
                         </div>
 
                     </div>{/*first row ends*/}
                     <br />
-                    <div className="d-flex justify-content-between">
-                        <div>
+                    <div className="form-row">{/*d-flex justify-content-between*/}
+                        <div className="form-group col">
                             <p className="mb-1">Employee Id</p>
                             <input
                                 id="empId-input"
                                 type="number"
                                 name="empId"
                                 value={employeeId}
+                                className="form-control"
                                 onChange={(e) => onEmpIdChange(e)}
                             />
                         </div>
 
-                        <div id="department-container">
+                        <div id="department-container" className="form-group col">
                             <p className="mb-1">Department</p>
                             <div className="">
-                                <select value={department} onChange={(e) => onDepartmentChange(e)} name="department" className="custom-select" id="department-select" >
+                                {/* <select value={department} onChange={(e) => onDepartmentChange(e)} name="department" className="custom-select" id="department-select" >
                                     <option value="Department Of Information Technology">Department Of Information Technology</option>
                                     <option value="Department Of COMPUTER SCIENCE & SOFTWARE ENGINEERING">Department Of COMPUTER SCIENCE & SOFTWARE ENGINEERING</option>
                                     <option value="Department Of COMPUTER SYSTEMS ENGINEERING">Department Of COMPUTER SYSTEMS ENGINEERING</option>
@@ -328,28 +341,30 @@ const LecturerContent = () => {
                                     <option value="Department Of CIVIL ENGINEERING">Department Of CIVIL ENGINEERING</option>
                                     <option value="Department Of QUANTITY SURVEYING">Department Of QUANTITY SURVEYING</option>
                                     <option value="SLIIT SCHOOL Of ARCHITECTURE">SLIIT SCHOOL Of ARCHITECTURE</option>
-                                </select>
+                                </select> */}
+                                <input value={department} onChange={(e) => onDepartmentChange(e)} name="department" className="custom-select" className="form-control" />
                             </div>
                         </div>
-                        <div id="building-container">
+                        <div id="building-container" className="form-group col">
                             <p className="mb-1">Building</p>
                             <div className="">
-                                <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="custom-select" id="building-select">
+                                {/* <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="custom-select" id="building-select">
                                     <option value="Main Building">Main Building</option>
                                     <option value="New Building">New Building</option>
                                     <option value="Engineering Building">Engineering Building</option>
                                     <option value="Buisnees Faculty Building">Buisnees Faculty Building</option>
                                     <option value="CAHM">CAHM</option>
-                                </select>
+                                </select> */}
+                                <input value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" />
                             </div>
                         </div>
 
-                        <div id="rank-container">
+                        <div id="rank-container" className="form-group col">
                             <p className="mb-1">Rank</p>
                             <input
                                 id="rank-input"
                                 readOnly="readOnly"
-
+                                className="form-control" 
                             />
                         </div>
 
@@ -372,6 +387,8 @@ const LecturerContent = () => {
                         paginationPerPage={7}
                         highlightOnHover={true}
                         responsive={true}
+                        fixedHeader={true}
+                        allowOverflow={true}
                     />
                 </div>
             </div>
