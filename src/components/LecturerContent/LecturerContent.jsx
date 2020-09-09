@@ -246,6 +246,7 @@ const LecturerContent = () => {
             name: 'Level',
             selector: 'level',
             sortable: true,
+            cell: row => <div>{row.level}</div>
 
         },
         {

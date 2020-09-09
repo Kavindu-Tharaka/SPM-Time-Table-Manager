@@ -26,6 +26,7 @@ const UpdateLecturerDialogBox = (props) => {
         setCenter(e.target.value);
     }
     const onLevelChange = (e) => {
+
         if (e.target.value === "Professor") {
             setRank(1);
         }
@@ -48,11 +49,11 @@ const UpdateLecturerDialogBox = (props) => {
             setRank(7);
         }
         setLevel(e.target.value);
-        setRankVal(`${level}.${rank}`);
+        // setRankVal(`${rank}.${employeeId}`);
     }
     const onEmpIdChange = (e) =>{
         setEmployeeId(e.target.value);
-        setRankVal(`${level}.${rank}`);
+        setRankVal(`${rank}.${employeeId}`);
     }
     const onDepartmentChange = (e) =>{
         setDepartment(e.target.value)
@@ -137,7 +138,7 @@ const UpdateLecturerDialogBox = (props) => {
                                     <option value="Senior Lecturer">Senior Lecturer</option>
                                     <option value="Lecturer">Lecturer</option>
                                     <option value="Assistant Lecturer">Assistant Lecturer</option>
-                                    <option value="Instructor">Instructors</option>
+                                    <option value="Instructor">Instructor</option>
                                 </select>
                     </div>
 
