@@ -3,7 +3,6 @@ import { css } from '@emotion/core';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 
 import './preLoader.css';
-import { useEffect } from 'react';
 
 const PreLoader = (props) => {
 	const override = css`
