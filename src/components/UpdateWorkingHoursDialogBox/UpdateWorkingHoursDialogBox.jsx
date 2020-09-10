@@ -12,6 +12,7 @@ function UpdateWorkingHoursDialogBox({ row, refreshComponent }) {
   const [dayOfWork, setDayOfWork] = useState(row.dayOfWork);
   const [fromTime, setFromTime] = useState(row.fromTime);
   const [toTime, setToTime] = useState(row.toTime);
+  const [loading,setLoading] = useState(true)
 
   const onUpdateClick = () => {
     axios
