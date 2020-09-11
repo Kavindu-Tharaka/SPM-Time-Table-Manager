@@ -6,7 +6,7 @@ import { buildToast } from '../../util/toast';
 
 const UpdateSubjectBox = (props) => {
 
-    console.log("subject props: ",props);
+    console.log("subject props: ", props);
 
     const [subjectCode, setSubjectCode] = useState(props.sub.subjectCode);
     const [offeredYear, setOfferedYear] = useState(props.sub.offeredYear);
@@ -16,6 +16,13 @@ const UpdateSubjectBox = (props) => {
     const [numberOfTutorialHrs, setNumberOfTutorialHrs] = useState(props.sub.numberOfTutorialHrs);
     const [numberOfLabHrs, setNumberOfLabHrs] = useState(props.sub.numberOfLabHrs);
     const [numberOfEveluationHrs, setnumberOfEveluationHrs] = useState(props.sub.numberOfEveluationHrs);
+
+    const [isCodevalid, setIsCodeValid] = useState(true);
+    const [isNameValid, setIsNameValid] = useState(true);
+    const [isLecHrsValid, setIsLecHrsValid] = useState(true);
+    const [isTutHrsValid, setIsTutHrsValid] = useState(true);
+    const [isEveHrsValid, setIsEveHrsValid] = useState(true);
+    const [isLabHrsValid, setIsLabHrsValid] = useState(true);
 
     const onYearChange = (e) => {
         setOfferedYear(e.target.value);
@@ -42,7 +49,38 @@ const UpdateSubjectBox = (props) => {
         setnumberOfEveluationHrs(e.target.value);
     }
 
-    const onUpdateClick = () =>{
+    const onUpdateClick = () => {
+
+        let hasErrorDetected = false;
+
+        if (subjectName === '') {
+            setIsNameValid(false);
+            hasErrorDetected = true;
+        }
+        if (subjectCode === '') {
+            setIsCodeValid(false);
+            hasErrorDetected = true;
+        }
+        if (numberOfLecHrs === '') {
+            setIsLecHrsValid(false);
+            hasErrorDetected = true;
+        }
+        if (numberOfTutorialHrs === '') {
+            setIsTutHrsValid(false);
+            hasErrorDetected = true;
+        }
+        if (numberOfLabHrs === '') {
+            setIsLabHrsValid(false);
+            hasErrorDetected = true;
+        }
+        if (numberOfEveluationHrs === '') {
+            setIsEveHrsValid(false);
+            hasErrorDetected = true;
+        }
+        if (hasErrorDetected) {
+            return;
+        }
+
         axios.patch(`http://localhost:8000/api/v1/subjects/${props.sub._id}`, {
             subjectCode,
             offeredYear,
@@ -55,13 +93,18 @@ const UpdateSubjectBox = (props) => {
         })
             .then((res) => {
                 window.location.reload();
+
                 store.addNotification(buildToast('success', '', 'Subject Updated'));
+
             })
             .catch((e) => {
-                console.err(e);
+                console.log(e);
+
                 store.addNotification(buildToast('warning', '', 'Subject Update Error'));
+
             });
     }
+
 
     return (
 
@@ -75,7 +118,7 @@ const UpdateSubjectBox = (props) => {
                         <div className='form-group col'>
                             <label className='dialog-label'>Offered Year</label>
                             <select value={offeredYear} onChange={(e) => onYearChange(e)} name="level" className="form-control">
-                                <option value="1">Professor</option>
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
@@ -88,11 +131,18 @@ const UpdateSubjectBox = (props) => {
                             <label className='dialog-label'>Subject Code</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isCodevalid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 // placeholder='Room Name'
                                 value={subjectCode}
                                 onChange={onSubjectCodeChange}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide subject code
+					</div>
                         </div>
 
                     </div>
@@ -103,20 +153,34 @@ const UpdateSubjectBox = (props) => {
                             <label className='dialog-label'> Lec Hrs</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isLecHrsValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={onLecHrsChange}
                                 value={numberOfLecHrs}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide lecture duration
+					</div>
                         </div>
 
                         <div className='form-group col'>
                             <label className='dialog-label'>Lab Hrs</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isLabHrsValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={onLabHrsChange}
                                 value={numberOfLabHrs}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide lab duration
+					</div>
                         </div>
                     </div>
 
@@ -133,10 +197,17 @@ const UpdateSubjectBox = (props) => {
                             <label className='dialog-label'>Subject Name</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isNameValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={onSubjectNameChange}
                                 value={subjectName}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide subject name
+					</div>
                         </div>
                     </div>
                     <div className='form-row'>
@@ -144,25 +215,39 @@ const UpdateSubjectBox = (props) => {
                             <label className='dialog-label'>Tutorial Hrs</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isTutHrsValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={onTutorialHrsChange}
                                 value={numberOfTutorialHrs}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide tutorial duration
+					</div>
                         </div>
                         <div className='form-group col'>
                             <label className='dialog-label'>Evalution Hrs</label>
                             <input
                                 type='text'
-                                className='form-control'
+                                className={
+                                    isEveHrsValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={onEvelutionsChange}
                                 value={numberOfEveluationHrs}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide evelution duration
+					</div>
                         </div>
                     </div>
 
                     <button
                         className='btn btn-info float-right mb-4'
-                    onClick={onUpdateClick}
+                        onClick={onUpdateClick}
                     >
                         Update
 			</button>

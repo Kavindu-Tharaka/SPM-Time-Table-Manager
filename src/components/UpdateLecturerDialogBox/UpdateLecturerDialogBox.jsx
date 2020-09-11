@@ -14,8 +14,15 @@ const UpdateLecturerDialogBox = (props) => {
     const [building, setBuilding] = useState(props.lec.building);
     const [employeeId, setEmployeeId] = useState(props.lec.employeeId);
     const [rank, setRank] = useState(1);
-    const [rankVal, setRankVal] = useState("");
+    const [rankVal, setRankVal] = useState(props.lec.rankVal);
     const [buildings, setBuildings] = useState([]);
+
+    const [isNameVaid, setIsNameValid] = useState(true);
+    const [isFacultyValid, setIsFacultyValid] = useState(true);
+    const [isCenterValid, setIsCenterValid] = useState(true);
+    const [isEmpIdValid, setIsEmpIdValid] = useState(true);
+    const [isDepartmentValid, setIsDepartmentValid] = useState(true);
+
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -50,11 +57,10 @@ const UpdateLecturerDialogBox = (props) => {
             setRank(7);
         }
         setLevel(e.target.value);
-        // setRankVal(`${rank}.${employeeId}`);
     }
     const onEmpIdChange = (e) => {
         setEmployeeId(e.target.value);
-        setRankVal(`${rank}.${employeeId}`);
+        setRankVal(`${rank}.${e.target.value}`);
     }
     const onDepartmentChange = (e) => {
         setDepartment(e.target.value)
@@ -64,6 +70,33 @@ const UpdateLecturerDialogBox = (props) => {
     }
 
     const onUpdateClick = () => {
+        let hasErrorDetected = false;
+
+        if (name === '') {
+            setIsNameValid(false);
+            hasErrorDetected = true;
+        }
+        if (center === '') {
+            setIsCenterValid(false);
+            hasErrorDetected = true;
+        }
+        if (faculty === '') {
+            setIsFacultyValid(false);
+            hasErrorDetected = true;
+        }
+        if (employeeId.length !== 6 || employeeId === '') {
+            setIsEmpIdValid(false);
+            hasErrorDetected = true;
+        }
+        if (department === '') {
+            setIsDepartmentValid(false);
+            hasErrorDetected = true;
+            if(hasErrorDetected){
+                return;
+            }
+        }
+
+
         axios
             .patch(`http://localhost:8000/api/v1/lecturers/${props.lec._id}`, {
                 name,
@@ -90,7 +123,6 @@ const UpdateLecturerDialogBox = (props) => {
         axios
             .get('http://localhost:8000/api/v1/buildings')
             .then((res) => {
-                // console.log("lec building: ",res.data.data.buildings)
                 setBuildings(res.data.data.buildings);
             })
             .catch((err) => {
@@ -109,10 +141,17 @@ const UpdateLecturerDialogBox = (props) => {
                         <label className='dialog-label'>Name</label>
                         <input
                             type='text'
-                            className='form-control'
+                            className={
+                                isNameVaid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                             value={name}
                             onChange={onNameChange}
                         />
+                        <div className='invalid-feedback'>
+                                    Please enter a name
+					</div>
                     </div>
 
 
@@ -121,10 +160,17 @@ const UpdateLecturerDialogBox = (props) => {
                         <label className='dialog-label'>Faculty</label>
                         <input
                             type='text'
-                            className='form-control'
+                            className={
+                                isFacultyValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                             value={faculty}
                             onChange={onFacultyChange}
                         />
+                        <div className='invalid-feedback'>
+                                    Please enter a faculty
+					</div>
                     </div>
 
                 </div>
@@ -135,11 +181,17 @@ const UpdateLecturerDialogBox = (props) => {
                         <label className='dialog-label'>Center</label>
                         <input
                             type='text'
-                            className='form-control'
-                            // placeholder='00'
+                            className={
+                                isCenterValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                             onChange={onCenterChange}
                             value={center}
                         />
+                        <div className='invalid-feedback'>
+                                    Please enter center
+					</div>
                     </div>
                     <div className='form-group col-6'>
                         <label className='dialog-label'>Level</label>
@@ -161,22 +213,34 @@ const UpdateLecturerDialogBox = (props) => {
                         <label className='dialog-label'>Employee Id</label>
                         <input
                             type='text'
-                            className='form-control'
-                            // placeholder='00'
+                            className={
+                                isEmpIdValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                             onChange={onEmpIdChange}
                             value={employeeId}
                         />
+                        <div className='invalid-feedback'>
+                                    Please enter a Emp Id
+					</div>
                     </div>
 
                     <div className='form-group col-6'>
                         <label className='dialog-label'>Department</label>
                         <input
                             type='text'
-                            className='form-control'
-                            // placeholder='00'
+                            className={
+                                isDepartmentValid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                             onChange={onDepartmentChange}
                             value={department}
                         />
+                        <div className='invalid-feedback'>
+                                    Please enter a department
+					</div>
                     </div>
 
                     <div className='form-group col-6'>
