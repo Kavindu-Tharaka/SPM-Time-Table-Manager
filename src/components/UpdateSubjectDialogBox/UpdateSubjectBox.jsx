@@ -16,7 +16,7 @@ const UpdateSubjectBox = (props) => {
     const [numberOfTutorialHrs, setNumberOfTutorialHrs] = useState(props.sub.numberOfTutorialHrs);
     const [numberOfLabHrs, setNumberOfLabHrs] = useState(props.sub.numberOfLabHrs);
     const [numberOfEveluationHrs, setnumberOfEveluationHrs] = useState(props.sub.numberOfEveluationHrs);
-
+console.log("offrd yr: ",props.sub.offeredYear);
     const onYearChange = (e) => {
         setOfferedYear(e.target.value);
     }
@@ -75,7 +75,7 @@ const UpdateSubjectBox = (props) => {
                         <div className='form-group col'>
                             <label className='dialog-label'>Offered Year</label>
                             <select value={offeredYear} onChange={(e) => onYearChange(e)} name="level" className="form-control">
-                                <option value="1">Professor</option>
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
