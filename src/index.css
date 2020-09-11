@@ -48,6 +48,7 @@ select {
 	-moz-box-shadow: none !important;
 	box-shadow: none !important;
 	height: 35px !important;
+	border-radius: 0 !important;
 }
 
 input:focus {

@@ -7,6 +7,7 @@ import WorkingHoursTable from "./WorkingHoursTable";
 import Swal from "sweetalert2";
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
+import PreLoader from '../PreLoader/PreLoader';
 import axios from "axios";
 // import WorkingHoursModal from "./WorkingHoursModal";
 function WorkingHoursComponent() {
@@ -22,7 +23,7 @@ function WorkingHoursComponent() {
   const [fromTime, setFromTime] = useState("00:00");
   const [toTime, setToTime] = useState("00:00");
   const [updateComponent, setUpdateComponent] = useState(0);
-
+  const [loading,setLoading] = useState(true)
   //validating the time slot
   const [isTimeSlotValid, setTimeSlotValid] = useState(true);
 
@@ -33,9 +34,11 @@ function WorkingHoursComponent() {
   }, [updateComponent]);
 
   const getData = () => {
+    setLoading(true)
     axios
       .get("http://localhost:8000/api/v1/workingDays")
       .then((result) => {
+        setLoading(false)
         console.log(result.data);
         setWorkingDay(result.data);
       })
@@ -104,6 +107,7 @@ function WorkingHoursComponent() {
         text: `Please Enter the Required Fields`,
       });
     } else {
+      setLoading(true)
       axios
         .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
         .then((res) => {
@@ -127,10 +131,11 @@ function WorkingHoursComponent() {
                   toTime,
                 })
                 .then((res) => {
+                  setLoading(false)
                   console.log(res);
                   addWorkingDay(res.data);
                   store.addNotification(
-                    buildToast('success', 'Success', 'Room Added Successfully')
+                    buildToast('success', 'Success', 'Working Time Added Successfully')
                   );
                   clear();
                 })
@@ -169,6 +174,7 @@ function WorkingHoursComponent() {
 
   return (
     <div>
+      <PreLoader loading={loading}  />
       <ContentHeader header={"Working Time"} />
 
       <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>

@@ -43,6 +43,7 @@ const StatisticsLecturer = (props) => {
 				columns={columns}
 				data={lecturers}
 				pagination
+				dense
 			/>
 		</div>
 	);

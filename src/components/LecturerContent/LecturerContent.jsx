@@ -432,6 +432,7 @@ const LecturerContent = () => {
                         responsive={true}
                         fixedHeader={true}
                         allowOverflow={true}
+                        dense
                     />
                 </div>
             </div>
