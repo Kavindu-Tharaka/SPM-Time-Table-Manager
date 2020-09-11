@@ -457,7 +457,7 @@ const LecturerContent = () => {
                         <div id="building-container" className="form-group col">
                             <p className="mb-1">Building</p>
                             <div className="">
-                                <select value={buildings} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
+                                <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
 
                                     {buildings.length > 0? buildings.map((name) => {
                                         return <option key={name._id} value={name.buildingName}>{name.buildingName}</option>
