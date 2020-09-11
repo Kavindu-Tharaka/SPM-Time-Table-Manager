@@ -159,20 +159,30 @@ const LecturerContent = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
+        let errDeteted = false;
+
         if (name === '') {
             setIsNameValid(false);
+            errDeteted = true;
         }
         if (center === '') {
             setIsCenterValid(false);
+            errDeteted = true;
         }
         if (faculty === '') {
-            setIsFacultyValid(false);  
+            setIsFacultyValid(false); 
+            errDeteted = true; 
         }
         if (employeeId.length !== 6 || employeeId === '') {
             setIsEmpIdValid(false); 
+            errDeteted = true;
         }
         if (department === '') {
             setIsDepartmentValid(false);
+            errDeteted = true;
+        }
+        if(errDeteted){
+            return;
         }
         //  if (!update) {
 
