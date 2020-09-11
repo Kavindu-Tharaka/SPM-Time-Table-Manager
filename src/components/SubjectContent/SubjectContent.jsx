@@ -88,7 +88,7 @@ const SubjectContent = () => {
                 window.location.reload();
                 store.addNotification(buildToast('success', '', 'Subject Added Successfully'));
             }).catch((err) => {
-                console.err(err);
+                console.log(err);
             });
         }
         else {
@@ -351,6 +351,7 @@ return (
                 paginationPerPage={7}
                 highlightOnHover={true}
                 responsive={true}
+                dense
             />
         </div>
     </div>

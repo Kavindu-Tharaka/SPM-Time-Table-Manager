@@ -134,6 +134,7 @@ function WorkingHoursTable({ workingDay, refreshComponent }) {
         paginationPerPage={7}
         highlightOnHover={true}
         responsive={true}
+        dense
       />
     </>
   );

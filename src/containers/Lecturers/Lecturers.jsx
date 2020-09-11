@@ -1,5 +1,4 @@
 import React, { Fragment,useEffect } from 'react'
-import './Lecturers.css';
 import LecturerContent from '../../components/LecturerContent/LecturerContent';
 
 

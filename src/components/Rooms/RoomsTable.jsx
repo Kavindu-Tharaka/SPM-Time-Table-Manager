@@ -62,6 +62,7 @@ const RoomsTable = (props) => {
 			cell: (row) => (
 				<div>
 					<button
+						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
 							onUpdateClick({
@@ -77,6 +78,7 @@ const RoomsTable = (props) => {
 						<IoMdCreate />
 					</button>
 					<button
+						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
 							onDeleteClick(row._id, row.roomName);
@@ -86,6 +88,7 @@ const RoomsTable = (props) => {
 					</button>
 				</div>
 			),
+			button: true,
 		},
 	];
 
@@ -95,6 +98,7 @@ const RoomsTable = (props) => {
 			data={props.rooms}
 			columns={columns}
 			pagination
+			dense
 		/>
 	);
 };

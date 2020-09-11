@@ -29,7 +29,7 @@ const StatisticsSubject = (props) => {
 		<div>
 			<ContentHeader header="Subject Statistics"/>
 
-			<DataTable title='Inserted Subjects' columns={columns} pagination data={subjects}/>
+			<DataTable title='Inserted Subjects' dense columns={columns} pagination data={subjects}/>
 		</div>
 	);
 };
