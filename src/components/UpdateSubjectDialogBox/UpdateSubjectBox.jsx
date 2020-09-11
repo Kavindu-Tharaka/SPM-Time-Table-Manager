@@ -6,7 +6,6 @@ import { buildToast } from '../../util/toast';
 
 const UpdateSubjectBox = (props) => {
 
-    console.log("subject props: ", props);
 
     const [subjectCode, setSubjectCode] = useState(props.sub.subjectCode);
     const [offeredYear, setOfferedYear] = useState(props.sub.offeredYear);
