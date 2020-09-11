@@ -91,9 +91,9 @@ const UpdateLecturerDialogBox = (props) => {
         if (department === '') {
             setIsDepartmentValid(false);
             hasErrorDetected = true;
-            if(hasErrorDetected){
-                return;
-            }
+        }
+        if(hasErrorDetected){
+            return;
         }
 
 

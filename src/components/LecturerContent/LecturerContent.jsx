@@ -14,6 +14,9 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import UpdateLecturerDialogBox from '../UpdateLecturerDialogBox/UpdateLecturerDialogBox';
 
 const LecturerContent = () => {
+   const init = [{buildingName: "Main Building",
+   __v: 0,
+   _id: "5f3d22083c801929a88e15ed"}];
 
     const [name, setName] = useState("");
     const [faculty, setFaculty] = useState("");
@@ -21,7 +24,7 @@ const LecturerContent = () => {
     const [level, setLevel] = useState("Professor");
     const [employeeId, setEmpId] = useState("");
     const [department, setDepartment] = useState("");
-    const [building, setBuilding] = useState("");
+    const [building, setBuilding] = useState("Main Building");
     const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
@@ -35,6 +38,7 @@ const LecturerContent = () => {
     const [isCenterValid, setIsCenterValid] = useState(true);
     const [isEmpIdValid, setIsEmpIdValid] = useState(true);
     const [isDepartmentValid, setIsDepartmentValid] = useState(true);
+ 
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -82,13 +86,16 @@ const LecturerContent = () => {
     }
     const onBuildingChange = (e) => {
         setBuilding(e.target.value)
+        // setBuildings(e.target.value)
     }
     useEffect(() => {
         loadData();
         axios
             .get('http://localhost:8000/api/v1/buildings')
             .then((res) => {
-                // console.log("lec building: ",res.data.data.buildings)
+                // console.log("lec building: ",res.data.data.buildings);
+                // let list = [];
+                // list.push(res.data.data.buildings);
                 setBuildings(res.data.data.buildings);
             })
             .catch((err) => {
@@ -197,7 +204,6 @@ const LecturerContent = () => {
             rankVal
         }).then((res) => {
             window.location.reload();
-            //console.log("data added", res);
             store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
         }).catch((err) => {
             console.log("err is: ", err);
@@ -451,11 +457,12 @@ const LecturerContent = () => {
                         <div id="building-container" className="form-group col">
                             <p className="mb-1">Building</p>
                             <div className="">
-                                <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
+                                <select value={buildings} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
 
-                                    {buildings.length > 0 ? buildings.map((name) => {
+                                    {buildings.length > 0? buildings.map((name) => {
                                         return <option key={name._id} value={name.buildingName}>{name.buildingName}</option>
                                     }) : <option>Insert a building!</option>}
+
 
                                     {/* <option value="New Building">New Building</option>
                                     <option value="Engineering Building">Engineering Building</option>
