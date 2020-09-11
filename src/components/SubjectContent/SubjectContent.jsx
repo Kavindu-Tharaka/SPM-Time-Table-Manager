@@ -75,23 +75,35 @@ const SubjectContent = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+        let errDeteted = false;
+
         if (subjectName === '') {
             setIsNameValid(false);
+            errDeteted = true;
         }
         if (subjectCode === '') {
             setIsCodeValid(false);
+            errDeteted = true;
         }
         if (numberOfLecHrs === '') {
             setIsLecHrsValid(false);
+            errDeteted = true;
         }
         if (numberOfTutorialHrs === '') {
             setIsTutHrsValid(false);
+            errDeteted = true;
         }
         if (numberOfLabHrs === '') {
-            setIsLabHrsValid(false);
+            setIsLabHrsValid(false); 
+            errDeteted = true;
         }
         if (numberOfEveluationHrs === '') {
             setIsEveHrsValid(false);
+            errDeteted = true;
+        }
+        if (errDeteted) {
+            return;
         }
         // else if (!update) {
 
@@ -305,9 +317,9 @@ const SubjectContent = () => {
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                             />
-                                 <div className='invalid-feedback'>
-                                    Please enter a subjet code
+                        />
+                        <div className='invalid-feedback'>
+                            Please enter a subjet code
 					</div>
                     </div>
                     <div className="form-group col">
@@ -320,9 +332,9 @@ const SubjectContent = () => {
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                            />
-                              <div className='invalid-feedback'>
-                                    Please provide lecture duration
+                        />
+                        <div className='invalid-feedback'>
+                            Please provide lecture duration
 					</div>
                     </div>
                     <div className="form-group col">
@@ -335,9 +347,9 @@ const SubjectContent = () => {
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                             />
-                                 <div className='invalid-feedback'>
-                                    Please enter lab duration
+                        />
+                        <div className='invalid-feedback'>
+                            Please enter lab duration
 					</div>
                     </div>
                 </div>
@@ -368,8 +380,8 @@ const SubjectContent = () => {
                                     : 'form-control is-invalid'
                             }
                         />
-                            <div className='invalid-feedback'>
-                                    Please provide a subject name
+                        <div className='invalid-feedback'>
+                            Please provide a subject name
 					</div>
                     </div>
                     <div className="form-group col">
@@ -382,8 +394,8 @@ const SubjectContent = () => {
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             } />
-                                <div className='invalid-feedback'>
-                                    Please provide tutorial duration
+                        <div className='invalid-feedback'>
+                            Please provide tutorial duration
 					</div>
                     </div>
                     <div className="form-group col">
@@ -396,9 +408,9 @@ const SubjectContent = () => {
                                     ? 'form-control'
                                     : 'form-control is-invalid'
                             }
-                             />
-                                 <div className='invalid-feedback'>
-                                    Please provide evelution duration
+                        />
+                        <div className='invalid-feedback'>
+                            Please provide evelution duration
 					</div>
                     </div>
                 </div>
