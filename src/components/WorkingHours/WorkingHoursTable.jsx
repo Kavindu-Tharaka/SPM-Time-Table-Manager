@@ -3,6 +3,8 @@ import axios from 'axios'
 import DataTable from "react-data-table-component";
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox'
 import UpdateWorkingHoursDialogBox from '../UpdateWorkingHoursDialogBox/UpdateWorkingHoursDialogBox'
+import { store } from 'react-notifications-component';
+import { buildToast } from '../../util/toast';
 import swal from '@sweetalert/with-react';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder'
 import './workingHours.css'
@@ -34,7 +36,12 @@ function WorkingHoursTable({ workingDay, refreshComponent }) {
         .delete(`http://localhost:8000/api/v1/workingDays/${id}`)
         .then((res) => {
           swal.close();
-          
+          store.addNotification(
+          buildToast(
+            'danger',
+            'Deleted',
+            'Working hour deleted'
+        ))
           refreshComponent();
         })
         .catch((err) => {
@@ -127,6 +134,7 @@ function WorkingHoursTable({ workingDay, refreshComponent }) {
         paginationPerPage={7}
         highlightOnHover={true}
         responsive={true}
+        dense
       />
     </>
   );

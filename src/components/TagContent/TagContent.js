@@ -148,7 +148,7 @@ function TagContent(props) {
                 }}
             >
                 <div className="form-row">
-                    <div className="col-md-4 mb-3">
+                    <div className="col-md-5 mb-3">
                         {/* <label>First name</label> */}
                         <input
                             type="text"

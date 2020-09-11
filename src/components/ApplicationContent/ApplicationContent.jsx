@@ -73,6 +73,18 @@ const ApplicationContent = (props) => {
                     )}
                 />
                 <Route
+                    path="/timetables"
+                    // component={() => (
+                    //     <WorkingTime setShowSubMenu={setShowSubMenu} />
+                    // )}
+                />
+                <Route
+                    path="/sessions"
+                    // component={() => (
+                    //     <WorkingTime setShowSubMenu={setShowSubMenu} />
+                    // )}
+                />
+                <Route
                     path="/"
                     component={() => (
                         <WorkingTime setShowSubMenu={setShowSubMenu} />

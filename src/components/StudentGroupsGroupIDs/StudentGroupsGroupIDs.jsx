@@ -33,60 +33,6 @@ function StudentGroupsGroupIDs(props) {
         const source = CancelToken.source();
 
         const loadData = () => {
-            // axios
-            //     .get('http://localhost:8000/api/v1/yearsemesters', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         // console.log(response.data.data.yearsemesters);
-            //         setYearSemesterList(response.data.data.yearsemesters);
-            //         setYearSemester(
-            //             response.data.data.yearsemesters[0].yearsemestername
-            //         );
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
-            // axios
-            //     .get('http://localhost:8000/api/v1/groupnumbers', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         setGroupNumberList(response.data.data.groupnumbers);
-            //         setGroupNumber(
-            //             response.data.data.groupnumbers[0].groupnumber
-            //         );
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
-            // axios
-            //     .get('http://localhost:8000/api/v1/specializations', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         setSpecializationList(response.data.data.specializations);
-            //         setSpecialization(
-            //             response.data.data.specializations[0].specializationname
-            //         );
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
-            // axios
-            //     .get('http://localhost:8000/api/v1/groupids', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function async(response) {
-            //         console.log(response.data.data.groupids);
-            //         setGroupIDList(response.data.data.groupids);
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
 
             axios
                 .all([
