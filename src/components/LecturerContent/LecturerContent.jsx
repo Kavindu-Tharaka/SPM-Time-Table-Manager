@@ -161,24 +161,18 @@ const LecturerContent = () => {
 
         if (name === '') {
             setIsNameValid(false);
-            console.log("input name ", name);
         }
         if (center === '') {
             setIsCenterValid(false);
-            console.log("input center", center);
         }
         if (faculty === '') {
-            setIsFacultyValid(false);
-            console.log("input faculry", faculty);
+            setIsFacultyValid(false);  
         }
         if (employeeId.length !== 6 || employeeId === '') {
-            setIsEmpIdValid(false);
-            console.log("input emp", employeeId);
+            setIsEmpIdValid(false); 
         }
         if (department === '') {
             setIsDepartmentValid(false);
-            console.log("input dep ", department);
-
         }
         //  if (!update) {
 

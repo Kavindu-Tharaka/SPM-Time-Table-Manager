@@ -307,7 +307,7 @@ const SubjectContent = () => {
                             }
                              />
                                  <div className='invalid-feedback'>
-                                    Please enter a faculty
+                                    Please enter a subjet code
 					</div>
                     </div>
                     <div className="form-group col">
@@ -369,7 +369,7 @@ const SubjectContent = () => {
                             }
                         />
                             <div className='invalid-feedback'>
-                                    Please enter a faculty
+                                    Please provide a subject name
 					</div>
                     </div>
                     <div className="form-group col">
@@ -383,7 +383,7 @@ const SubjectContent = () => {
                                     : 'form-control is-invalid'
                             } />
                                 <div className='invalid-feedback'>
-                                    Please enter a faculty
+                                    Please provide tutorial duration
 					</div>
                     </div>
                     <div className="form-group col">
@@ -398,7 +398,7 @@ const SubjectContent = () => {
                             }
                              />
                                  <div className='invalid-feedback'>
-                                    Please enter a faculty
+                                    Please provide evelution duration
 					</div>
                     </div>
                 </div>
