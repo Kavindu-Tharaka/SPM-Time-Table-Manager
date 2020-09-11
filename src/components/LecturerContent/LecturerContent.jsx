@@ -16,19 +16,25 @@ import UpdateLecturerDialogBox from '../UpdateLecturerDialogBox/UpdateLecturerDi
 const LecturerContent = () => {
 
     const [name, setName] = useState("");
-    const [faculty, setFaculty] = useState("Computing");
-    const [center, setCenter] = useState("Malabe");
+    const [faculty, setFaculty] = useState("");
+    const [center, setCenter] = useState("");
     const [level, setLevel] = useState("Professor");
     const [employeeId, setEmpId] = useState("");
-    const [department, setDepartment] = useState("Department Of Information Technology");
-    const [building, setBuilding] = useState("Main Building");
+    const [department, setDepartment] = useState("");
+    const [building, setBuilding] = useState("");
     const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
     const [update, setUpdate] = useState(false);
     const [id, setId] = useState("");
     const [loading, setloading] = useState(true);
-    const [buildings,setBuildings] = useState([]);
+    const [buildings, setBuildings] = useState([]);
+
+    const [isNameVaid, setIsNameValid] = useState(true);
+    const [isFacultyValid, setIsFacultyValid] = useState(true);
+    const [isCenterValid, setIsCenterValid] = useState(true);
+    const [isEmpIdValid, setIsEmpIdValid] = useState(true);
+    const [isDepartmentValid, setIsDepartmentValid] = useState(true);
 
     const onNameChange = (e) => {
         setName(e.target.value);
@@ -80,14 +86,14 @@ const LecturerContent = () => {
     useEffect(() => {
         loadData();
         axios
-        .get('http://localhost:8000/api/v1/buildings')
-        .then((res) => {
-            // console.log("lec building: ",res.data.data.buildings)
-            setBuildings(res.data.data.buildings);
-        })
-        .catch((err) => {
-            console.log(err.response);
-        });
+            .get('http://localhost:8000/api/v1/buildings')
+            .then((res) => {
+                // console.log("lec building: ",res.data.data.buildings)
+                setBuildings(res.data.data.buildings);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
     }, []);
 
 
@@ -106,18 +112,18 @@ const LecturerContent = () => {
     };
 
     const onDeleteClick = (id, name) => {
-		swal({
-			buttons: false,
-			content: (
-				<DeleteConfirmationDialogBox
-					deleteEventWithIdHandler={deleteLecturer}
-					itemId={id}
-					itemName={name}
-				/>
-			),
-		});
+        swal({
+            buttons: false,
+            content: (
+                <DeleteConfirmationDialogBox
+                    deleteEventWithIdHandler={deleteLecturer}
+                    itemId={id}
+                    itemName={name}
+                />
+            ),
+        });
     };
-    
+
     const deleteLecturer = (rowID) => {
         axios
             .delete(`http://localhost:8000/api/v1/lecturers/${rowID}`)
@@ -142,74 +148,79 @@ const LecturerContent = () => {
         // setBuilding(data.building)
 
         swal({
-			buttons: false,
-			content: (
-				<UpdateLecturerDialogBox
-					lec={data}
-				/>
-			),
-		});
+            buttons: false,
+            content: (
+                <UpdateLecturerDialogBox
+                    lec={data}
+                />
+            ),
+        });
     }
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if (name === '' && employeeId === '') {
-            Swal.fire('Please Enter a Name and Valid Employee Id!');
-            setName('');
-            setEmpId('');
+        if (name === '') {
+            setIsNameValid(false);
+            console.log("input name ", name);
         }
-        else if (employeeId === '') {
-            Swal.fire('Please Enter A Valid Employee Id!');
+        if (center === '') {
+            setIsCenterValid(false);
+            console.log("input center", center);
         }
-        else if (name === '') {
-            Swal.fire('Please Enter a Name!');
-            setName('');
+        if (faculty === '') {
+            setIsFacultyValid(false);
+            console.log("input faculry", faculty);
         }
-        else if (employeeId.length !== 6) {
-            Swal.fire('Employee Id should be 6 digit number');
-            setEmpId('');
+        if (employeeId.length !== 6 || employeeId === '') {
+            setIsEmpIdValid(false);
+            console.log("input emp", employeeId);
         }
-        else if (!update) {
+        if (department === '') {
+            setIsDepartmentValid(false);
+            console.log("input dep ", department);
 
-            axios.post("http://localhost:8000/api/v1/lecturers", {
-                name,
-                faculty,
-                center,
-                level,
-                employeeId,
-                department,
-                building,
-                rankVal
-            }).then((res) => {
-                window.location.reload();
-                //console.log("data added", res);
-                store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
-            }).catch((err) => {
-                console.log("err is: ", err);
-            });
         }
-        else {
-            // axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
-            //     name,
-            //     faculty,
-            //     center,
-            //     level,
-            //     employeeId,
-            //     department,
-            //     building,
-            //     rankVal
-            // })
-            //     .then((res) => {
-            //         console.log(res.data);
-            //         // console.log("lecturer update executed succesfully")
-            //         setUpdate(false);
-            //         window.location.reload();
-            //         store.addNotification(buildToast('warning', '', 'Lecturer Updated Successfully'));
-            //     })
-            //     .catch((e) => {
-            //         console.err(e);
-            //     });
-        }
+        //  if (!update) {
+
+        axios.post("http://localhost:8000/api/v1/lecturers", {
+            name,
+            faculty,
+            center,
+            level,
+            employeeId,
+            department,
+            building,
+            rankVal
+        }).then((res) => {
+            window.location.reload();
+            //console.log("data added", res);
+            store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
+        }).catch((err) => {
+            console.log("err is: ", err);
+        });
+        // }
+        // else {
+        //     axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
+        //         name,
+        //         faculty,
+        //         center,
+        //         level,
+        //         employeeId,
+        //         department,
+        //         building,
+        //         rankVal
+        //     })
+        //         .then((res) => {
+        //             console.log(res.data);
+        //             // console.log("lecturer update executed succesfully")
+        //             setUpdate(false);
+        //             window.location.reload();
+        //             store.addNotification(buildToast('warning', '', 'Lecturer Updated Successfully'));
+        //         })
+        //         .catch((e) => {
+        //             console.err(e);
+        //         });
+        // }
     }
 
     const columns = [
@@ -270,9 +281,9 @@ const LecturerContent = () => {
             // right: true,
             cell:
                 (row) => (
-                    <div className="d-flex">
-                        <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>{""}
-                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => onDeleteClick (row._id,row.name)}><IoMdClose/></button>
+                    <div className="d-flex">        
+                        <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>{""}
+                        <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt ' onClick={() => onDeleteClick(row._id, row.name)}><IoMdClose /></button>
                     </div>
                 )
         },
@@ -283,8 +294,8 @@ const LecturerContent = () => {
             <div>
                 <ContentHeader header={'Lecturers'} />
                 <br />
-                <form onSubmit={onSubmit}>
-                    <div className="form-row"> 
+                <form onSubmit={onSubmit} className="needs-validation">
+                    <div className="form-row">
 
                         <div className="form-group col">
                             <p className="mb-1">Name</p>
@@ -292,8 +303,15 @@ const LecturerContent = () => {
                                 type="text"
                                 name="name"
                                 value={name}
-                                className="form-control"
+                                className={
+                                    isNameVaid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
                                 onChange={(e) => onNameChange(e)} />
+                            <div className='invalid-feedback'>
+                                Please provide a lecturer name
+					</div>
                         </div>
 
                         <div id="faculty-container" className="form-group col">
@@ -310,13 +328,20 @@ const LecturerContent = () => {
                                     <option value="School of Hospitality & Culinary">School of Hospitality & Culinary</option>
                                 </select> */}
 
-                                <input 
-                                onChange={(e) => onfacultyChange(e)} 
-                                value={faculty} name="faculty" 
-                                className="form-control" 
+                                <input
+                                    onChange={(e) => onfacultyChange(e)}
+                                    value={faculty}
+                                    name="faculty"
+                                    className={
+                                        isFacultyValid
+                                            ? 'form-control'
+                                            : 'form-control is-invalid'
+                                    }
                                 // id="faculty-select"
-                                 />
-                                     
+                                />
+                                <div className='invalid-feedback'>
+                                    Please enter a faculty
+					</div>
                             </div>
                         </div>
 
@@ -332,7 +357,19 @@ const LecturerContent = () => {
                                     <option value="Kurunagala">Kurunagala</option>
                                     <option value="Jaffna">Jaffna</option>
                                 </select> */}
-                                <input onChange={(e) => onCenterChange(e)} value={center} name="center" className="form-control"/>
+                                <input
+                                    onChange={(e) => onCenterChange(e)}
+                                    value={center}
+                                    name="center"
+                                    className={
+                                        isCenterValid
+                                            ? 'form-control'
+                                            : 'form-control is-invalid'
+                                    }
+                                />
+                                <div className='invalid-feedback'>
+                                    Please provide a center
+					</div>
                             </div>
                         </div>
 
@@ -362,9 +399,17 @@ const LecturerContent = () => {
                                 type="number"
                                 name="empId"
                                 value={employeeId}
-                                className="form-control"
+                                className={
+                                    isEmpIdValid
+                                        ? 'form-control'
+                                        : 'form-control is-invalid'
+                                }
+                                placeholder="6 digit number"
                                 onChange={(e) => onEmpIdChange(e)}
                             />
+                            <div className='invalid-feedback'>
+                                Please provide a employee id of 6 digit
+					</div>
                         </div>
 
                         <div id="department-container" className="form-group col">
@@ -381,17 +426,30 @@ const LecturerContent = () => {
                                     <option value="Department Of QUANTITY SURVEYING">Department Of QUANTITY SURVEYING</option>
                                     <option value="SLIIT SCHOOL Of ARCHITECTURE">SLIIT SCHOOL Of ARCHITECTURE</option>
                                 </select> */}
-                                <input value={department} onChange={(e) => onDepartmentChange(e)} name="department" className="custom-select" className="form-control" />
+                                <input
+                                    value={department}
+                                    onChange={(e) => onDepartmentChange(e)}
+                                    name="department"
+                                    className="custom-select"
+                                    className={
+                                        isDepartmentValid
+                                            ? 'form-control'
+                                            : 'form-control is-invalid'
+                                    }
+                                />
+                                <div className='invalid-feedback'>
+                                    Please provide a department
+					</div>
                             </div>
                         </div>
                         <div id="building-container" className="form-group col">
                             <p className="mb-1">Building</p>
                             <div className="">
                                 <select value={building} onChange={(e) => onBuildingChange(e)} name="building" className="form-control" id="building-select">
-     
-                            {buildings.length > 0? buildings.map((name)=>{
-                                return <option key={name._id} value={name.buildingName}>{name.buildingName}</option>
-                            }) :   <option>Insert a building!</option>}
+
+                                    {buildings.length > 0 ? buildings.map((name) => {
+                                        return <option key={name._id} value={name.buildingName}>{name.buildingName}</option>
+                                    }) : <option>Insert a building!</option>}
 
                                     {/* <option value="New Building">New Building</option>
                                     <option value="Engineering Building">Engineering Building</option>
@@ -407,7 +465,7 @@ const LecturerContent = () => {
                             <input
                                 id="rank-input"
                                 readOnly="readOnly"
-                                className="form-control" 
+                                className="form-control"
                             />
                         </div>
 
