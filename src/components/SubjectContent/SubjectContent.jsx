@@ -310,6 +310,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Subject Code'}</p>
                         <input
+                        type="number"
                             onChange={(e) => onCodeChange(e)}
                             value={subjectCode}
                             className={
@@ -325,6 +326,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Number Of Lecture Hrs'}</p>
                         <input
+                        type="number"
                             onChange={(e) => onLecHrschange(e)}
                             value={numberOfLecHrs}
                             className={
@@ -340,6 +342,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Number Of Lab Hrs'}</p>
                         <input
+                        type="number"
                             onChange={(e) => onLabHrschange(e)}
                             value={numberOfLabHrs}
                             className={
@@ -358,6 +361,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Offered Semester'}</p>
                         <select
+                        type="number"
                             id="offerdSemester"
                             style={{ borderRadius: 0 }}
                             className="form-control"
@@ -372,6 +376,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Subject Name'}</p>
                         <input
+                        type="text"
                             onChange={(e) => onNamechange(e)}
                             value={subjectName}
                             className={
@@ -387,6 +392,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Number Of Tutorial Hrs'}</p>
                         <input
+                        type="number"
                             onChange={(e) => onTutorialHrsChange(e)}
                             value={numberOfTutorialHrs}
                             className={
@@ -401,6 +407,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'number Of Evluation Hrs'}</p>
                         <input
+                        type="number"
                             onChange={(e) => onEveluationHrschange(e)}
                             value={numberOfEveluationHrs}
                             className={

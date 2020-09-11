@@ -333,6 +333,7 @@ const LecturerContent = () => {
                                 </select> */}
 
                                 <input
+                                type="text"
                                     onChange={(e) => onfacultyChange(e)}
                                     value={faculty}
                                     name="faculty"
@@ -362,6 +363,7 @@ const LecturerContent = () => {
                                     <option value="Jaffna">Jaffna</option>
                                 </select> */}
                                 <input
+                                type="text"
                                     onChange={(e) => onCenterChange(e)}
                                     value={center}
                                     name="center"
