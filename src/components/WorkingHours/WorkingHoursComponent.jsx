@@ -384,7 +384,7 @@ function WorkingHoursComponent() {
         <div className="row">
           <div className="col  ">
             <button className="btn btn-primary wk-submit-button">
-              {edit ? "Edit" : "Submit"}
+              {edit ? "Edit" : "Add"}
             </button>{" "}
           </div>
         </div>
