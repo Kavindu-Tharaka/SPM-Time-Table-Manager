@@ -177,7 +177,7 @@ function WorkingHoursComponent() {
       <PreLoader loading={loading}  />
       <ContentHeader header={"Working Time"} />
 
-      <form onSubmit={onSubmitHandler} style={{ marginBottom: 20 }}>
+      <form   style={{ marginBottom: 20 }}>
         {" "}
         <div className="row" style={{ marginBottom: "30px" }}>
           <div className="col col-md-2">
@@ -383,7 +383,7 @@ function WorkingHoursComponent() {
         </div>
         <div className="row">
           <div className="col  ">
-            <button className="btn btn-primary wk-submit-button">
+            <button className="btn btn-primary wk-submit-button" onClick={onSubmitHandler}>
               {edit ? "Edit" : "Add"}
             </button>{" "}
           </div>
