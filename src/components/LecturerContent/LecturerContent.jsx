@@ -504,7 +504,7 @@ const LecturerContent = () => {
 
                     <div className="d-flex justify-content-end mt-2">
 
-                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button" onClick={onSubmit} >{" "} {'Add'} {" "}</button>
+                        <button id="lec-insert" className="btn btn-primary wk-submit-button" onClick={onSubmit} >{" "} {'Add'} {" "}</button>
                     </div>
                 </form>
 

@@ -69,6 +69,7 @@ function StudentGroupsGroupIDs(props) {
                     );
 
                     setGroupIDList(response[3].data.data.groupids);
+                    console.log(response[3].data.data.groupids);
 
                     setLoading(false);
                 })
@@ -121,11 +122,15 @@ function StudentGroupsGroupIDs(props) {
         });
 
         if (!isExist) {
+
+            const groupid = groupNumber < 10 ? `${yearSemester}.${specialization}.0${groupNumber}` : `${yearSemester}.${specialization}.${groupNumber}`;
+
             axios
                 .post('http://localhost:8000/api/v1/groupids', {
                     yearsemestername: yearSemester,
                     specializationname: specialization,
                     groupnumber: groupNumber,
+                    groupid: groupid
                 })
                 .then(function (response) {
                     console.log(response.data.data.groupid);

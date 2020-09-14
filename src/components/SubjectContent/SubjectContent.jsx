@@ -439,7 +439,7 @@ const SubjectContent = () => {
                     </div>
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button type="submit" className="btn btn-primary wk-submit-button mt-2" onClick={onSubmit}> {'Add'}</button>
+                    <button className="btn btn-primary wk-submit-button mt-2" onClick={onSubmit}> {'Add'}</button>
                 </div>
             </form>
 

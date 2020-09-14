@@ -65,6 +65,9 @@ const UpdateGroupIDsDialogBox = (props) => {
             });
 
             if (!isExist) {
+                
+                const groupid = groupNumber < 10 ? `${yearSemester}.${specialization}.0${groupNumber}` : `${yearSemester}.${specialization}.${groupNumber}`;
+
                 axios
                     .patch(
                         `http://localhost:8000/api/v1/groupids/${props.id}`,
@@ -72,6 +75,7 @@ const UpdateGroupIDsDialogBox = (props) => {
                             yearsemestername: yearSemester,
                             specializationname: specialization,
                             groupnumber: groupNumber,
+                            groupid: groupid
                         }
                     )
                     .then(function (response) {
