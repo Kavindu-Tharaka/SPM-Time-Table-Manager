@@ -4,20 +4,20 @@ import axios from 'axios';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
-import UpdateSubGroupIDsDialogBox from './UpdateConstraintsLecturersDialogBox';
+import UpdateConstraintsGroupsDialogBox from './UpdateConstraintsGroupsDialogBox';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
-const RoomsTable = (props) => {
-	const onDeleteClick = (itemId, lecturer, day, from, to) => {
+const ConstraintsGroupsTable = (props) => {
+	const onDeleteClick = (itemId, groupid, day, from, to) => {
 		swal({
 			buttons: false,
 			content: (
 				<DeleteConfirmationDialogBox
 					deleteEventWithIdHandler={deleteConstraint}
 					itemId={itemId}
-					itemName={`${lecturer} From: ${from} To: ${to} on ${day}`}
+					itemName={`${groupid} From: ${from} To: ${to} on ${day}`}
 				/>
 			),
 		});
@@ -25,7 +25,7 @@ const RoomsTable = (props) => {
 
 	const deleteConstraint = (itemId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/constraintslecturers/${itemId}`)
+			.delete(`http://localhost:8000/api/v1/constraintsgroups/${itemId}`)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
@@ -42,16 +42,16 @@ const RoomsTable = (props) => {
 			});
 	};
 
-	const onUpdateClick = (id, name, from, to, day) => {
+	const onUpdateClick = (id, groupid, from, to, day) => {
 		swal({
 			buttons: false,
 			content: (
-				<UpdateSubGroupIDsDialogBox
-					lecturers={props.lecturers}
+				<UpdateConstraintsGroupsDialogBox
+					groups={props.groups}
 					refreshComponent={props.refreshComponent}
-					constraintsLectureList={props.constraintsLectureList}
+					constraintsGroupList={props.constraintsGroupList}
 					id = {id}
-					name = {name}
+					groupid = {groupid}
 					from = {from}
 					to = {to}
 					day = {day}
@@ -62,7 +62,7 @@ const RoomsTable = (props) => {
 
 	const columns = [
 		{ name: 'ID', selector: '_id', omit: true },
-		{ name: 'Lecturer Name', selector: 'lecturer.name', sortable: true },
+		{ name: 'Group', selector: 'group.groupid', sortable: true },
 		{ name: 'Day', selector: 'day', sortable: true },
 		{ name: 'From', selector: 'from', sortable: true },
 		{ name: 'To', selector: 'to', sortable: true },
@@ -74,7 +74,7 @@ const RoomsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.lecturer.name, row.from, row.to, row.day);
+							onUpdateClick(row._id, row.group.groupid, row.from, row.to, row.day);
 						}}
 					>
 						<IoMdCreate />
@@ -83,7 +83,7 @@ const RoomsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.lecturer.name, row.from, row.to, row.day);
+							onDeleteClick(row._id, row.group.groupid, row.from, row.to, row.day);
 						}}
 					>
 						<IoMdClose />
@@ -96,8 +96,8 @@ const RoomsTable = (props) => {
 
 	return (
 		<DataTable
-			title="Lecturers' Not Available Times"
-			data={props.constraintsLectureList}
+			title="Groups' Not Available Times"
+			data={props.constraintsGroupList}
 			columns={columns}
 			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
 			dense
@@ -107,4 +107,4 @@ const RoomsTable = (props) => {
 	);
 };
 
-export default RoomsTable;
+export default ConstraintsGroupsTable;
