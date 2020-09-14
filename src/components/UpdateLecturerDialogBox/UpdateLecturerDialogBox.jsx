@@ -109,9 +109,9 @@ const UpdateLecturerDialogBox = (props) => {
                 rankVal
             })
             .then((res) => {
-                window.location.reload();
+                props.setRefresh(!props.refresh);
                 swal.close();
-                store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
+                store.addNotification(buildToast('success', 'Success', 'Lecturer Updated Successfully'));
             })
             .catch((err) => {
                 console.log(err.response);

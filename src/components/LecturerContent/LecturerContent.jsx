@@ -28,8 +28,6 @@ const LecturerContent = () => {
     const [lecturerDetails, setLecturerDetails] = useState([]);
     const [rank, setRank] = useState(1);
     const [rankVal, setRankVal] = useState("");
-    const [update, setUpdate] = useState(false);
-    const [id, setId] = useState("");
     const [loading, setloading] = useState(true);
     const [buildings, setBuildings] = useState([]);
 
@@ -38,6 +36,8 @@ const LecturerContent = () => {
     const [isCenterValid, setIsCenterValid] = useState(true);
     const [isEmpIdValid, setIsEmpIdValid] = useState(true);
     const [isDepartmentValid, setIsDepartmentValid] = useState(true);
+
+    const [refresh,setRefresh] = useState(false);
  
 
     const onNameChange = (e) => {
@@ -101,7 +101,7 @@ const LecturerContent = () => {
             .catch((err) => {
                 console.log(err.response);
             });
-    }, []);
+    }, [refresh]);
 
 
     const loadData = () => {
@@ -159,6 +159,8 @@ const LecturerContent = () => {
             content: (
                 <UpdateLecturerDialogBox
                     lec={data}
+                    setRefresh={setRefresh}
+                    refresh={refresh}
                 />
             ),
         });
@@ -203,11 +205,27 @@ const LecturerContent = () => {
             building,
             rankVal
         }).then((res) => {
-            window.location.reload();
+        
             store.addNotification(buildToast('success', 'Success', 'Lecturer Added Successfully'));
+            setRefresh(true);
+            clear();
         }).catch((err) => {
             console.log("err is: ", err);
         });
+
+        const clear = () =>{
+            setName('');
+            setFaculty('');
+            setCenter('');
+            setLevel('Professor');
+            setBuilding('Main building');
+            setEmpId('');
+            setRankVal('');
+            setDepartment('');
+            const rank_input = document.getElementById('rank-input');
+            rank_input.value= '';
+            setRefresh(false);
+        }
         // }
         // else {
         //     axios.patch(`http://localhost:8000/api/v1/lecturers/${id}`, {
@@ -304,7 +322,7 @@ const LecturerContent = () => {
             <div>
                 <ContentHeader header={'Lecturers'} />
                 <br />
-                <form onSubmit={onSubmit} className="needs-validation">
+                <form className="needs-validation">
                     <div className="form-row">
 
                         <div className="form-group col">
@@ -486,7 +504,7 @@ const LecturerContent = () => {
 
                     <div className="d-flex justify-content-end mt-2">
 
-                        <button id="lec-insert" type="submit" className="btn btn-primary wk-submit-button">{" "} {update ? 'Edit' : 'Add'} {" "}</button>
+                        <button id="lec-insert" className="btn btn-primary wk-submit-button" onClick={onSubmit} >{" "} {'Add'} {" "}</button>
                     </div>
                 </form>
 

@@ -91,16 +91,14 @@ const UpdateSubjectBox = (props) => {
             numberOfEveluationHrs
         })
             .then((res) => {
-                window.location.reload();
-
+                // window.location.reload();
+                swal.close();
                 store.addNotification(buildToast('success', '', 'Subject Updated'));
-
+                props.setRefresh(!props.refresh);
             })
             .catch((e) => {
                 console.log(e);
-
                 store.addNotification(buildToast('warning', '', 'Subject Update Error'));
-
             });
     }
 
