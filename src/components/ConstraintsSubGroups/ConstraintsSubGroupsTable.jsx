@@ -43,7 +43,7 @@ function ConstraintsSubGroupsTable(props) {
 			});
 	};
 
-	const onUpdateClick = (id, subgroupid, from, to, day) => {
+	const onUpdateClick = (id, subgroupid, day, from, to) => {
 		swal({
 			buttons: false,
 			content: (
@@ -75,7 +75,7 @@ function ConstraintsSubGroupsTable(props) {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.subgroup.subgroupid, row.from, row.to, row.day);
+							onUpdateClick(row._id, row.subgroup.subgroupid, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdCreate />
@@ -84,7 +84,7 @@ function ConstraintsSubGroupsTable(props) {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.subgroup.subgroupid, row.from, row.to, row.day);
+							onDeleteClick(row._id, row.subgroup.subgroupid, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdClose />

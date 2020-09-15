@@ -42,7 +42,7 @@ const ConstraintsGroupsTable = (props) => {
 			});
 	};
 
-	const onUpdateClick = (id, groupid, from, to, day) => {
+	const onUpdateClick = (id, groupid, day, from, to) => {
 		swal({
 			buttons: false,
 			content: (
@@ -74,7 +74,7 @@ const ConstraintsGroupsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.group.groupid, row.from, row.to, row.day);
+							onUpdateClick(row._id, row.group.groupid, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdCreate />
@@ -83,7 +83,7 @@ const ConstraintsGroupsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.group.groupid, row.from, row.to, row.day);
+							onDeleteClick(row._id, row.group.groupid, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdClose />

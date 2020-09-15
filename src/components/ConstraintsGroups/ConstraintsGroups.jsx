@@ -10,6 +10,7 @@ import moment from 'moment';
 import ConstraintsGroupsTable from './ConstraintsGroupsTable'
 
 function ConstraintsGroups() {
+    
     let groupIdTemp;
     const [groups, setGroups] = useState([]);
 
