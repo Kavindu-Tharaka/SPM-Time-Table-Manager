@@ -42,7 +42,7 @@ const RoomsTable = (props) => {
 			});
 	};
 
-	const onUpdateClick = (id, name, from, to, day) => {
+	const onUpdateClick = (id, name, day, from, to) => {
 		swal({
 			buttons: false,
 			content: (
@@ -74,7 +74,7 @@ const RoomsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.lecturer.name, row.from, row.to, row.day);
+							onUpdateClick(row._id, row.lecturer.name, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdCreate />
@@ -83,7 +83,7 @@ const RoomsTable = (props) => {
 						style={{marginRight:15}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.lecturer.name, row.from, row.to, row.day);
+							onDeleteClick(row._id, row.lecturer.name, row.day, row.from, row.to);
 						}}
 					>
 						<IoMdClose />
