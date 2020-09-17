@@ -281,7 +281,7 @@ function ConstraintsLecturers() {
             <br />
 
             {lecturers.length === 0 ? (
-                <EmptyDataPlaceholder message="Room list is currently empty" />
+                <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
                 <ConstraintsLecturersTable
                     constraintsLectureList={constraintsLectureList}

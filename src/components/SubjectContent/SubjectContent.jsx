@@ -17,7 +17,7 @@ const SubjectContent = () => {
 
     const [subjectCode, setSubjectCode] = useState("");
     const [offeredYear, setOfferedYear] = useState("1");
-    const [offeredSemester, setOfferedSemester] = useState("S1");
+    const [offeredSemester, setOfferedSemester] = useState("1");
     const [subjectName, setSubjetName] = useState("");
     const [numberOfLecHrs, setNumberOfLecHrs] = useState("");
     const [numberOfTutorialHrs, setNumberOfTutorialHrs] = useState("");
@@ -34,6 +34,8 @@ const SubjectContent = () => {
     const [isTutHrsValid, setIsTutHrsValid] = useState(true);
     const [isEveHrsValid, setIsEveHrsValid] = useState(true);
     const [isLabHrsValid, setIsLabHrsValid] = useState(true);
+
+    const [refresh,setRefresh] = useState(false);
 
     const onOfferedYearChange = (e) => {
         setOfferedYear(e.target.value)
@@ -67,6 +69,8 @@ const SubjectContent = () => {
             content: (
                 <UpdateSubjectDialogBox
                     sub={data}
+                    setRefresh={setRefresh}
+                    refresh={refresh}
                 />
             ),
         });
@@ -117,11 +121,24 @@ const SubjectContent = () => {
             numberOfLabHrs,
             numberOfEveluationHrs
         }).then((res) => {
-            window.location.reload();
             store.addNotification(buildToast('success', '', 'Subject Added Successfully'));
+            setRefresh(true);
+            clear();
         }).catch((err) => {
             console.log(err);
         });
+
+        const clear = () =>{
+            setOfferedYear("1");
+            setOfferedSemester("1");
+            setSubjectCode("");
+            setSubjetName("");
+            setNumberOfLabHrs("");
+            setNumberOfLecHrs("");
+            setNumberOfTutorialHrs("");
+            setnumberOfEveluationHrs("");
+            setRefresh(false);
+        }
         // }
         // else {
 
@@ -148,7 +165,7 @@ const SubjectContent = () => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refresh]);
 
     const loadData = () => {
         axios
@@ -289,7 +306,7 @@ const SubjectContent = () => {
             <PreLoader loading={loading} />
             <ContentHeader header={'Subjects'} />
             <br />
-            <form onSubmit={onSubmit}>
+            <form>
                 <div className="form-row">
                     <div className="form-group col">
                         <p className="mb-1">{'Offered Year'}</p>
@@ -310,7 +327,7 @@ const SubjectContent = () => {
                     <div className="form-group col">
                         <p className="mb-1">{'Subject Code'}</p>
                         <input
-                        type="number"
+                        type="text"
                             onChange={(e) => onCodeChange(e)}
                             value={subjectCode}
                             className={
@@ -422,7 +439,7 @@ const SubjectContent = () => {
                     </div>
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button type="submit" className="btn btn-primary wk-submit-button mt-2">{update ? 'Edit' : 'Add'}</button>
+                    <button className="btn btn-primary wk-submit-button mt-2" onClick={onSubmit}> {'Add'}</button>
                 </div>
             </form>
 

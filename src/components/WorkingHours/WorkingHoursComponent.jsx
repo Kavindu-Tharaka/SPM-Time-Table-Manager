@@ -107,7 +107,7 @@ function WorkingHoursComponent() {
         text: `Please Enter the Required Fields`,
       });
     } else {
-      setLoading(true)
+      // setLoading(true)
       axios
         .get(`http://localhost:8000/api/v1/workingDays/type/count/${dayType}`)
         .then((res) => {

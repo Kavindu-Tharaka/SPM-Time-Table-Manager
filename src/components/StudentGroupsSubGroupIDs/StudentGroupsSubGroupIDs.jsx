@@ -34,55 +34,6 @@ function StudentGroupsSubGroupIDs(props) {
         const source = CancelToken.source();
 
         const loadData = () => {
-            // axios
-            //     .get('http://localhost:8000/api/v1/groupids', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         console.log(response.data.data.groupids);
-            //         setGroupIDList(response.data.data.groupids);
-
-            //         groupIdTemp = response.data.data.groupids.find(
-            //             (item) =>
-            //                 year === item.yearsemestername.substring(1, 2) &&
-            //                 semester === item.yearsemestername.substring(4, 5)
-            //         );
-
-            //         setGroupID(
-            //             `${groupIdTemp.yearsemestername}.${groupIdTemp.specializationname}.${groupIdTemp.groupnumber}`
-            //         );
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
-            // axios
-            //     .get('http://localhost:8000/api/v1/subgroupids', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         console.log(response.data.data.subgroupids);
-            //         setSubGroupIDList(response.data.data.subgroupids);
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
-            // axios
-            //     .get('http://localhost:8000/api/v1/subgroupnumbers', {
-            //         cancelToken: source.token,
-            //     })
-            //     .then(function (response) {
-            //         console.log(response.data.data.subgroupnumbers);
-            //         setSubGroupNumberList(response.data.data.subgroupnumbers);
-            //         setSubGroupNumber(
-            //             response.data.data.subgroupnumbers[0].subgroupnumber
-            //         );
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-
             axios
                 .all([
                     axios.get('http://localhost:8000/api/v1/groupids', {
@@ -97,6 +48,7 @@ function StudentGroupsSubGroupIDs(props) {
                 ])
                 .then((response) => {
                     setGroupIDList(response[0].data.data.groupids);
+                    console.log(response[0].data.data.groupids);
 
                     groupIdTemp = response[0].data.data.groupids.find(
                         (item) =>
@@ -104,9 +56,7 @@ function StudentGroupsSubGroupIDs(props) {
                             semester === item.yearsemestername.substring(4, 5)
                     );
 
-                    setGroupID(
-                        `${groupIdTemp.yearsemestername}.${groupIdTemp.specializationname}.${groupIdTemp.groupnumber}`
-                    );
+                    setGroupID(groupIdTemp.groupid);
 
                     setSubGroupIDList(response[1].data.data.subgroupids);
 
@@ -142,6 +92,7 @@ function StudentGroupsSubGroupIDs(props) {
     };
     const onInputChangeGroupID = (e) => {
         setGroupID(e.target.value);
+        console.log(e.target.value)
         setErrorMsg('');
     };
     const onInputChangeSubGroupNumber = (e) => {
@@ -168,10 +119,13 @@ function StudentGroupsSubGroupIDs(props) {
         });
 
         if (!isExist) {
+            const subgroupid = `${groupID}.${subGroupNumber}`;
+
             axios
                 .post('http://localhost:8000/api/v1/subgroupids', {
                     groupid: groupID,
                     subgroupnumber: subGroupNumber,
+                    subgroupid: subgroupid,
                 })
                 .then(function (response) {
                     console.log(response.data.data.subgroupid);
@@ -292,13 +246,8 @@ function StudentGroupsSubGroupIDs(props) {
                                     item.yearsemestername.substring(1, 2) &&
                                 semester ===
                                     item.yearsemestername.substring(4, 5) ? (
-                                    <option
-                                        key={item._id}
-                                        value={`${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`}
-                                    >
-                                        {item.groupnumber >= 10
-                                            ? `${item.yearsemestername}.${item.specializationname}.${item.groupnumber}`
-                                            : `${item.yearsemestername}.${item.specializationname}.0${item.groupnumber}`}
+                                    <option key={item._id} value={item.groupid}>
+                                        {item.groupid}
                                     </option>
                                 ) : null
                             )}
@@ -378,27 +327,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             // editMethod={editSubGroupID}
-                                            tagName={
-                                                item.groupid.split('.')[3] >= 10
-                                                    ? `${item.groupid}.${item.subgroupnumber}`
-                                                    : `${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[0]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[1]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[2]
-                                                      }.0${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[3]
-                                                      }.${item.subgroupnumber}`
-                                            }
+                                            tagName={item.subgroupid}
                                             component={
                                                 UpdateSubGroupIDsDialogBox
                                             }
@@ -455,27 +384,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             // editMethod={editSubGroupID}
-                                            tagName={
-                                                item.groupid.split('.')[3] >= 10
-                                                    ? `${item.groupid}.${item.subgroupnumber}`
-                                                    : `${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[0]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[1]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[2]
-                                                      }.0${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[3]
-                                                      }.${item.subgroupnumber}`
-                                            }
+                                            tagName={item.subgroupid}
                                             component={
                                                 UpdateSubGroupIDsDialogBox
                                             }
@@ -532,27 +441,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             // editMethod={editSubGroupID}
-                                            tagName={
-                                                item.groupid.split('.')[3] >= 10
-                                                    ? `${item.groupid}.${item.subgroupnumber}`
-                                                    : `${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[0]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[1]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[2]
-                                                      }.0${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[3]
-                                                      }.${item.subgroupnumber}`
-                                            }
+                                            tagName={item.subgroupid}
                                             component={
                                                 UpdateSubGroupIDsDialogBox
                                             }
@@ -609,27 +498,7 @@ function StudentGroupsSubGroupIDs(props) {
                                             id={item._id}
                                             deleteMethod={deleteSubGroupID}
                                             // editMethod={editSubGroupID}
-                                            tagName={
-                                                item.groupid.split('.')[3] >= 10
-                                                    ? `${item.groupid}.${item.subgroupnumber}`
-                                                    : `${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[0]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[1]
-                                                      }.${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[2]
-                                                      }.0${
-                                                          item.groupid.split(
-                                                              '.'
-                                                          )[3]
-                                                      }.${item.subgroupnumber}`
-                                            }
+                                            tagName={item.subgroupid}
                                             component={
                                                 UpdateSubGroupIDsDialogBox
                                             }

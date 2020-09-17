@@ -59,11 +59,15 @@ const UpdateSubGroupIDsDialogBox = (props) => {
             });
 
             if (!isExist) {
+                
+                const subgroupid = `${groupID}.${subGroupNumber}`;
+
                 axios
                     .patch(
                         `http://localhost:8000/api/v1/subgroupids/${props.id}`,
                         {
                             subgroupnumber: subGroupNumber,
+                            subgroupid: subgroupid
                         }
                     )
                     .then(function (response) {
