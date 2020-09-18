@@ -13,31 +13,29 @@ import PreLoader from '../PreLoader/PreLoader';
 
 
 const SessionContent = () => {
-
+    //   fetchData();
     const [lecturersArr, setLecturersArr] = useState([]);
     const [tagsArr, setTagsArr] = useState([]);
     const [grpsArr, setGrpsArr] = useState([]);
     const [subGrpsArr, seSubGrpsArr] = useState([]);
     const [subjectsArr, setSubjectsArr] = useState([]);
-
-    const loadedTags = [];
-    tagsArr.map(d => loadedTags.push(d.tagname));
-
-    const loadedGrp = [];
-    
-    subGrpsArr.map(d => loadedGrp.push(d.groupid));
-    console.log("sub: ",loadedGrp[0]);
+    // const loadedTags = [];
+    // tagsArr.map(d => loadedTags.push(d.tagname));
+    // console.log("loadedTags: ",loadedTags)
+    // const loadedGrp = [];
 
     const [lecturers, setLectures] = useState([]);
-    const [tag, setTag] = useState(`${loadedTags[0]}`);
-
-
-// if(tag == 'Practical' || tag == 'practical'){
-
-// }
-
-    const [studentGroup, setStudentGrp] = useState('');
-    const [subject, setSubject] = useState();
+    const [tag, setTag] = useState('Lecture');
+    // if (tag == 'Practical' || tag == 'practical') {
+    //     subGrpsArr.map(d => loadedGrp.push(d.subgroupid));
+    // } else {
+    //     subGrpsArr.map(d => loadedGrp.push(d.groupid));
+    // }
+    const [studentGroup, setStudentGrp] = useState('Y1.S1.IT.01');
+    // const loadedSubject = [];
+    // subjectsArr.map(d=> loadedSubject.push(d.subjectName));
+    // console.log("loadedSubject ",loadedSubject)
+    const [subject, setSubject] = useState('Introduction to Programming');
     const [numberOfStudents, setNumberOfStudent] = useState('');
     const [duration, setDuration] = useState('');
     const [refresh, setRefresh] = useState(false);
@@ -54,7 +52,7 @@ const SessionContent = () => {
         //lec
         try {
             const lecdata = await axios.get("http://localhost:8000/api/v1/lecturers");
-            setLecturersArr(lecdata.data.data.lecturers); //.lecturers
+            setLecturersArr(lecdata.data.data.lecturers);
         } catch (e) {
             console.error(e);
         }
@@ -97,7 +95,6 @@ const SessionContent = () => {
             console.error(e);
             setloading(false);
         }
-
     }
     const onChangeLecture = (list) => {
         list.map(d => setLectures([...lecturers, d.name]))
@@ -150,6 +147,9 @@ const SessionContent = () => {
         //     console.error(e);
         //     console.log("not saved");
         // }
+        if (subject == 'undefined') {
+            fetchData()
+        }
 
         axios.post("http://localhost:8000/api/v1/session", {
             lecturers,
