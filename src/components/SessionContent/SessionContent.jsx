@@ -43,6 +43,9 @@ const SessionContent = () => {
     const [loading, setloading] = useState(true);
 
     const [sessionDetails, setSessionDeatils] = useState([]);
+    const [isNumOfStudentValid, setIsNumOfStudntValid] = useState(true);
+    const [isDurationValid, setIsDurationValid] = useState(true);
+    const [isLectureValid, setIsLectureValid] = useState(true);
 
     useEffect(() => {
         fetchData();
@@ -132,23 +135,24 @@ const SessionContent = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        // try {
-        //     axios.post("http://localhost:8000/api/v1/session", {
-        //         lectures,
-        //         tag,
-        //         studentGrp,
-        //         subject,
-        //         numberOfStudent,
-        //         duration
-        //     })
-        //     console.log("saved");
-        //     setLectures('');
-        // } catch (e) {
-        //     console.error(e);
-        //     console.log("not saved");
-        // }
-        if (subject == 'undefined') {
-            fetchData()
+ 
+        let errDetected = false;
+
+        if (numberOfStudents == '') {
+            errDetected = true;
+            setIsNumOfStudntValid(false);
+        }
+        if (duration == '') {
+            errDetected = true;
+            setIsDurationValid(false);
+        }
+
+        if (lecturers.length == 0) {
+            errDetected = true;
+            setIsLectureValid(false);
+        }
+        if (errDetected) {
+            return;
         }
 
         axios.post("http://localhost:8000/api/v1/session", {
@@ -277,8 +281,11 @@ const SessionContent = () => {
                                         searchable={false}
                                         onChange={(l) => onChangeLecture(l)}
                                         name="lecturers"
+                                        className={isLectureValid ? 'form-control' : 'form-control is-invalid'}
                                     />
-
+                                    <div className='invalid-feedback'>
+                                        Please provide a lecturer name
+					                </div>
                                 </div>
                             </div>
 
@@ -348,10 +355,12 @@ const SessionContent = () => {
                                     type="number"
                                     name="numberOfStudents"
                                     value={numberOfStudents}
-                                    className="form-control"
+                                    className={isNumOfStudentValid ? 'form-control' : 'form-control is-invalid'}
                                     onChange={(e) => onNumOfStudenthange(e)}
                                 />
-
+                                <div className='invalid-feedback'>
+                                    Please provide student count
+					                </div>
                             </div>
 
 
@@ -360,10 +369,13 @@ const SessionContent = () => {
                                 <input
                                     type="number"
                                     name="duration"
-                                    className="form-control"
+                                    className={isDurationValid ? 'form-control' : 'form-control is-invalid'}
                                     onChange={(e) => onDurationChange(e)}
                                     value={duration}
                                 />
+                                  <div className='invalid-feedback'>
+                                    Please provide session duration
+					                </div>
                             </div>
 
                         </div>{/**second row ends here */}
