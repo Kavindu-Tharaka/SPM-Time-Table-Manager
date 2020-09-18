@@ -19,14 +19,49 @@ function GenerateTimeTable(props) {
   useEffect(() => {
     props.setShowSubMenu(true);
   });
+
+  const columns = [
+    {
+      name: "Monday",
+      selector: "monday",
+    },
+    {
+      name: "Tuesday",
+      selector: "tuesday",
+    },
+    {
+      name: "Wednesday",
+      selector: "wednesday",
+    },
+    {
+      name: "Thursday",
+      selector: "thursday",
+    },
+    {
+      name: "Friday",
+      selector: "friday",
+    },
+    {
+      name: "Saturday",
+      selector: "saturday",
+    },
+    {
+      name: "Sunday",
+      selector: "sunday",
+    },
+  ]
+
+
+
+
   return (
     <Fragment>
       <SubNavigationBar links={links} header="Time Tables" />
       <Switch>
         <Route path={"/timetables/generate-timetable"} component={NewTimeTable} />
-        <Route path={"/timetables/lecturer-timetable"} component={LecturerTimetable} />
-        <Route path={"/timetables/student-timetable"} component={StudentTimeTbale} />
-        <Route path={"/timetables/hall-timetable"} component={HallTimeTable} />
+        <Route path={"/timetables/lecturer-timetable"} component={() => <LecturerTimetable days = {columns}/>} />
+        <Route path={"/timetables/student-timetable"} component={() =>  <StudentTimeTbale days = {columns}/>} />
+        <Route path={"/timetables/hall-timetable"} component={() => <HallTimeTable days= {columns} />} />
       </Switch>
     </Fragment>
   );

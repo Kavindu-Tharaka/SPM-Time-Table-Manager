@@ -1,7 +1,11 @@
 import React from 'react'
 import ContentHeader from '../../ContentHeader/ContentHeader'
+import DataTable from "react-data-table-component";
+import EmptyDataPlaceholder from '../../EmptyDataPlacehoder/EmptyDataPlaceholder'
 
-function HallTimeTable() {
+function HallTimeTable({days}) {
+ 
+
     return (
         <div>
            <ContentHeader header={'Hall Time Table'} />
@@ -44,6 +48,7 @@ function HallTimeTable() {
           <button  className="btn btn-primary" type="submit">Add</button>
         </div>
       </div>
+      <DataTable columns = {days}  noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}/>
         </div>
     )
 }
