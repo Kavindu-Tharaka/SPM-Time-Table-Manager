@@ -1,7 +1,8 @@
 import React from "react";
 import ContentHeader from "../../ContentHeader/ContentHeader";
-
-function LecturerTimetable() {
+import EmptyDataPlaceholder from '../../EmptyDataPlacehoder/EmptyDataPlaceholder'
+import Datatable from 'react-data-table-component'
+function LecturerTimetable({days}) {
   return (
     <div>
       <ContentHeader header={"Lecturer Time Table"} />
@@ -27,6 +28,7 @@ function LecturerTimetable() {
           <button  className="btn btn-primary" type="submit">Add</button>
         </div>
       </div>
+        <Datatable columns = {days} noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}/>
     </div>
   );
 }

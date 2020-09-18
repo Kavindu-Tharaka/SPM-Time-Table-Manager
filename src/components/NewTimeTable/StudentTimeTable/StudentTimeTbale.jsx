@@ -1,7 +1,9 @@
 import React from "react";
 import ContentHeader from "../../ContentHeader/ContentHeader";
+import EmptyDataPlaceholder from '../../EmptyDataPlacehoder/EmptyDataPlaceholder'
 
-function StudentTimeTbale() {
+import DataTable from 'react-data-table-component'
+function StudentTimeTbale({days}) {
   return (
     <div>
       <ContentHeader header={"Student Time Table"} />
@@ -38,6 +40,7 @@ function StudentTimeTbale() {
           </button>
         </div>
       </div>
+      <DataTable columns = {days} noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}/>
     </div>
   );
 }
