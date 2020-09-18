@@ -14,9 +14,6 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import UpdateLecturerDialogBox from '../UpdateLecturerDialogBox/UpdateLecturerDialogBox';
 
 const LecturerContent = () => {
-   const init = [{buildingName: "Main Building",
-   __v: 0,
-   _id: "5f3d22083c801929a88e15ed"}];
 
     const [name, setName] = useState("");
     const [faculty, setFaculty] = useState("");

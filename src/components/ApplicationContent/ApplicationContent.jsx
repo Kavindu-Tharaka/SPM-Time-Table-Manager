@@ -14,6 +14,8 @@ import Tags from '../../containers/Tags/Tags';
 import StudentGroups from '../../containers/StudentGroups/StudentGroups';
 import Constraints from '../../containers/Constraints/Constraints';
 
+import Session from '../../containers/Sessions/Sessions';
+
 const ApplicationContent = (props) => {
     const [showSubMenu, setShowSubMenu] = useState(false);
 
@@ -80,9 +82,9 @@ const ApplicationContent = (props) => {
                 />
                 <Route
                     path="/sessions"
-                    // component={() => (
-                    //     <WorkingTime setShowSubMenu={setShowSubMenu} />
-                    // )}
+                    component={() => (
+                        <Session setShowSubMenu={setShowSubMenu} />
+                    )}
                 />
                 <Route
                     path="/"
