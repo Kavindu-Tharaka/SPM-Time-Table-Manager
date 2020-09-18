@@ -135,7 +135,7 @@ const SessionContent = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
- 
+        const asString = `${lecturers}/${subject}/${tag}/${studentGroup}`;
         let errDetected = false;
 
         if (numberOfStudents == '') {
@@ -161,20 +161,25 @@ const SessionContent = () => {
             studentGroup,
             subject,
             numberOfStudents,
-            duration
+            duration,
+            asString
         }).then((res) => {
-            console.log("saved");
-            setNames([]);
-            setTag('');
-            setStudentGrp('');
-            setSubject('');
-            setNumberOfStudent('');
-            setDuration('');
+            clear();
             setRefresh(true);
         }).catch((err) => {
             console.log("err is: ", err);
         });
 
+    }
+
+    const clear = () => {
+        setNames([]);
+        setTag('Lecture');
+        setStudentGrp('Y1.S1.IT.01');
+        setSubject('Introduction to Programming');
+        setNumberOfStudent('');
+        setDuration('');
+        setRefresh(false);
     }
 
     const onDeleteClick = (id, name) => {
@@ -281,7 +286,9 @@ const SessionContent = () => {
                                         searchable={false}
                                         onChange={(l) => onChangeLecture(l)}
                                         name="lecturers"
-                                        className={isLectureValid ? 'form-control' : 'form-control is-invalid'}
+                                        className={isLectureValid ? '' : 'form-control is-invalid'}
+                                        clearOnSelect={false}
+                                    
                                     />
                                     <div className='invalid-feedback'>
                                         Please provide a lecturer name
@@ -373,7 +380,7 @@ const SessionContent = () => {
                                     onChange={(e) => onDurationChange(e)}
                                     value={duration}
                                 />
-                                  <div className='invalid-feedback'>
+                                <div className='invalid-feedback'>
                                     Please provide session duration
 					                </div>
                             </div>
