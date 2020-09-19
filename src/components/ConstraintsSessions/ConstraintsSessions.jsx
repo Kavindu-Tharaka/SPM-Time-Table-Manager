@@ -11,6 +11,7 @@ import ConstraintsSessionsTable from './ConstraintsSessionsTable';
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
 
+
 function ConstraintsSessions() {
     let sessionIdTemp;
     let asString;
@@ -63,6 +64,9 @@ function ConstraintsSessions() {
         );
 
         setSessionIDBehalfOfName(session ? session._id : '');
+
+
+        setErrorMsg('');
     };
 
     const onDayChange = (e) => {
@@ -155,6 +159,7 @@ function ConstraintsSessions() {
                         asString = res.data.data.tempSession.asstring;
                     })
                     .catch((err) => console.log(err));
+
 
                 axios
                     .post('http://localhost:8000/api/v1/constraintssessions', {
@@ -271,23 +276,7 @@ function ConstraintsSessions() {
                     </div>
 
                     <div className="form-group col-md-8">
-                        {/* <label>Session</label>
-                        <select
-                            className="custom-select"
-                            onChange={onSessionChange}
-                            value={sessionIDbehalfOfName}
-                        >
-                            {sessions.map((item) =>
-                                year ===
-                                    item.grouporsubgroupid.substring(1, 2) &&
-                                semester ===
-                                    item.grouporsubgroupid.substring(4, 5) ? (
-                                    <option key={item._id} value={item._id}>
-                                        {item.asstring}
-                                    </option>
-                                ) : null
-                            )}
-                        </select> */}
+
 
                         <label className="dialog-label">Session</label>
                         <TextInput
@@ -310,6 +299,8 @@ function ConstraintsSessions() {
                 <div className="form-row">
                     <div className="form-group col-md-4">
                         <label>Day</label>
+
+                        <label>Day of Week</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
@@ -359,7 +350,7 @@ function ConstraintsSessions() {
                         style={{
                             color: 'crimson',
                             fontSize: 13,
-                            marginLeft: '3px',
+                            marginLeft: '3px'
                         }}
                     >
                         {errorMsg}
@@ -396,6 +387,7 @@ function ConstraintsSessions() {
                     sessions={sessions}
                 />
             )}
+
         </div>
     );
 }

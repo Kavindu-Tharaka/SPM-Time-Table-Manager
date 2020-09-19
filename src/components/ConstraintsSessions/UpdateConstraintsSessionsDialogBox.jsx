@@ -17,8 +17,9 @@ function UpdateConstraintsSessionsDialogBox(props) {
     const [currentSessionName, setCurrentsessionName] = useState(props.session);
 
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState(
-        sessions.find((element) => element.asstring === props.session)._id
-    );
+        sessions.find((element) => element.asstring === props.session)._id)
+
+
     const [day, setDay] = useState(props.day);
 
     const [from, setFrom] = useState(props.from);
@@ -27,15 +28,16 @@ function UpdateConstraintsSessionsDialogBox(props) {
     const [isConstraintValid, setIsConstraintValid] = useState(true);
 
     const [year, setYear] = useState(
-        props.sessions
+        sessions
             .find((element) => element.asstring === props.session)
             .grouporsubgroupid.substring(1, 2)
     );
     const [semester, setSemester] = useState(
-        props.sessions
+        sessions
             .find((element) => element.asstring === props.session)
             .grouporsubgroupid.substring(4, 5)
     );
+
 
     const [isFromValid, setIsFromValid] = useState(true);
     const [fromErrorMsg, setFromErrorMsg] = useState('');
@@ -69,6 +71,7 @@ function UpdateConstraintsSessionsDialogBox(props) {
 
         setSessionIDBehalfOfName(session ? session._id : '');
         console.log(session)
+
     };
 
     const onDayChange = (e) => {
@@ -134,6 +137,7 @@ function UpdateConstraintsSessionsDialogBox(props) {
             console.log(to);
             console.log(sessionIDbehalfOfName);
             console.log(currentSessionName);
+
 
             props.constraintsSessionList.forEach((element) => {
                 if (
@@ -237,25 +241,6 @@ function UpdateConstraintsSessionsDialogBox(props) {
             </div>
             <div className="form-row">
                 <div className="form-group col-md-12">
-                    {/* <label className="dialog-label">Select Group</label>
-                    <select
-                        className="custom-select"
-                        onChange={onSessionChange}
-                        value={currentSessionName}
-                    >
-                        {props.sessions.map((item) =>
-                            year === item.grouporsubgroupid.substring(1, 2) &&
-                            semester ===
-                                item.grouporsubgroupid.substring(4, 5) ? (
-                                <option
-                                    key={item._id}
-                                    value={item.asstring}
-                                >
-                                    {item.asstring}
-                                </option>
-                            ) : null
-                        )}
-                    </select> */}
 
                     <label className="dialog-label">Session</label>
 
@@ -270,17 +255,6 @@ function UpdateConstraintsSessionsDialogBox(props) {
                             
                             (session) => session.asstring
                         )}
-
-                        // options={sessions.map((session) => {
-                        //     if (
-                        //         year ===
-                        //         session.grouporsubgroupid.substring(1, 2) &&
-                        //         semester ===
-                        //         session.grouporsubgroupid.substring(4, 5)
-                        //     ) {
-                        //         return session.asstring;
-                        //     }
-                        // })}
 
                         onChange={onSessionChange}
                         style={{ height: 35, width: '100%', paddingLeft: 10 }}
@@ -303,6 +277,7 @@ function UpdateConstraintsSessionsDialogBox(props) {
                         <option>Friday</option>
                         <option>Saturday</option>
                         <option>Sunday</option>
+
                     </select>
                 </div>
                 <div className="form-group col-md-4">

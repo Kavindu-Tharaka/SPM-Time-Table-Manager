@@ -9,7 +9,7 @@ import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
-function ConstraintConsecutiveSessionsTable(props) {
+function ConstraintsUnOverlapSessionsTable(props) {
 
     const onDeleteClick = (itemId) => {
 		swal({
@@ -25,7 +25,7 @@ function ConstraintConsecutiveSessionsTable(props) {
     
     const deleteConstraint = (itemId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/constraintsconsecutivesessions/${itemId}`)
+			.delete(`http://localhost:8000/api/v1/constraintsunoverlapsessions/${itemId}`)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
@@ -47,9 +47,8 @@ function ConstraintConsecutiveSessionsTable(props) {
 		{ name: 'ID', selector: '_id', omit: true },
 		{ name: 'Year', selector: 'year', sortable: true },
 		{ name: 'Semester', selector: 'semester', sortable: true },
-		{ name: 'Subject', selector: 'subject.subjectCode', sortable: true },
-        { name: 'Session 1', selector: 'consecutivesessions[0].asstring', sortable: true, grow: 5 },
-		{ name: 'Session 2', selector: 'consecutivesessions[1].asstring', sortable: true, grow: 5 },   
+        { name: 'Session 1', selector: 'unoverlapsessions[0].asstring', sortable: true, grow: 5 },
+		{ name: 'Session 2', selector: 'unoverlapsessions[1].asstring', sortable: true, grow: 5 },   
         {
 			name: 'Action',
 			cell: (row) => (
@@ -68,11 +67,11 @@ function ConstraintConsecutiveSessionsTable(props) {
 			button: true,
 		},
     ];
-    
+
     return (
 		<DataTable
-			title="Consecutive Sessions"
-			data={props.consecutiveSessionsConstraintsList}
+			title="UnOverlap Sessions"
+			data={props.unoverlapSessionsConstraintsList}
 			columns={columns}
 			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
 			dense
@@ -82,4 +81,4 @@ function ConstraintConsecutiveSessionsTable(props) {
     )
 }
 
-export default ConstraintConsecutiveSessionsTable
+export default ConstraintsUnOverlapSessionsTable

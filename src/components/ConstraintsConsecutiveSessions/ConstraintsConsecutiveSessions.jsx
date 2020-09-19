@@ -24,7 +24,10 @@ function ConstraintsConsecutiveSessions() {
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
     const [subjectIDbehalfOfName, setSubjectIDBehalfOfName] = useState('');
     const [sessions, setSessions] = useState([]);
-    const [consecutiveSessionsList, setConsecutiveSessionsList] = useState([]);
+    const [
+        consecutiveSessionsConstraintsList,
+        setConsecutiveSessionsConstraintsList,
+    ] = useState([]);
     const [sessionAsString, setSessionAsString] = useState('');
     const [subjects, setSubjects] = useState([]);
     const [updateComponent, setUpdateComponent] = useState(0);
@@ -58,6 +61,7 @@ function ConstraintsConsecutiveSessions() {
 
     const onSubjectChange = async (e) => {
         setSubject(e.target.value);
+
         // console.log(e.target.value);
 
         // await axios
@@ -83,6 +87,8 @@ function ConstraintsConsecutiveSessions() {
     };
 
     const addConstraint = () => {
+        setIsAdding(true);
+
         axios
             .post(
                 'http://localhost:8000/api/v1/constraintsconsecutivesessions',
@@ -110,8 +116,7 @@ function ConstraintsConsecutiveSessions() {
     };
 
     const addToBucket = async () => {
-
-        console.log(sessionIDbehalfOfName)
+        console.log(sessionIDbehalfOfName);
 
         console.log(year);
         console.log(semester);
@@ -158,6 +163,10 @@ function ConstraintsConsecutiveSessions() {
                     }
                 )
                 .then((res) => {
+                    setConsecutiveSessionsConstraintsList(
+                        res[2].data.data.constraintsConsecutiveSessions
+                    );
+
                     setSubjects(res[1].data.data.subjects);
 
                     subjectIdTemp = res[1].data.data.subjects.find(
@@ -241,6 +250,7 @@ function ConstraintsConsecutiveSessions() {
 
     return (
         <div>
+            <PreLoader loading={loading} hasSideBar={true} />
             <ContentHeader header={'Consecutive Sessions'} />
             <div
                 style={{
@@ -299,23 +309,6 @@ function ConstraintsConsecutiveSessions() {
                 <div className="form-row">
                     <div className="form-group col-md-10">
                         <label className="dialog-label">Session</label>
-                        {/* <select
-                            className="custom-select"
-                            onChange={onSessionChange}
-                            value={sessionIDbehalfOfName}
-                        >
-                            {sessions.map((item) =>
-                                year ===
-                                    item.grouporsubgroupid.substring(1, 2) &&
-                                semester ===
-                                    item.grouporsubgroupid.substring(4, 5) &&
-                                subject === item.subjectcode ? (
-                                    <option key={item._id} value={item._id}>
-                                        {item.asstring}
-                                    </option>
-                                ) : null
-                            )}
-                        </select> */}
 
                         <TextInput
                             id="autoCompleteInput"
@@ -324,7 +317,9 @@ function ConstraintsConsecutiveSessions() {
                             matchAny={true}
                             placeholder={'Enter a Session'}
                             trigger=""
-                            options={sessions.map((session) => session.asstring)}
+                            options={sessions.map(
+                                (session) => session.asstring
+                            )}
                             onChange={onSessionChange}
                             style={{
                                 height: 35,
@@ -337,16 +332,10 @@ function ConstraintsConsecutiveSessions() {
                         <button
                             className="btn btn-primary"
                             onClick={addToBucket}
-                            style={{ marginTop: 31, width:'100%' }}
+                            style={{ marginTop: 31, width: '100%' }}
                             disabled={sessionIDbehalfOfName === ''}
                         >
-                            {isAdding ? (
-                                <div>
-                                    Adding <FaSpinner className="spin" />
-                                </div>
-                            ) : (
-                                <IoMdAddCircleOutline size="30" />
-                            )}
+                            <IoMdAddCircleOutline size="30" />
                         </button>
                     </div>
                 </div>
@@ -425,7 +414,9 @@ function ConstraintsConsecutiveSessions() {
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
                 <ConstraintConsecutiveSessionsTable
-                    consecutiveSessionsList={consecutiveSessionsList}
+                    consecutiveSessionsConstraintsList={
+                        consecutiveSessionsConstraintsList
+                    }
                     refreshComponent={refreshComponent}
                     sessions={sessions}
                 />
