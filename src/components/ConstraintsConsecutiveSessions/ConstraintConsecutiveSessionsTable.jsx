@@ -48,8 +48,8 @@ function ConstraintConsecutiveSessionsTable(props) {
 		{ name: 'Year', selector: 'year', sortable: true },
 		{ name: 'Semester', selector: 'semester', sortable: true },
 		{ name: 'Subject', selector: 'subject.subjectCode', sortable: true },
-        { name: 'Session 1', selector: 'consecutivesessions[0].asstring', sortable: true, grow: 5 },
-		{ name: 'Session 2', selector: 'consecutivesessions[1].asstring', sortable: true, grow: 5 },   
+        { name: 'Session 1', selector: 'consecutivesessions[0].asString', sortable: true, grow: 4, cell: row => <div>{row.consecutivesessions[0].asString}</div> },
+		{ name: 'Session 2', selector: 'consecutivesessions[1].asString', sortable: true, grow: 4, cell: row => <div>{row.consecutivesessions[1].asString}</div> },   
         {
 			name: 'Action',
 			cell: (row) => (
@@ -75,7 +75,6 @@ function ConstraintConsecutiveSessionsTable(props) {
 			data={props.consecutiveSessionsConstraintsList}
 			columns={columns}
 			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
-			dense
 			pagination
 			highlightOnHover
 		/>

@@ -47,8 +47,8 @@ function ConstraintsUnOverlapSessionsTable(props) {
 		{ name: 'ID', selector: '_id', omit: true },
 		{ name: 'Year', selector: 'year', sortable: true },
 		{ name: 'Semester', selector: 'semester', sortable: true },
-        { name: 'Session 1', selector: 'unoverlapsessions[0].asstring', sortable: true, grow: 5 },
-		{ name: 'Session 2', selector: 'unoverlapsessions[1].asstring', sortable: true, grow: 5 },   
+        { name: 'Session 1', selector: 'unoverlapsessions[0].asString', sortable: true, grow: 5, cell: row => <div>{row.unoverlapsessions[0].asString}</div> },
+		{ name: 'Session 2', selector: 'unoverlapsessions[1].asString', sortable: true, grow: 5, cell: row => <div>{row.unoverlapsessions[1].asString}</div> },   
         {
 			name: 'Action',
 			cell: (row) => (
@@ -74,7 +74,6 @@ function ConstraintsUnOverlapSessionsTable(props) {
 			data={props.unoverlapSessionsConstraintsList}
 			columns={columns}
 			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
-			dense
 			pagination
 			highlightOnHover
 		/>

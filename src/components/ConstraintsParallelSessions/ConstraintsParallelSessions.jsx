@@ -53,7 +53,7 @@ function ConstraintsParallelSessions() {
         const sessionName = document.querySelector('#autoCompleteInput').value;
 
         const session = sessions.find(
-            (session) => session.asstring === sessionName.trim()
+            (session) => session.asString === sessionName.trim()
         );
 
         setSessionIDBehalfOfName(session ? session._id : '');
@@ -106,18 +106,18 @@ function ConstraintsParallelSessions() {
 
         await axios
             .get(
-                `http://localhost:8000/api/v1/tempsessions/${sessionIDbehalfOfName}`
+                `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
             )
             .then((res) => {
                 if (
                     !sessionBucket.find(
                         (session) =>
-                            session._id === res.data.data.tempSession._id
+                            session._id === res.data.data.session._id
                     )
                 )
                     setSessionBucket([
                         ...sessionBucket,
-                        res.data.data.tempSession,
+                        res.data.data.session,
                     ]);
             })
             .catch((err) => console.log(err));
@@ -133,7 +133,7 @@ function ConstraintsParallelSessions() {
             axios
                 .all(
                     [
-                        axios.get('http://localhost:8000/api/v1/tempsessions'),
+                        axios.get('http://localhost:8000/api/v1/session'),
                         axios.get('http://localhost:8000/api/v1/subjects'),
                         axios.get(
                             'http://localhost:8000/api/v1/constraintsparallelsessions'
@@ -159,13 +159,13 @@ function ConstraintsParallelSessions() {
                     setSubjectIDBehalfOfName(subjectIdTemp._id);
                     setSubject(subjectIdTemp.subjectCode);
 
-                    setSessions(res[0].data.data.tempSessions);
+                    setSessions(res[0].data.data.sessions);
 
-                    sessionIdTemp = res[0].data.data.tempSessions.find(
+                    sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
-                            year == item.grouporsubgroupid.substring(1, 2) &&
+                            year == item.studentGroup.substring(1, 2) &&
                             semester ==
-                                item.grouporsubgroupid.substring(4, 5) &&
+                                item.studentGroup.substring(4, 5) &&
                             subject == item.subjectcode
                     );
 
@@ -238,7 +238,7 @@ function ConstraintsParallelSessions() {
                             placeholder={'Enter a Session'}
                             trigger=""
                             options={sessions.map(
-                                (session) => session.asstring
+                                (session) => session.asString
                             )}
                             onChange={onSessionChange}
                             style={{
@@ -286,7 +286,7 @@ function ConstraintsParallelSessions() {
                                 >
                                     <div className="mr-auto p-2 bd-highlight">
                                         <h6 style={{ display: 'inline' }}>
-                                            {session.asstring}
+                                            {session.asString}
                                         </h6>
                                     </div>
                                     <div className="p-2 bd-highlight">

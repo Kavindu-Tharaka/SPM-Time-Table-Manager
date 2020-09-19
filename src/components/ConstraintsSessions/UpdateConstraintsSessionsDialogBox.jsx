@@ -10,14 +10,14 @@ import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
 
 function UpdateConstraintsSessionsDialogBox(props) {
-    let asString;
+    let asStringg;
 
     const [sessions, setSessions] = useState(props.sessions);
 
     const [currentSessionName, setCurrentsessionName] = useState(props.session);
 
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState(
-        sessions.find((element) => element.asstring === props.session)._id)
+        sessions.find((element) => element.asString === props.session)._id)
 
 
     const [day, setDay] = useState(props.day);
@@ -29,13 +29,13 @@ function UpdateConstraintsSessionsDialogBox(props) {
 
     const [year, setYear] = useState(
         sessions
-            .find((element) => element.asstring === props.session)
-            .grouporsubgroupid.substring(1, 2)
+            .find((element) => element.asString === props.session)
+            .studentGroup.substring(1, 2)
     );
     const [semester, setSemester] = useState(
         sessions
-            .find((element) => element.asstring === props.session)
-            .grouporsubgroupid.substring(4, 5)
+            .find((element) => element.asString === props.session)
+            .studentGroup.substring(4, 5)
     );
 
 
@@ -155,10 +155,10 @@ function UpdateConstraintsSessionsDialogBox(props) {
             if (!isExist) {
                 await axios
                     .get(
-                        `http://localhost:8000/api/v1/tempsessions/${sessionIDbehalfOfName}`
+                        `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
                     )
                     .then((res) => {
-                        asString = res.data.data.tempSession.asstring;
+                        asStringg = res.data.data.session.asString;
                     })
                     .catch((err) => console.log(err));
 
@@ -172,7 +172,7 @@ function UpdateConstraintsSessionsDialogBox(props) {
                             day: day,
                             from: from,
                             to: to,
-                            sessionasstring: asString,
+                            sessionasstring: asStringg,
                         }
                     )
                     .then(function (response) {
@@ -253,7 +253,7 @@ function UpdateConstraintsSessionsDialogBox(props) {
                         trigger=""
                         options={sessions.map(
                             
-                            (session) => session.asstring
+                            (session) => session.asString
                         )}
 
                         onChange={onSessionChange}

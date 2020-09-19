@@ -14,7 +14,7 @@ import 'react-autocomplete-input/dist/bundle.css';
 
 function ConstraintsSessions() {
     let sessionIdTemp;
-    let asString;
+    let asStringg;
     const [sessions, setSessions] = useState([]);
 
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
@@ -60,7 +60,7 @@ function ConstraintsSessions() {
         const sessionName = document.querySelector('#autoCompleteInput').value;
 
         const session = sessions.find(
-            (session) => session.asstring === sessionName.trim()
+            (session) => session.asString === sessionName.trim()
         );
 
         setSessionIDBehalfOfName(session ? session._id : '');
@@ -153,10 +153,10 @@ function ConstraintsSessions() {
             if (!isExist) {
                 await axios
                     .get(
-                        `http://localhost:8000/api/v1/tempsessions/${sessionIDbehalfOfName}`
+                        `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
                     )
                     .then((res) => {
-                        asString = res.data.data.tempSession.asstring;
+                        asStringg = res.data.data.session.asString;
                     })
                     .catch((err) => console.log(err));
 
@@ -169,7 +169,7 @@ function ConstraintsSessions() {
                         day: day,
                         from: from,
                         to: to,
-                        sessionasstring: asString,
+                        sessionasstring: asStringg,
                     })
                     .then(function (response) {
                         refreshComponent();
@@ -198,7 +198,7 @@ function ConstraintsSessions() {
             axios
                 .all(
                     [
-                        axios.get('http://localhost:8000/api/v1/tempsessions'),
+                        axios.get('http://localhost:8000/api/v1/session'),
                         axios.get(
                             'http://localhost:8000/api/v1/constraintssessions'
                         ),
@@ -208,12 +208,12 @@ function ConstraintsSessions() {
                     }
                 )
                 .then((res) => {
-                    setSessions(res[0].data.data.tempSessions);
+                    setSessions(res[0].data.data.sessions);
 
-                    sessionIdTemp = res[0].data.data.tempSessions.find(
+                    sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
-                            year === item.grouporsubgroupid.substring(1, 2) &&
-                            semester === item.grouporsubgroupid.substring(4, 5)
+                            year === item.studentGroup.substring(1, 2) &&
+                            semester === item.studentGroup.substring(4, 5)
                     );
 
                     setSessionIDBehalfOfName(sessionIdTemp._id);
@@ -286,7 +286,7 @@ function ConstraintsSessions() {
                             matchAny={true}
                             placeholder={'Enter a Session'}
                             trigger=""
-                            options={sessions.map((session) => session.asstring)}
+                            options={sessions.map((session) => session.asString)}
                             onChange={onSessionChange}
                             style={{
                                 height: 35,
