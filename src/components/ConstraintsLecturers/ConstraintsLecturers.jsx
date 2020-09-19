@@ -8,6 +8,8 @@ import { buildToast } from '../../util/toast';
 import { FaSpinner } from 'react-icons/fa';
 import ConstraintsLecturersTable from './ConstraintsLecturersTable';
 import moment from 'moment';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 function ConstraintsLecturers() {
     const [lecturers, setLecturers] = useState([]);
@@ -33,6 +35,8 @@ function ConstraintsLecturers() {
 
     const [constraintsLectureList, setConstraintsLectureList] = useState([]);
 
+    const [value, setValue] = useState('');
+
     const _isBefore = (from, to) => {
         const fromTime = moment(from, 'HH:mm');
         const toTime = moment(to, 'HH:mm');
@@ -44,8 +48,15 @@ function ConstraintsLecturers() {
     };
 
     const onLecturerChange = (e) => {
-        setLecturerIDBehalfOfName(e.target.value);
         setErrorMsg('');
+
+        const lecturerName = document.querySelector('#autoCompleteInput').value;
+
+        const lecturer = lecturers.find(
+            (lecturer) => lecturer.name === lecturerName.trim()
+        );
+
+        setLecturerIDBehalfOfName(lecturer ? lecturer._id : '');
     };
 
     const onDayChange = (e) => {
@@ -137,7 +148,6 @@ function ConstraintsLecturers() {
         const source = CancelToken.source();
 
         const loadData = () => {
-
             axios
                 .all(
                     [
@@ -190,8 +200,8 @@ function ConstraintsLecturers() {
             >
                 <div className="form-row">
                     <div className="form-group col-md-3">
-                        <label>Select Lecturer</label>
-                        <select
+                        <label className='dialog-label'>Lecturer</label>
+                        {/* <select
                             className="custom-select"
                             onChange={onLecturerChange}
                             value={lecturerIDbehalfOfName}
@@ -206,10 +216,39 @@ function ConstraintsLecturers() {
                                     </option>
                                 );
                             })}
-                        </select>
+                        </select> */}
+
+                        {/* <Autocomplete
+                            items={lecturers}
+                            shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
+                            getItemValue={item => item.name}
+                            renderItem={(item, highlighted) =>
+                                <div
+                                key={item._id}
+                                style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
+                                >
+                                {item.name}
+                                </div>
+                            }
+                            value={value}
+                            onChange={e => {setValue(e.target.value); console.log(e.target.value)}}
+                            onSelect={val => setValue(val)}
+                        /> */}
+
+                        <TextInput
+                            id="autoCompleteInput"
+                            Component="input"
+                            maxOptions={10}
+                            matchAny={true}
+                            placeholder={'Enter Lecturer Name'}
+                            trigger=""
+                            options={lecturers.map((lecturer) => lecturer.name)}
+                            onChange={onLecturerChange}
+                            style={{height: 35, width: '100%', paddingLeft: 10}}
+                        />
                     </div>
                     <div className="form-group col-md-2">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
@@ -283,11 +322,13 @@ function ConstraintsLecturers() {
             {lecturers.length === 0 ? (
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
-                <ConstraintsLecturersTable
-                    constraintsLectureList={constraintsLectureList}
-                    refreshComponent={refreshComponent}
-                    lecturers={lecturers}
-                />
+                <div>
+                    <ConstraintsLecturersTable
+                        constraintsLectureList={constraintsLectureList}
+                        refreshComponent={refreshComponent}
+                        lecturers={lecturers}
+                    />
+                </div>
             )}
         </div>
     );

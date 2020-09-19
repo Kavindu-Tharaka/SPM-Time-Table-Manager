@@ -135,7 +135,7 @@ const SessionContent = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        const asString = `${lecturers}/${subject}/${tag}/${studentGroup}`;
+        const asString = `${lecturers} / ${subject} / ${tag} / ${studentGroup}`;
         let errDetected = false;
 
         if (numberOfStudents == '') {

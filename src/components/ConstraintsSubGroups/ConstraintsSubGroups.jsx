@@ -237,7 +237,7 @@ function ConstraintsSubSubGroups() {
                         </select>
                     </div>
                     <div className="form-subgroup col-md-2">
-                        <label>Select SubGroup</label>
+                        <label>Sub-Group</label>
                         <select
                             className="custom-select"
                             onChange={onSubGroupChange}
@@ -259,7 +259,7 @@ function ConstraintsSubSubGroups() {
                         </select>
                     </div>
                     <div className="form-subgroup col-md-2">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}

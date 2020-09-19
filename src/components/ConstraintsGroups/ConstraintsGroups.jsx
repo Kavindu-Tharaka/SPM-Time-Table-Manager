@@ -237,7 +237,7 @@ function ConstraintsGroups() {
                         </select>
                     </div>
                     <div className="form-group col-md-2">
-                        <label>Select Group</label>
+                        <label>Group</label>
                         <select
                             className="custom-select"
                             onChange={onGroupChange}
@@ -261,7 +261,7 @@ function ConstraintsGroups() {
                         </select>
                     </div>
                     <div className="form-group col-md-2">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
