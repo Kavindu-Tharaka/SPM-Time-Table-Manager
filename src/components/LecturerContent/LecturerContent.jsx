@@ -4,7 +4,7 @@ import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import './LecturerContent.css';
 import axios from "axios";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
@@ -14,9 +14,6 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import UpdateLecturerDialogBox from '../UpdateLecturerDialogBox/UpdateLecturerDialogBox';
 
 const LecturerContent = () => {
-   const init = [{buildingName: "Main Building",
-   __v: 0,
-   _id: "5f3d22083c801929a88e15ed"}];
 
     const [name, setName] = useState("");
     const [faculty, setFaculty] = useState("");
@@ -460,7 +457,6 @@ const LecturerContent = () => {
                                     value={department}
                                     onChange={(e) => onDepartmentChange(e)}
                                     name="department"
-                                    className="custom-select"
                                     className={
                                         isDepartmentValid
                                             ? 'form-control'
