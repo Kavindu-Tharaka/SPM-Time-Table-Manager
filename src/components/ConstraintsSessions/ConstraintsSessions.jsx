@@ -8,6 +8,8 @@ import { buildToast } from '../../util/toast';
 import { FaSpinner } from 'react-icons/fa';
 import moment from 'moment';
 import ConstraintsSessionsTable from './ConstraintsSessionsTable';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 function ConstraintsSessions() {
     let sessionIdTemp;
@@ -49,9 +51,18 @@ function ConstraintsSessions() {
     };
 
     const onSessionChange = (e) => {
-        setSessionIDBehalfOfName(e.target.value);
-        console.log(e.target.value);
+        // setSessionIDBehalfOfName(e.target.value);
+        // console.log(e.target.value);
+
         setErrorMsg('');
+
+        const sessionName = document.querySelector('#autoCompleteInput').value;
+
+        const session = sessions.find(
+            (session) => session.asstring === sessionName.trim()
+        );
+
+        setSessionIDBehalfOfName(session ? session._id : '');
     };
 
     const onDayChange = (e) => {
@@ -144,9 +155,11 @@ function ConstraintsSessions() {
                         asString = res.data.data.tempSession.asstring;
                     })
                     .catch((err) => console.log(err));
-                    
+
                 axios
                     .post('http://localhost:8000/api/v1/constraintssessions', {
+                        year: year,
+                        semester: semester,
                         session: sessionIDbehalfOfName,
                         day: day,
                         from: from,
@@ -258,7 +271,7 @@ function ConstraintsSessions() {
                     </div>
 
                     <div className="form-group col-md-8">
-                        <label>Select Session</label>
+                        {/* <label>Session</label>
                         <select
                             className="custom-select"
                             onChange={onSessionChange}
@@ -274,12 +287,29 @@ function ConstraintsSessions() {
                                     </option>
                                 ) : null
                             )}
-                        </select>
+                        </select> */}
+
+                        <label className="dialog-label">Session</label>
+                        <TextInput
+                            id="autoCompleteInput"
+                            Component="input"
+                            maxOptions={10}
+                            matchAny={true}
+                            placeholder={'Enter a Session'}
+                            trigger=""
+                            options={sessions.map((session) => session.asstring)}
+                            onChange={onSessionChange}
+                            style={{
+                                height: 35,
+                                width: '100%',
+                                paddingLeft: 10,
+                            }}
+                        />
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col-md-4">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
@@ -329,7 +359,7 @@ function ConstraintsSessions() {
                         style={{
                             color: 'crimson',
                             fontSize: 13,
-                            marginLeft: '3px'
+                            marginLeft: '3px',
                         }}
                     >
                         {errorMsg}
@@ -359,13 +389,13 @@ function ConstraintsSessions() {
 
             {sessions.length === 0 ? (
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
-            ) : 
-            <ConstraintsSessionsTable
-                constraintsSessionList={constraintsSessionList}
-                refreshComponent={refreshComponent}
-                sessions={sessions}
-            />
-            }
+            ) : (
+                <ConstraintsSessionsTable
+                    constraintsSessionList={constraintsSessionList}
+                    refreshComponent={refreshComponent}
+                    sessions={sessions}
+                />
+            )}
         </div>
     );
 }

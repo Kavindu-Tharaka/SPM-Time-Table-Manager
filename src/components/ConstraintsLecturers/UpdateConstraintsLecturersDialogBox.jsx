@@ -6,6 +6,8 @@ import { FaSpinner } from 'react-icons/fa';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import moment from 'moment';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 const UpdateConstraintsLecturersDialogBox = (props) => {
     const [lecturers, setLecturers] = useState(props.lecturers);
@@ -34,12 +36,16 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
     };
 
     const onLecturerChange = (e) => {
-        setCurrentLecturerName(e.target.value);
+        // setCurrentLecturerName(e.target.value);
         setIsConstraintValid(true);
         
-        setLecturerIDBehalfOfName((lecturers.find(element => element.name === e.target.value))._id);
+        const lecturerName = document.querySelector('#autoCompleteInputLecturer').value;
 
-        console.log(lecturerIDbehalfOfName)
+        const lecturer = lecturers.find(
+            (lecturer) => lecturer.name === lecturerName.trim()
+        );
+
+        setLecturerIDBehalfOfName(lecturer ? lecturer._id : '');
 
     };
 
@@ -142,8 +148,8 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
 
             <div className="form-row">
                 <div className="form-group col-md-12">
-                    <label className="dialog-label">Select Lecturer</label>
-                    <select
+                    <label className="dialog-label">Lecturer</label>
+                    {/* <select
                         className="custom-select"
                         onChange={onLecturerChange}
                         value={currentLecturerName}
@@ -153,7 +159,18 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
                                 {lecturer.name}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+                                            <TextInput
+                            id="autoCompleteInputLecturer"
+                            Component="input"
+                            maxOptions={10}
+                            matchAny={true}
+                            defaultValue={currentLecturerName}
+                            trigger=""
+                            options={lecturers.map((lecturer) => lecturer.name)}
+                            onChange={onLecturerChange}
+                            style={{height: 35, width: '100%', paddingLeft: 10}}
+                        />
                 </div>
             </div>
 
