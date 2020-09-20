@@ -298,7 +298,7 @@ const SessionContent = () => {
             selector: 'duration',
             sortable: true,
             center: true,
-            width:"auto"
+            width:"100px"
         },
         {
             name: 'Action',
