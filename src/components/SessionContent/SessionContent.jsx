@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import ContentHeader from '../ContentHeader/ContentHeader';
 import DataTable from 'react-data-table-component';
 import axios from "axios";
 import Select from "react-dropdown-select";
 import styled from "@emotion/styled";
-import { IoMdClose, IoMdCreate } from 'react-icons/io';
+import { IoMdClose, IoMdCloseCircle } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
 import { store } from 'react-notifications-component';
@@ -166,6 +166,7 @@ const SessionContent = () => {
         }).then((res) => {
             clear();
             setRefresh(true);
+            store.addNotification(buildToast('success', 'Success', 'Session Added Successfully'));
         }).catch((err) => {
             console.log("err is: ", err);
         });
@@ -207,6 +208,54 @@ const SessionContent = () => {
             })
             .catch((e) => console.error(e));
     }
+    //filter fn
+    const FilterComponent = ({ filterText, onFilter, onClear }) => (
+        <div className='row'>
+            {/* <div className="col"> */}
+            <input id="search" type="text" placeholder="Search..." aria-label="Search Input" value={filterText} onChange={onFilter} />
+            {/* </div> */}
+            {/* <div className="col">
+            <button className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={onClear}><IoMdCloseCircle/></button>
+            </div> */}
+        </div>
+    );
+
+    const Table = () => {
+        const [filterText, setFilterText] = useState('');
+        const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+        const filteredItems = filterText == '' ? sessionDetails : sessionDetails.filter(item =>
+            item.lecturers == `${filterText}` || item.duration == `${filterText}` || item.numberOfStudents == `${filterText}` || item.studentGroup == `${filterText}` || item.subject == `${filterText}` || item.tag == `${filterText}`)
+
+        const subHeaderComponentMemo = useMemo(() => {
+            const handleClear = () => {
+                if (filterText) {
+                    setResetPaginationToggle(!resetPaginationToggle);
+                    setFilterText('');
+                }
+            };
+
+            return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+        }, [filterText, resetPaginationToggle]);
+
+        return (
+            <DataTable
+                title="Session Details"
+                columns={columns}
+                data={filteredItems}
+                pagination
+                paginationResetDefaultPage={resetPaginationToggle}
+                subHeader
+                subHeaderComponent={subHeaderComponentMemo}
+                // selectableRows
+                persistTableHead
+                paginationTotalRows={7}
+                paginationPerPage={7}
+                dense
+                responsive={true}
+                fixedHeader={true}
+            />
+        );
+    };
 
     const columns = [
         {
@@ -286,9 +335,9 @@ const SessionContent = () => {
                                         searchable={false}
                                         onChange={(l) => onChangeLecture(l)}
                                         name="lecturers"
-                                        className={isLectureValid ? '' : 'form-control is-invalid'}
+                                        className={isLectureValid ? null : 'form-control is-invalid'}
                                         clearOnSelect={false}
-                                    
+
                                     />
                                     <div className='invalid-feedback'>
                                         Please provide a lecturer name
@@ -394,11 +443,17 @@ const SessionContent = () => {
                     </form>
                 </div>{/*form ends*/}
 
-                <DataTable
+                {/* <DataTable
                     title="Session Details"
                     columns={columns}
                     data={sessionDetails}
-                />
+                    pagination={true}
+                    paginationTotalRows={7}
+                    paginationPerPage={7}
+                    highlightOnHover={true}
+                    responsive={true}
+                /> */}
+                <Table />
             </div>
         </div>
     )
