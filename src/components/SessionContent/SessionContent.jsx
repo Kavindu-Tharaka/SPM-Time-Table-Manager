@@ -267,6 +267,7 @@ const SessionContent = () => {
         {
             name: 'Lecturer',
             selector: 'lecturers',
+            grow:4,
             sortable: true,
         cell: row => row.lecturers.map(name => <div>{`${name},`}</div>)
         },
@@ -285,6 +286,7 @@ const SessionContent = () => {
             name: 'Subject',
             selector: 'subject',
             sortable: true,
+            grow:2,
             cell: row => <div>{row.subject}</div>
         },
         {
@@ -298,12 +300,13 @@ const SessionContent = () => {
             selector: 'duration',
             sortable: true,
             center: true,
-            width:"100px"
+            // width:"100px"
+            grow:1
         },
         {
             name: 'Action',
             selector: 'action',
-            center: true,
+            // center: true,
             width:"65px",
             cell:
                 (row) => (
