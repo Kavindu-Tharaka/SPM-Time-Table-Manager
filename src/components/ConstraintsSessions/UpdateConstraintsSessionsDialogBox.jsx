@@ -6,14 +6,20 @@ import { FaSpinner } from 'react-icons/fa';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import moment from 'moment';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 function UpdateConstraintsSessionsDialogBox(props) {
-    let asString;
+    let asStringg;
+
+    const [sessions, setSessions] = useState(props.sessions);
 
     const [currentSessionName, setCurrentsessionName] = useState(props.session);
+
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState(
-        props.sessions.find((element) => element.asstring === props.session)._id
-    );
+        sessions.find((element) => element.asString === props.session)._id)
+
+
     const [day, setDay] = useState(props.day);
 
     const [from, setFrom] = useState(props.from);
@@ -21,8 +27,17 @@ function UpdateConstraintsSessionsDialogBox(props) {
 
     const [isConstraintValid, setIsConstraintValid] = useState(true);
 
-    const [year, setYear] = useState(props.sessions.find((element) => element.asstring === props.session).grouporsubgroupid.substring(1,2));
-    const [semester, setSemester] = useState(props.sessions.find((element) => element.asstring === props.session).grouporsubgroupid.substring(4,5));
+    const [year, setYear] = useState(
+        sessions
+            .find((element) => element.asString === props.session)
+            .studentGroup.substring(1, 2)
+    );
+    const [semester, setSemester] = useState(
+        sessions
+            .find((element) => element.asString === props.session)
+            .studentGroup.substring(4, 5)
+    );
+
 
     const [isFromValid, setIsFromValid] = useState(true);
     const [fromErrorMsg, setFromErrorMsg] = useState('');
@@ -39,14 +54,24 @@ function UpdateConstraintsSessionsDialogBox(props) {
     };
 
     const onSessionChange = (e) => {
-        setCurrentsessionName(e.target.value);
+        // setCurrentsessionName(e.target.value);
+        // setIsConstraintValid(true);
+
+        // setSessionIDBehalfOfName(
+        //     props.sessions.find((element) => element.asstring === e.target.value)._id
+        // );
+
         setIsConstraintValid(true);
 
-        setSessionIDBehalfOfName(
-            props.sessions.find((element) => element.asstring === e.target.value)._id
+        const sessionName = document.querySelector('#autoCompleteInputSession').value;
+
+        const session = sessions.find(
+            (session) => session.asstring == sessionName.trim()
         );
 
-        // console.log(sessionIDbehalfOfName);
+        setSessionIDBehalfOfName(session ? session._id : '');
+        console.log(session)
+
     };
 
     const onDayChange = (e) => {
@@ -107,11 +132,12 @@ function UpdateConstraintsSessionsDialogBox(props) {
 
             let isExist = false;
 
-            console.log(day)
-            console.log(from)
-            console.log(to)
-            console.log(sessionIDbehalfOfName)
-            console.log(currentSessionName)
+            console.log(day);
+            console.log(from);
+            console.log(to);
+            console.log(sessionIDbehalfOfName);
+            console.log(currentSessionName);
+
 
             props.constraintsSessionList.forEach((element) => {
                 if (
@@ -127,25 +153,26 @@ function UpdateConstraintsSessionsDialogBox(props) {
             });
 
             if (!isExist) {
-
                 await axios
-                .get(
-                    `http://localhost:8000/api/v1/tempsessions/${sessionIDbehalfOfName}`
-                )
-                .then((res) => {
-                    asString = res.data.data.tempSession.asstring;
-                })
-                .catch((err) => console.log(err));
+                    .get(
+                        `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
+                    )
+                    .then((res) => {
+                        asStringg = res.data.data.session.asString;
+                    })
+                    .catch((err) => console.log(err));
 
                 axios
                     .patch(
                         `http://localhost:8000/api/v1/constraintssessions/${props.id}`,
                         {
+                            year: year,
+                            semester: semester,
                             session: sessionIDbehalfOfName,
                             day: day,
                             from: from,
                             to: to,
-                            sessionasstring: asString
+                            sessionasstring: asStringg,
                         }
                     )
                     .then(function (response) {
@@ -214,25 +241,24 @@ function UpdateConstraintsSessionsDialogBox(props) {
             </div>
             <div className="form-row">
                 <div className="form-group col-md-12">
-                    <label className="dialog-label">Select Group</label>
-                    <select
-                        className="custom-select"
-                        onChange={onSessionChange}
-                        value={currentSessionName}
-                    >
-                        {props.sessions.map((item) =>
-                            year === item.grouporsubgroupid.substring(1, 2) &&
-                            semester ===
-                                item.grouporsubgroupid.substring(4, 5) ? (
-                                <option
-                                    key={item._id}
-                                    value={item.asstring}
-                                >
-                                    {item.asstring}
-                                </option>
-                            ) : null
+
+                    <label className="dialog-label">Session</label>
+
+                    <TextInput
+                        id="autoCompleteInputSession"
+                        Component="input"
+                        maxOptions={10}
+                        matchAny={true}
+                        defaultValue={currentSessionName}
+                        trigger=""
+                        options={sessions.map(
+                            
+                            (session) => session.asString
                         )}
-                    </select>
+
+                        onChange={onSessionChange}
+                        style={{ height: 35, width: '100%', paddingLeft: 10 }}
+                    />
                 </div>
             </div>
 
@@ -244,13 +270,14 @@ function UpdateConstraintsSessionsDialogBox(props) {
                         onChange={onDayChange}
                         value={day}
                     >
-                        <option >Monday</option>
-                        <option >Tuesday</option>
-                        <option >Wednesday</option>
-                        <option >Thursday</option>
-                        <option >Friday</option>
-                        <option >Saturday</option>
-                        <option >Sunday</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                        <option>Sunday</option>
+
                     </select>
                 </div>
                 <div className="form-group col-md-4">
