@@ -268,7 +268,7 @@ const SessionContent = () => {
             name: 'Lecturer',
             selector: 'lecturers',
             sortable: true,
-            cell: row => <div>{row.lecturers}</div>
+        cell: row => row.lecturers.map(name => <div>{`${name},`}</div>)
         },
         {
             name: 'Tag',
@@ -297,16 +297,17 @@ const SessionContent = () => {
             name: 'Duration',
             selector: 'duration',
             sortable: true,
-            center: true
+            center: true,
+            width:"auto"
         },
         {
             name: 'Action',
             selector: 'action',
             center: true,
+            width:"65px",
             cell:
                 (row) => (
                     <div className="d-flex">
-                        {/* <button id="btn-edit" className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt' onClick={() => updateLecturer(row)}><IoMdCreate /></button>{""} */}
                         <button id="btn-remove" className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt' onClick={() => onDeleteClick(row._id, row.name)}><IoMdClose /></button>
                     </div>
                 )
