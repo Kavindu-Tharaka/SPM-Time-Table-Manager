@@ -48,6 +48,7 @@ const SessionContent = () => {
     const [isLectureValid, setIsLectureValid] = useState(true);
 
     useEffect(() => {
+        // setNames([]);
         fetchData();
     }, [refresh]);
 
@@ -100,7 +101,7 @@ const SessionContent = () => {
         }
     }
     const onChangeLecture = (list) => {
-        list.map(d => setLectures([...lecturers, d.name]))
+        list.map(d => setLectures([...lecturers, d.name])) //...lecturers,
         setNames(list);
     }
     const onTagChange = (e) => {
@@ -174,6 +175,7 @@ const SessionContent = () => {
     }
 
     const clear = () => {
+        setLectures([]);
         setNames([]);
         setTag('Lecture');
         setStudentGrp('Y1.S1.IT.01');
@@ -300,13 +302,12 @@ const SessionContent = () => {
             selector: 'duration',
             sortable: true,
             center: true,
-            // width:"100px"
             grow:1
         },
         {
             name: 'Action',
             selector: 'action',
-            // center: true,
+            center: true,
             width:"65px",
             cell:
                 (row) => (
@@ -332,7 +333,7 @@ const SessionContent = () => {
 
                                     <StyledSelect
                                         multi={true}
-                                        values={names}// values={lecturers}
+                                        values={names}// values={lecturers}  names
                                         labelField="name"
                                         valueField="name"
                                         options={lecturersArr}
