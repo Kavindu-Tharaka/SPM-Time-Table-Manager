@@ -129,14 +129,10 @@ function ConstraintsConsecutiveSessions() {
             .then((res) => {
                 if (
                     !sessionBucket.find(
-                        (session) =>
-                            session._id === res.data.data.session._id
+                        (session) => session._id === res.data.data.session._id
                     )
                 )
-                    setSessionBucket([
-                        ...sessionBucket,
-                        res.data.data.session,
-                    ]);
+                    setSessionBucket([...sessionBucket, res.data.data.session]);
             })
             .catch((err) => console.log(err));
     };
@@ -182,8 +178,7 @@ function ConstraintsConsecutiveSessions() {
                     sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
                             year == item.studentGroup.substring(1, 2) &&
-                            semester ==
-                                item.studentGroup.substring(4, 5) &&
+                            semester == item.studentGroup.substring(4, 5) &&
                             subject == item.subjectcode
                     );
 
@@ -223,8 +218,7 @@ function ConstraintsConsecutiveSessions() {
                     sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
                             year == item.studentGroup.substring(1, 2) &&
-                            semester ==
-                                item.studentGroup.substring(4, 5) &&
+                            semester == item.studentGroup.substring(4, 5) &&
                             subject == item.subjectCode
                     );
 
@@ -306,7 +300,7 @@ function ConstraintsConsecutiveSessions() {
                     </div>
                 </div>
                 <div className="form-row">
-                    <div className="form-group col-md-10">
+                    <div className="form-group col-md-11">
                         <label className="dialog-label">Session</label>
 
                         <TextInput
@@ -327,14 +321,24 @@ function ConstraintsConsecutiveSessions() {
                             }}
                         />
                     </div>
-                    <div className="form-group col-md-2">
-                        <button
+                    <div className="form-group col-md-1">
+                        {/* <button
                             className="btn btn-primary"
                             onClick={addToBucket}
                             style={{ marginTop: 31, width: '100%' }}
                             disabled={sessionIDbehalfOfName === ''}
                         >
                             <IoMdAddCircleOutline size="30" />
+                        </button> */}
+
+                        <button
+                            style={{ marginTop: 32, marginRight: 20}}
+                            className="temp-add-btn bc-sm-ctrl-btn-upt"
+                            onClick={addToBucket}
+                            disabled={sessionIDbehalfOfName === ''}
+
+                        >
+                            <IoMdAdd />
                         </button>
                     </div>
                 </div>
