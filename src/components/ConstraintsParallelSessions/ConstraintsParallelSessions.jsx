@@ -11,7 +11,7 @@ import { IoMdAdd, IoMdAddCircleOutline } from 'react-icons/io';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
-import ConstraintsParallelSessionsTable from './ConstraintsParallelSessionsTable'
+import ConstraintsParallelSessionsTable from './ConstraintsParallelSessionsTable';
 
 function ConstraintsParallelSessions() {
     let sessionIdTemp;
@@ -111,14 +111,10 @@ function ConstraintsParallelSessions() {
             .then((res) => {
                 if (
                     !sessionBucket.find(
-                        (session) =>
-                            session._id === res.data.data.session._id
+                        (session) => session._id === res.data.data.session._id
                     )
                 )
-                    setSessionBucket([
-                        ...sessionBucket,
-                        res.data.data.session,
-                    ]);
+                    setSessionBucket([...sessionBucket, res.data.data.session]);
             })
             .catch((err) => console.log(err));
     };
@@ -164,8 +160,7 @@ function ConstraintsParallelSessions() {
                     sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
                             year == item.studentGroup.substring(1, 2) &&
-                            semester ==
-                                item.studentGroup.substring(4, 5) &&
+                            semester == item.studentGroup.substring(4, 5) &&
                             subject == item.subjectcode
                     );
 
@@ -250,12 +245,12 @@ function ConstraintsParallelSessions() {
                     </div>
                     <div className="form-group col-md-1">
                         <button
-                            className="btn btn-primary"
+                            style={{ marginTop: 32, marginRight: 20 }}
+                            className="temp-add-btn bc-sm-ctrl-btn-upt"
                             onClick={addToBucket}
-                            style={{ marginTop: 31, width: '100%' }}
                             disabled={sessionIDbehalfOfName === ''}
                         >
-                            <IoMdAddCircleOutline size="30" />
+                            <IoMdAdd />
                         </button>
                     </div>
                 </div>
@@ -335,8 +330,8 @@ function ConstraintsParallelSessions() {
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
                 <ConstraintsParallelSessionsTable
-                parallelSessionsConstraintsList={
-                    parallelSessionsConstraintsList
+                    parallelSessionsConstraintsList={
+                        parallelSessionsConstraintsList
                     }
                     refreshComponent={refreshComponent}
                     sessions={sessions}

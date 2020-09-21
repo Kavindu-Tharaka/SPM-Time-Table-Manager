@@ -11,7 +11,7 @@ import { IoMdAdd, IoMdAddCircleOutline } from 'react-icons/io';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
-import ConstraintsUnOverlapSessionsTable from './ConstraintsUnOverlapSessionsTable'
+import ConstraintsUnOverlapSessionsTable from './ConstraintsUnOverlapSessionsTable';
 
 function ConstraintsUnOverlapSessions() {
     let sessionIdTemp;
@@ -111,14 +111,10 @@ function ConstraintsUnOverlapSessions() {
             .then((res) => {
                 if (
                     !sessionBucket.find(
-                        (session) =>
-                            session._id === res.data.data.session._id
+                        (session) => session._id === res.data.data.session._id
                     )
                 )
-                    setSessionBucket([
-                        ...sessionBucket,
-                        res.data.data.session,
-                    ]);
+                    setSessionBucket([...sessionBucket, res.data.data.session]);
             })
             .catch((err) => console.log(err));
     };
@@ -250,12 +246,12 @@ function ConstraintsUnOverlapSessions() {
                     </div>
                     <div className="form-group col-md-1">
                         <button
-                            className="btn btn-primary"
+                            style={{ marginTop: 32, marginRight: 20 }}
+                            className="temp-add-btn bc-sm-ctrl-btn-upt"
                             onClick={addToBucket}
-                            style={{ marginTop: 31, width: '100%' }}
                             disabled={sessionIDbehalfOfName === ''}
                         >
-                            <IoMdAddCircleOutline size="30" />
+                            <IoMdAdd />
                         </button>
                     </div>
                 </div>
@@ -335,8 +331,8 @@ function ConstraintsUnOverlapSessions() {
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
                 <ConstraintsUnOverlapSessionsTable
-                unoverlapSessionsConstraintsList={
-                    unoverlapSessionsConstraintsList
+                    unoverlapSessionsConstraintsList={
+                        unoverlapSessionsConstraintsList
                     }
                     refreshComponent={refreshComponent}
                     sessions={sessions}

@@ -55,7 +55,7 @@ function ConstraintConsecutiveSessionsTable(props) {
 			cell: (row) => (
 				<div>
 					<button
-						style={{marginRight:25}}
+						style={{marginRight:30, marginTop:7}}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
 							onDeleteClick(row._id);
