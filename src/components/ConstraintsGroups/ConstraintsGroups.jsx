@@ -122,7 +122,6 @@ function ConstraintsGroups() {
                         'The Constraint You Entered is Already Exists!'
                     );
                     isExist = true;
-                    // setTagName('');
                     setIsAdding(false);
                 }
             });
@@ -145,7 +144,12 @@ function ConstraintsGroups() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsGroupList);
+                        setYear('1')
+                        setSemester('1')
+                        setDay('Monday')
+                        setFrom('')
+                        setTo('')
+                        
                     })
                     .catch(function (error) {
                         console.log(error);

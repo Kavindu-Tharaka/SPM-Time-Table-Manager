@@ -19,6 +19,7 @@ function ConstraintsSessions() {
 
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
     const [day, setDay] = useState('Monday');
+    const [currentSession, setCurrentSession] = useState('');
 
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
@@ -52,8 +53,8 @@ function ConstraintsSessions() {
     };
 
     const onSessionChange = (e) => {
-        // setSessionIDBehalfOfName(e.target.value);
-        // console.log(e.target.value);
+
+        setCurrentSession(document.querySelector('#autoCompleteInput').value);
 
         setErrorMsg('');
 
@@ -123,12 +124,7 @@ function ConstraintsSessions() {
             setIsToValid(false);
             setToErrorMsg('To-time should be after to From-time!');
         }
-        // else if (!_isBefore(from, to)) {
-        //     setIsFromValid(false);
-        //     setFromErrorMsg('From-time should be before to To-time!');
-        //     setIsToValid(false);
-        //     setToErrorMsg('To-time should be after to From-time!');
-        // }
+
         else {
             setIsAdding(true);
 
@@ -181,7 +177,14 @@ function ConstraintsSessions() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsSessionList);
+                        
+                        setYear('1')
+                        setSemester('1')
+                        setCurrentSession('')
+                        setDay('Monday')
+                        setFrom('')
+                        setTo('')
+                        
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -250,7 +253,7 @@ function ConstraintsSessions() {
                 }}
             >
                 <div className="form-row">
-                    <div className="form-group col-md-2">
+                    {/* <div className="form-group col-md-2">
                         <label>{'Year'}</label>
                         <select
                             className="custom-select"
@@ -273,9 +276,9 @@ function ConstraintsSessions() {
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
-                    </div>
+                    </div> */}
 
-                    <div className="form-group col-md-8">
+                    <div className="form-group col-md-12">
 
 
                         <label className="dialog-label">Session</label>
@@ -286,6 +289,7 @@ function ConstraintsSessions() {
                             matchAny={true}
                             placeholder={'Enter a Session'}
                             trigger=""
+                            value={currentSession}
                             options={sessions.map((session) => session.asString)}
                             onChange={onSessionChange}
                             style={{
@@ -299,8 +303,6 @@ function ConstraintsSessions() {
                 <div className="form-row">
                     <div className="form-group col-md-4">
                         <label>Day</label>
-
-                        <label>Day of Week</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}

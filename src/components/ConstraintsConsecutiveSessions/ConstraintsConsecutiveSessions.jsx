@@ -34,20 +34,16 @@ function ConstraintsConsecutiveSessions() {
     const [isAdding, setIsAdding] = useState(false);
 
     const [sessionBucket, setSessionBucket] = useState([]);
+    const [currentSession, setCurrentSession] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+    const [isSessionvalid, setIsSessionValid] = useState(true);
 
     const refreshComponent = () => {
         setUpdateComponent(Math.random());
     };
 
     const onSessionChange = async (e) => {
-        // setSessionIDBehalfOfName(e.target.value);
-
-        // await axios
-        //     .get(`http://localhost:8000/api/v1/sessions/${e.target.value}`)
-        //     .then((res) => {
-        //         setSessionAsString(res.data.data.session.asstring);
-        //     })
-        //     .catch((err) => console.log(err));
+        setCurrentSession(document.querySelector('#autoCompleteInput').value);
 
         const sessionName = document.querySelector('#autoCompleteInput').value;
 
@@ -56,6 +52,8 @@ function ConstraintsConsecutiveSessions() {
         );
 
         setSessionIDBehalfOfName(session ? session._id : '');
+        setErrorMsg('')
+        setIsSessionValid(true)
     };
 
     const onSubjectChange = async (e) => {
@@ -83,63 +81,91 @@ function ConstraintsConsecutiveSessions() {
         setSessionBucket((sessionBucket) =>
             sessionBucket.filter((session) => session._id !== id)
         );
+        setErrorMsg('')
+        setIsSessionValid(true)
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            addToBucket();
+        }
     };
 
     const addConstraint = () => {
-        setIsAdding(true);
+        if (sessionBucket.length < 2) {
+            setIsSessionValid(false);
+            setErrorMsg('Consecutive Sessions Should be two or more Sessions!');
+        } 
+        else {
+            setIsAdding(true);
 
-        axios
-            .post(
-                'http://localhost:8000/api/v1/constraintsconsecutivesessions',
-                {
-                    year: year,
-                    semester: semester,
-                    subject: subjectIDbehalfOfName,
-                    consecutivesessions: sessionBucket,
-                }
-            )
-            .then((res) => {
-                console.log(res.data.data.constraintsConsecutiveSession);
-                setSessionBucket([]);
-                refreshComponent();
-                setIsAdding(false);
-                store.addNotification(
-                    buildToast(
-                        'success',
-                        'Success',
-                        'Constraint Added Successfully'
-                    )
-                );
-            })
-            .catch((err) => console.log(err));
+            axios
+                .post(
+                    'http://localhost:8000/api/v1/constraintsconsecutivesessions',
+                    {
+                        // year: year,
+                        // semester: semester,
+                        // subject: subjectIDbehalfOfName,
+                        consecutivesessions: sessionBucket,
+                    }
+                )
+                .then((res) => {
+                    console.log(res.data.data.constraintsConsecutiveSession);
+                    setSessionBucket([]);
+                    refreshComponent();
+                    setIsAdding(false);
+                    store.addNotification(
+                        buildToast(
+                            'success',
+                            'Success',
+                            'Constraint Added Successfully'
+                        )
+                    );
+                    setCurrentSession('');
+                })
+                .catch((err) => console.log(err));
+        }
     };
 
     const addToBucket = async () => {
-        console.log(sessionIDbehalfOfName);
-
-        console.log(year);
-        console.log(semester);
-        console.log(subject + ' : ' + subjectIDbehalfOfName);
-        console.log(sessionIDbehalfOfName);
+        if (currentSession === '') {
+            setIsSessionValid(false);
+            setErrorMsg('Please Select a Session!');
+        }else{
 
         await axios
             .get(
                 `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
             )
             .then((res) => {
-                if (
+                if(res.data.data.session === undefined){
+                    setCurrentSession('')
+                    setErrorMsg('You entered an Invalid Session!')
+                    setIsSessionValid(false)
+                }
+                else if (
+                    sessionBucket.find(
+                        (session) => session._id === res.data.data.session._id
+                    )
+                ){
+                    setCurrentSession('')
+                    setErrorMsg('Session is already added!')
+                    setIsSessionValid(false)
+                }
+                else if (
                     !sessionBucket.find(
                         (session) => session._id === res.data.data.session._id
                     )
-                )
+                ){
                     setSessionBucket([...sessionBucket, res.data.data.session]);
+                setCurrentSession('');}
+                
             })
             .catch((err) => console.log(err));
+        }
     };
 
     useEffect(() => {
-        // console.log('Called UseEffect 1');
-
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
@@ -200,8 +226,6 @@ function ConstraintsConsecutiveSessions() {
     }, [updateComponent, year, semester]);
 
     useEffect(() => {
-        // console.log('Called UseEffect 2');
-
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
@@ -213,16 +237,12 @@ function ConstraintsConsecutiveSessions() {
                 .then((res) => {
                     setSessions(res[0].data.data.sessions);
 
-                    console.log('subject : ' + subject);
-
                     sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
                             year == item.studentGroup.substring(1, 2) &&
                             semester == item.studentGroup.substring(4, 5) &&
                             subject == item.subjectCode
                     );
-
-                    // console.log(sessionIdTemp)
 
                     setSessionIDBehalfOfName(sessionIdTemp._id);
 
@@ -252,7 +272,7 @@ function ConstraintsConsecutiveSessions() {
                     paddingRight: '1%',
                 }}
             >
-                <div className="form-row">
+                {/* <div className="form-row">
                     <div className="form-group col-md-3">
                         <label>{'Year'}</label>
                         <select
@@ -298,45 +318,47 @@ function ConstraintsConsecutiveSessions() {
                             )}
                         </select>
                     </div>
-                </div>
+                </div> */}
                 <div className="form-row">
                     <div className="form-group col-md-11">
                         <label className="dialog-label">Session</label>
-
                         <TextInput
                             id="autoCompleteInput"
                             Component="input"
                             maxOptions={10}
                             matchAny={true}
-                            placeholder={'Enter a Session'}
+                            placeholder={
+                                'Ex:- Jagath Wickramarathne / Internet and Web Technologies / Lecture / Y1.S2.IT.02'
+                            }
                             trigger=""
                             options={sessions.map(
                                 (session) => session.asString
                             )}
                             onChange={onSessionChange}
+                            value={currentSession}
                             style={{
                                 height: 35,
                                 width: '100%',
                                 paddingLeft: 10,
                             }}
+                            onKeyDown={handleKeyDown}
+                            className={
+                                isSessionvalid
+                                    ? 'form-control'
+                                    : 'form-control is-invalid'
+                            }
                         />
+                        {isSessionvalid ? null : (
+                            <div style={{ color: 'crimson', fontSize: 12 }}>
+                                {errorMsg}
+                            </div>
+                        )}
                     </div>
                     <div className="form-group col-md-1">
-                        {/* <button
-                            className="btn btn-primary"
-                            onClick={addToBucket}
-                            style={{ marginTop: 31, width: '100%' }}
-                            disabled={sessionIDbehalfOfName === ''}
-                        >
-                            <IoMdAddCircleOutline size="30" />
-                        </button> */}
-
                         <button
-                            style={{ marginTop: 32, marginRight: 20}}
+                            style={{ marginTop: 32, marginRight: 20 }}
                             className="temp-add-btn bc-sm-ctrl-btn-upt"
                             onClick={addToBucket}
-                            disabled={sessionIDbehalfOfName === ''}
-
                         >
                             <IoMdAdd />
                         </button>
@@ -354,7 +376,9 @@ function ConstraintsConsecutiveSessions() {
                         }}
                         className="form-row"
                     >
-                        {sessionBucket.map((session) => {
+                        {
+                        
+                        sessionBucket.map((session) => {
                             return (
                                 <div
                                     key={session._id}

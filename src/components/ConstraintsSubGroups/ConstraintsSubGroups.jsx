@@ -121,7 +121,6 @@ function ConstraintsSubSubGroups() {
                         'The Constraint You Entered is Already Exists!'
                     );
                     isExist = true;
-                    // setTagName('');
                     setIsAdding(false);
                 }
             });
@@ -144,7 +143,12 @@ function ConstraintsSubSubGroups() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsSubGroupList);
+                        setYear('1')
+                        setSemester('1')
+                        setDay('Monday')
+                        setFrom('')
+                        setTo('')
+                        
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -172,7 +176,6 @@ function ConstraintsSubSubGroups() {
                 )
                 .then((res) => {
                     setSubGroups(res[0].data.data.subgroupids);
-                    console.log(res[0].data.data.subgroupids);
 
 
                     subGroupIdTemp = res[0].data.data.subgroupids.find(
