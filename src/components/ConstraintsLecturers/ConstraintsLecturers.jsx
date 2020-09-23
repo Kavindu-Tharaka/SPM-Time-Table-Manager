@@ -203,12 +203,12 @@ function ConstraintsLecturers() {
             <div
                 style={{
                     marginTop: '3%',
-                    paddingLeft: '10%',
-                    paddingRight: '1%',
+                    paddingLeft: '3%',
+                    paddingRight: '3%',
                 }}
             >
                 <div className="form-row">
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-md-4">
                         <label className='dialog-label'>Lecturer</label>
                         <TextInput
                             id="autoCompleteInput"

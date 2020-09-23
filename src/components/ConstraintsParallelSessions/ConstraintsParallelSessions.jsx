@@ -6,9 +6,8 @@ import PreLoader from '../PreLoader/PreLoader';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import { FaSpinner } from 'react-icons/fa';
-import moment from 'moment';
-import { IoMdAdd, IoMdAddCircleOutline } from 'react-icons/io';
-import { IoMdClose, IoMdCreate } from 'react-icons/io';
+import { IoMdAdd } from 'react-icons/io';
+import { IoMdClose } from 'react-icons/io';
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
 import ConstraintsParallelSessionsTable from './ConstraintsParallelSessionsTable';
@@ -53,8 +52,8 @@ function ConstraintsParallelSessions() {
         );
 
         setSessionIDBehalfOfName(session ? session._id : '');
-        setErrorMsg('')
-        setIsSessionValid(true)
+        setErrorMsg('');
+        setIsSessionValid(true);
     };
 
     const onInputChangeYear = (e) => {
@@ -67,10 +66,10 @@ function ConstraintsParallelSessions() {
         setSessionBucket((sessionBucket) =>
             sessionBucket.filter((session) => session._id !== id)
         );
-        setErrorMsg('')
-        setIsSessionValid(true)
+        setErrorMsg('');
+        setIsSessionValid(true);
     };
-    
+
     const handleKeyDown = (e) => {
         if (e.keyCode === 13) {
             addToBucket();
@@ -81,31 +80,33 @@ function ConstraintsParallelSessions() {
         if (sessionBucket.length < 2) {
             setIsSessionValid(false);
             setErrorMsg('Consecutive Sessions Should be two or more Sessions!');
-        } 
-        else {
-        setIsAdding(true);
+        } else {
+            setIsAdding(true);
 
-        axios
-            .post('http://localhost:8000/api/v1/constraintsparallelsessions', {
-                // year: year,
-                // semester: semester,
-                parallelsessions: sessionBucket,
-            })
-            .then((res) => {
-                console.log(res.data.data.constraintsParallelSession);
-                setSessionBucket([]);
-                refreshComponent();
-                setIsAdding(false);
-                store.addNotification(
-                    buildToast(
-                        'success',
-                        'Success',
-                        'Constraint Added Successfully'
-                    )
-                );
-                setCurrentSession('');
-            })
-            .catch((err) => console.log(err));
+            axios
+                .post(
+                    'http://localhost:8000/api/v1/constraintsparallelsessions',
+                    {
+                        // year: year,
+                        // semester: semester,
+                        parallelsessions: sessionBucket,
+                    }
+                )
+                .then((res) => {
+                    console.log(res.data.data.constraintsParallelSession);
+                    setSessionBucket([]);
+                    refreshComponent();
+                    setIsAdding(false);
+                    store.addNotification(
+                        buildToast(
+                            'success',
+                            'Success',
+                            'Constraint Added Successfully'
+                        )
+                    );
+                    setCurrentSession('');
+                })
+                .catch((err) => console.log(err));
         }
     };
 
@@ -113,34 +114,43 @@ function ConstraintsParallelSessions() {
         if (currentSession === '') {
             setIsSessionValid(false);
             setErrorMsg('Please Select a Session!');
-        }else{
-
-        await axios
-            .get(
-                `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
-            )
-            .then((res) => {
-                if(res.data.data.session === undefined){
-                    setCurrentSession('')
-                    setErrorMsg('You entered an Invalid Session!')
-                    setIsSessionValid(false)
-                }
-                else if (
-                    !sessionBucket.find(
-                        (session) => session._id === res.data.data.session._id
-                    )
-                ){
-                    setSessionBucket([...sessionBucket, res.data.data.session]);
-                setCurrentSession('');}
-                
-            })
-            .catch((err) => console.log(err));
+        } else {
+            await axios
+                .get(
+                    `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
+                )
+                .then((res) => {
+                    if (res.data.data.session === undefined) {
+                        setCurrentSession('');
+                        setErrorMsg('You entered an Invalid Session!');
+                        setIsSessionValid(false);
+                    } else if (
+                        sessionBucket.find(
+                            (session) =>
+                                session._id === res.data.data.session._id
+                        )
+                    ) {
+                        setCurrentSession('');
+                        setErrorMsg('Session is already added!');
+                        setIsSessionValid(false);
+                    } else if (
+                        !sessionBucket.find(
+                            (session) =>
+                                session._id === res.data.data.session._id
+                        )
+                    ) {
+                        setSessionBucket([
+                            ...sessionBucket,
+                            res.data.data.session,
+                        ]);
+                        setCurrentSession('');
+                    }
+                })
+                .catch((err) => console.log(err));
         }
     };
 
     useEffect(() => {
-        // console.log('Called UseEffect 1');
-
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
 
@@ -211,9 +221,7 @@ function ConstraintsParallelSessions() {
                     paddingRight: '1%',
                 }}
             >
-                <div
-                    className="form-row"
-                >
+                <div className="form-row">
                     {/* <div className="form-group col-md-1">
                         <label>{'Year'}</label>
                         <select
@@ -249,7 +257,6 @@ function ConstraintsParallelSessions() {
                             placeholder={
                                 'Ex:- Jagath Wickramarathne / Internet and Web Technologies / Lecture / Y1.S2.IT.02'
                             }
-                            placeholder={'Enter a Session'}
                             trigger=""
                             options={sessions.map(
                                 (session) => session.asString
@@ -268,7 +275,7 @@ function ConstraintsParallelSessions() {
                                     : 'form-control is-invalid'
                             }
                         />
-                                                {isSessionvalid ? null : (
+                        {isSessionvalid ? null : (
                             <div style={{ color: 'crimson', fontSize: 12 }}>
                                 {errorMsg}
                             </div>

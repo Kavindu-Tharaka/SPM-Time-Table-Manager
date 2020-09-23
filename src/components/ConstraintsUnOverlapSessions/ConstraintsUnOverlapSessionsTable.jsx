@@ -43,15 +43,10 @@ function ConstraintsUnOverlapSessionsTable(props) {
 
     
     const columns = [
-        { name: 'ID', selector: '_id', omit: true },
-        { name: 'Year', selector: 'year', omit: true },
-        { name: 'Semester', selector: 'semester', omit: true },
-        {
-            name: 'Subject',
-            selector: 'subject.subjectCode',
-            omit: true
-        },
-        {
+		{ name: 'ID', selector: '_id', omit: true },
+		{ name: 'Year', selector: 'year', omit: true  },
+		{ name: 'Semester', selector: 'semester', omit: true  },
+		{
             name: 'Sessions',
             sortable: true,
             grow: 10,
@@ -62,7 +57,7 @@ function ConstraintsUnOverlapSessionsTable(props) {
                     })}
                 </div>
             ),
-        },
+        }, 
         {
             name: '',
             cell: (row) => (

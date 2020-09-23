@@ -253,7 +253,7 @@ function ConstraintsSessions() {
                 }}
             >
                 <div className="form-row">
-                    <div className="form-group col-md-2">
+                    {/* <div className="form-group col-md-2">
                         <label>{'Year'}</label>
                         <select
                             className="custom-select"
@@ -276,9 +276,9 @@ function ConstraintsSessions() {
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
-                    </div>
+                    </div> */}
 
-                    <div className="form-group col-md-8">
+                    <div className="form-group col-md-12">
 
 
                         <label className="dialog-label">Session</label>

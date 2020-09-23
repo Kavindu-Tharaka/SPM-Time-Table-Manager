@@ -144,6 +144,15 @@ function ConstraintsConsecutiveSessions() {
                     setIsSessionValid(false)
                 }
                 else if (
+                    sessionBucket.find(
+                        (session) => session._id === res.data.data.session._id
+                    )
+                ){
+                    setCurrentSession('')
+                    setErrorMsg('Session is already added!')
+                    setIsSessionValid(false)
+                }
+                else if (
                     !sessionBucket.find(
                         (session) => session._id === res.data.data.session._id
                     )

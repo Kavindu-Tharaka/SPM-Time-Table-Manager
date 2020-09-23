@@ -269,13 +269,13 @@ const LecturerContent = () => {
             name: 'Faculty',
             selector: 'faculty',
             sortable: true,
-            cell: row => <div>{row.faculty}</div>
+            cell: row => <div>{row.faculty}<br/></div>
         },
         {
             name: 'Department',
             selector: 'department',
             sortable: true,
-            cell: row => <div>{row.department}</div>
+            cell: row => <div className="">{row.department}</div>
         },
         {
             name: 'Center',
@@ -509,13 +509,7 @@ const LecturerContent = () => {
                         title="Lecturer Details"
                         columns={columns}
                         data={lecturerDetails}
-                        pagination={true}
-                        paginationTotalRows={7}
-                        paginationPerPage={7}
-                        highlightOnHover={true}
-                        responsive={true}
-                        fixedHeader={true}
-                        allowOverflow={true}
+                        pagination
                         dense
                     />
                 </div>
