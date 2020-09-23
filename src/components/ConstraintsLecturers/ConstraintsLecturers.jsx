@@ -16,6 +16,7 @@ function ConstraintsLecturers() {
 
     const [lecturerIDbehalfOfName, setLecturerIDBehalfOfName] = useState('');
     const [day, setDay] = useState('Monday');
+    const [currentLecturer, setCurrentLecturer] = useState('');
 
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
@@ -48,6 +49,9 @@ function ConstraintsLecturers() {
     };
 
     const onLecturerChange = (e) => {
+
+        setCurrentLecturer(document.querySelector('#autoCompleteInput').value);
+
         setErrorMsg('');
 
         const lecturerName = document.querySelector('#autoCompleteInput').value;
@@ -134,7 +138,12 @@ function ConstraintsLecturers() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsLectureList);
+                        setCurrentLecturer('')
+                        setTo('')
+                        setFrom('')
+                        setDay('Monday')
+
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -201,40 +210,6 @@ function ConstraintsLecturers() {
                 <div className="form-row">
                     <div className="form-group col-md-3">
                         <label className='dialog-label'>Lecturer</label>
-                        {/* <select
-                            className="custom-select"
-                            onChange={onLecturerChange}
-                            value={lecturerIDbehalfOfName}
-                        >
-                            {lecturers.map((lecturer) => {
-                                return (
-                                    <option
-                                        key={lecturer._id}
-                                        value={lecturer._id}
-                                    >
-                                        {lecturer.name}
-                                    </option>
-                                );
-                            })}
-                        </select> */}
-
-                        {/* <Autocomplete
-                            items={lecturers}
-                            shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
-                            getItemValue={item => item.name}
-                            renderItem={(item, highlighted) =>
-                                <div
-                                key={item._id}
-                                style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
-                                >
-                                {item.name}
-                                </div>
-                            }
-                            value={value}
-                            onChange={e => {setValue(e.target.value); console.log(e.target.value)}}
-                            onSelect={val => setValue(val)}
-                        /> */}
-
                         <TextInput
                             id="autoCompleteInput"
                             Component="input"
@@ -242,6 +217,7 @@ function ConstraintsLecturers() {
                             matchAny={true}
                             placeholder={'Enter Lecturer Name'}
                             trigger=""
+                            value={currentLecturer}
                             options={lecturers.map((lecturer) => lecturer.name)}
                             onChange={onLecturerChange}
                             style={{height: 35, width: '100%', paddingLeft: 10}}

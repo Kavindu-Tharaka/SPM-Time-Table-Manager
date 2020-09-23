@@ -35,6 +35,9 @@ function ConstraintsUnOverlapSessions() {
     const [isAdding, setIsAdding] = useState(false);
 
     const [sessionBucket, setSessionBucket] = useState([]);
+    const [currentSession, setCurrentSession] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+    const [isSessionvalid, setIsSessionValid] = useState(true);
 
     const refreshComponent = () => {
         setUpdateComponent(Math.random());
@@ -185,7 +188,7 @@ function ConstraintsUnOverlapSessions() {
     return (
         <div>
             <PreLoader loading={loading} hasSideBar={true} />
-            <ContentHeader header={'UnOverlap Sessions'} />
+            <ContentHeader header={'Un-Overlap Sessions'} />
             <div
                 style={{
                     marginTop: '3%',

@@ -54,13 +54,6 @@ function UpdateConstraintsSessionsDialogBox(props) {
     };
 
     const onSessionChange = (e) => {
-        // setCurrentsessionName(e.target.value);
-        // setIsConstraintValid(true);
-
-        // setSessionIDBehalfOfName(
-        //     props.sessions.find((element) => element.asstring === e.target.value)._id
-        // );
-
         setIsConstraintValid(true);
 
         const sessionName = document.querySelector('#autoCompleteInputSession').value;

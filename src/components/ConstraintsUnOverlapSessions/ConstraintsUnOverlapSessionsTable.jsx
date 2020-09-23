@@ -4,7 +4,6 @@ import axios from 'axios';
 import { IoMdClose, IoMdCreate } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
-// import UpdateSubGroupIDsDialogBox from './UpdateConstraintsLecturersDialogBox';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
@@ -44,33 +43,50 @@ function ConstraintsUnOverlapSessionsTable(props) {
 
     
     const columns = [
-		{ name: 'ID', selector: '_id', omit: true },
-		{ name: 'Year', selector: 'year', sortable: true },
-		{ name: 'Semester', selector: 'semester', sortable: true },
-        { name: 'Session 1', selector: 'unoverlapsessions[0].asString', sortable: true, grow: 5, cell: row => <div>{row.unoverlapsessions[0].asString}</div> },
-		{ name: 'Session 2', selector: 'unoverlapsessions[1].asString', sortable: true, grow: 5, cell: row => <div>{row.unoverlapsessions[1].asString}</div> },   
+        { name: 'ID', selector: '_id', omit: true },
+        { name: 'Year', selector: 'year', omit: true },
+        { name: 'Semester', selector: 'semester', omit: true },
         {
-			name: 'Action',
-			cell: (row) => (
-				<div>
-					<button
-						style={{marginRight:30, marginTop:7}}
-						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
-						onClick={() => {
-							onDeleteClick(row._id);
-						}}
-					>
-						<IoMdClose />
-					</button>
-				</div>
-			),
-			button: true,
-		},
+            name: 'Subject',
+            selector: 'subject.subjectCode',
+            omit: true
+        },
+        {
+            name: 'Sessions',
+            sortable: true,
+            grow: 10,
+            cell: (row) => (
+                <div style={{paddingTop: 10}}>
+                    {[...row.unoverlapsessions].map((session) => {
+                        return <div key={session._id}>{session.asString} <br/> <br/> </div>;
+                    })}
+                </div>
+            ),
+        },
+        {
+            name: '',
+            cell: (row) => (
+                <div>
+                    <button
+                        style={{ marginRight: '50%', marginTop: '50%', }}
+                        className="sm-ctrl-btn sm-ctrl-btn-dlt"
+                        onClick={() => {
+                            onDeleteClick(row._id);
+                        }}
+                    >
+                        <IoMdClose />
+                    </button>
+                </div>
+            ),
+
+            button: true,
+            grow: 1,
+        },
     ];
 
     return (
 		<DataTable
-			title="UnOverlap Sessions"
+			title="Un-Overlap Sessions"
 			data={props.unoverlapSessionsConstraintsList}
 			columns={columns}
 			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
