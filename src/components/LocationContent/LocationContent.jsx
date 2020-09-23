@@ -78,7 +78,7 @@ const LocationContent = (props) => {
 
 	return (
 		<div>
-			<PreLoader loading={loading} hasSideBar={false} />
+			<PreLoader loading={loading} hasSideBar={true} />
 			<ContentHeader header='Buildings' />
 			<div className='single-input-container d-flex'>
 				<div className='col'>
