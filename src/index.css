@@ -91,6 +91,18 @@ select:focus {
 	outline: none;
 }
 
+.temp-add-btn {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+}
+
+.temp-add-btn:focus{
+	border: none;
+	outline: none;
+}
 .md-ctrl-btn {
 	width: 35px;
 	height: 35px;

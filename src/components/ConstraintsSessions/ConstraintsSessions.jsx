@@ -8,14 +8,18 @@ import { buildToast } from '../../util/toast';
 import { FaSpinner } from 'react-icons/fa';
 import moment from 'moment';
 import ConstraintsSessionsTable from './ConstraintsSessionsTable';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
+
 
 function ConstraintsSessions() {
     let sessionIdTemp;
-    let asString;
+    let asStringg;
     const [sessions, setSessions] = useState([]);
 
     const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
     const [day, setDay] = useState('Monday');
+    const [currentSession, setCurrentSession] = useState('');
 
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
@@ -49,8 +53,20 @@ function ConstraintsSessions() {
     };
 
     const onSessionChange = (e) => {
-        setSessionIDBehalfOfName(e.target.value);
-        console.log(e.target.value);
+
+        setCurrentSession(document.querySelector('#autoCompleteInput').value);
+
+        setErrorMsg('');
+
+        const sessionName = document.querySelector('#autoCompleteInput').value;
+
+        const session = sessions.find(
+            (session) => session.asString === sessionName.trim()
+        );
+
+        setSessionIDBehalfOfName(session ? session._id : '');
+
+
         setErrorMsg('');
     };
 
@@ -108,12 +124,7 @@ function ConstraintsSessions() {
             setIsToValid(false);
             setToErrorMsg('To-time should be after to From-time!');
         }
-        // else if (!_isBefore(from, to)) {
-        //     setIsFromValid(false);
-        //     setFromErrorMsg('From-time should be before to To-time!');
-        //     setIsToValid(false);
-        //     setToErrorMsg('To-time should be after to From-time!');
-        // }
+
         else {
             setIsAdding(true);
 
@@ -138,20 +149,23 @@ function ConstraintsSessions() {
             if (!isExist) {
                 await axios
                     .get(
-                        `http://localhost:8000/api/v1/tempsessions/${sessionIDbehalfOfName}`
+                        `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
                     )
                     .then((res) => {
-                        asString = res.data.data.tempSession.asstring;
+                        asStringg = res.data.data.session.asString;
                     })
                     .catch((err) => console.log(err));
-                    
+
+
                 axios
                     .post('http://localhost:8000/api/v1/constraintssessions', {
+                        year: year,
+                        semester: semester,
                         session: sessionIDbehalfOfName,
                         day: day,
                         from: from,
                         to: to,
-                        sessionasstring: asString,
+                        sessionasstring: asStringg,
                     })
                     .then(function (response) {
                         refreshComponent();
@@ -163,7 +177,14 @@ function ConstraintsSessions() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsSessionList);
+                        
+                        setYear('1')
+                        setSemester('1')
+                        setCurrentSession('')
+                        setDay('Monday')
+                        setFrom('')
+                        setTo('')
+                        
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -180,7 +201,7 @@ function ConstraintsSessions() {
             axios
                 .all(
                     [
-                        axios.get('http://localhost:8000/api/v1/tempsessions'),
+                        axios.get('http://localhost:8000/api/v1/session'),
                         axios.get(
                             'http://localhost:8000/api/v1/constraintssessions'
                         ),
@@ -190,12 +211,12 @@ function ConstraintsSessions() {
                     }
                 )
                 .then((res) => {
-                    setSessions(res[0].data.data.tempSessions);
+                    setSessions(res[0].data.data.sessions);
 
-                    sessionIdTemp = res[0].data.data.tempSessions.find(
+                    sessionIdTemp = res[0].data.data.sessions.find(
                         (item) =>
-                            year === item.grouporsubgroupid.substring(1, 2) &&
-                            semester === item.grouporsubgroupid.substring(4, 5)
+                            year === item.studentGroup.substring(1, 2) &&
+                            semester === item.studentGroup.substring(4, 5)
                     );
 
                     setSessionIDBehalfOfName(sessionIdTemp._id);
@@ -232,7 +253,7 @@ function ConstraintsSessions() {
                 }}
             >
                 <div className="form-row">
-                    <div className="form-group col-md-2">
+                    {/* <div className="form-group col-md-2">
                         <label>{'Year'}</label>
                         <select
                             className="custom-select"
@@ -255,31 +276,33 @@ function ConstraintsSessions() {
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
-                    </div>
+                    </div> */}
 
-                    <div className="form-group col-md-8">
-                        <label>Select Session</label>
-                        <select
-                            className="custom-select"
+                    <div className="form-group col-md-12">
+
+
+                        <label className="dialog-label">Session</label>
+                        <TextInput
+                            id="autoCompleteInput"
+                            Component="input"
+                            maxOptions={10}
+                            matchAny={true}
+                            placeholder={'Enter a Session'}
+                            trigger=""
+                            value={currentSession}
+                            options={sessions.map((session) => session.asString)}
                             onChange={onSessionChange}
-                            value={sessionIDbehalfOfName}
-                        >
-                            {sessions.map((item) =>
-                                year ===
-                                    item.grouporsubgroupid.substring(1, 2) &&
-                                semester ===
-                                    item.grouporsubgroupid.substring(4, 5) ? (
-                                    <option key={item._id} value={item._id}>
-                                        {item.asstring}
-                                    </option>
-                                ) : null
-                            )}
-                        </select>
+                            style={{
+                                height: 35,
+                                width: '100%',
+                                paddingLeft: 10,
+                            }}
+                        />
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col-md-4">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
@@ -359,13 +382,14 @@ function ConstraintsSessions() {
 
             {sessions.length === 0 ? (
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
-            ) : 
-            <ConstraintsSessionsTable
-                constraintsSessionList={constraintsSessionList}
-                refreshComponent={refreshComponent}
-                sessions={sessions}
-            />
-            }
+            ) : (
+                <ConstraintsSessionsTable
+                    constraintsSessionList={constraintsSessionList}
+                    refreshComponent={refreshComponent}
+                    sessions={sessions}
+                />
+            )}
+
         </div>
     );
 }

@@ -45,7 +45,6 @@ function UpdateConstraintsGroupsDialogBox(props) {
             props.groups.find((element) => element.groupid === e.target.value)._id
         );
 
-        // console.log(groupIDbehalfOfName);
     };
 
     const onDayChange = (e) => {

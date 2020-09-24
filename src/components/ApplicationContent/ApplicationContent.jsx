@@ -13,6 +13,8 @@ import './applicationContent.css';
 import Tags from '../../containers/Tags/Tags';
 import StudentGroups from '../../containers/StudentGroups/StudentGroups';
 import Constraints from '../../containers/Constraints/Constraints';
+import Session from '../../containers/Sessions/Sessions';
+import GenerateTimeTable from '../../containers/GenerateTimeTable/GenerateTimeTable'
 
 import GenerateTimeTable from '../../containers/GenerateTimeTable/GenerateTimeTable'
 
@@ -82,9 +84,9 @@ const ApplicationContent = (props) => {
                 />
                 <Route
                     path="/sessions"
-                    // component={() => (
-                    //     <WorkingTime setShowSubMenu={setShowSubMenu} />
-                    // )}
+                    component={() => (
+                        <Session setShowSubMenu={setShowSubMenu} />
+                    )}
                 />
                 <Route
                     path="/"

@@ -66,9 +66,10 @@ const ConstraintsSessionsTable = (props) => {
         { name: 'ID', selector: '_id', omit: true },
         {
             name: 'Session',
-            selector: 'session.asstring',
+            // selector: 'session.asString',
+            selector: 'session.asString',
             sortable: true,
-            grow: 5,
+            grow: 7,
         },
         { name: 'Day', selector: 'day', sortable: true },
         { name: 'From', selector: 'from', sortable: true },
@@ -83,7 +84,7 @@ const ConstraintsSessionsTable = (props) => {
                         onClick={() => {
                             onUpdateClick(
                                 row._id,
-                                row.session.asstring,
+                                row.session.asString,
                                 row.day,
                                 row.from,
                                 row.to
@@ -98,7 +99,7 @@ const ConstraintsSessionsTable = (props) => {
                         onClick={() => {
                             onDeleteClick(
                                 row._id,
-                                row.session.asstring,
+                                row.session.asString,
                                 row.day,
                                 row.from,
                                 row.to
