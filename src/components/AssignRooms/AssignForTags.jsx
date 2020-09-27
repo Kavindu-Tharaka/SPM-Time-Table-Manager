@@ -10,23 +10,28 @@ import RoomCard from '../RoomCard/RoomCard';
 const AssignForTags = (props) => {
 	const [buildings, setBuildings] = useState([]);
 	const [tags, setTags] = useState([]);
+	const [rooms, setRooms] = useState([]);
 
-	const [buildingName, setBuildingName] = useState('');
-	const [tagName, setTagName] = useState('');
+	const [selectedBuidlign, setSelectedBuilding] = useState('');
+	const [selectedTag, setSelectedTag] = useState('');
 
 	const [updateComponent, setUpdateComponent] = useState(0);
 
+	const refreshComponent = () => {
+		setUpdateComponent(Math.random());
+	};
+
 	const onBuildingChange = (e) => {
-		setBuildingName(e.target.value);
+		setSelectedBuilding(e.target.value);
 	};
 
 	const onTagChange = (e) => {
-		setTagName(e.target.value);
+		setSelectedTag(e.target.value);
 	};
 
 	const [{ canDrop, isOver }, drop] = useDrop({
 		accept: ItemTypes.RoomCard,
-		drop: () => ({ name: tagName }),
+		drop: () => ({ name: selectedTag }),
 		collect: (monitor) => ({
 			isOver: monitor.isOver(),
 			canDrop: monitor.canDrop(),
@@ -41,7 +46,7 @@ const AssignForTags = (props) => {
 			.then((res) => {
 				setBuildings(res.data.data.buildings);
 				if (res.data.data.buildings.length !== 0) {
-					setBuildingName(res.data.data.buildings[0]._id);
+					setSelectedBuilding(res.data.data.buildings[0]._id);
 				}
 			})
 			.catch((err) => {
@@ -51,11 +56,19 @@ const AssignForTags = (props) => {
 		axios
 			.get('http://localhost:8000/api/v1/tags')
 			.then((res) => {
-                setTags(res.data.data.tags);
-                console.log(res.data.data.tags);
+				setTags(res.data.data.tags);
 				if (res.data.data.tags.length !== 0) {
-					setTagName(res.data.data.tags[0].tagname);
+					setSelectedTag(res.data.data.tags[0]._id);
 				}
+			})
+			.catch((err) => {
+				console.log(err.response);
+			});
+
+		axios
+			.get('http://localhost:8000/api/v1/rooms')
+			.then((res) => {
+				setRooms(res.data.data.rooms);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -86,7 +99,11 @@ const AssignForTags = (props) => {
 				<hr className='mt-0' />
 
 				<div className='left-room-container'>
-					<RoomCard name='B560' />
+					<div className='row row-cols-2 pr-2 pl-2'>
+						{rooms.map((room) => (
+							<RoomCard key={room._id} room={room} refreshComponent={refreshComponent}/>
+						))}
+					</div>
 				</div>
 			</div>
 
@@ -110,8 +127,15 @@ const AssignForTags = (props) => {
 				<p className='mt-3 mb-1'>Tag</p>
 				<hr className='mt-0' />
 
-				<div className='right-drag-container' ref={drop}>
-					{isActive ? 'Release to drop' : 'Drag a box here'}
+				<div
+					className={
+						isActive
+							? 'right-drag-container-active'
+							: 'right-drag-container'
+					}
+					ref={drop}
+				>
+					<p>{isActive ? 'Release to drop' : 'Drag a room here'}</p>
 				</div>
 			</div>
 		</div>

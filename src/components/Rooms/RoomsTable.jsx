@@ -50,7 +50,7 @@ const RoomsTable = (props) => {
 		{ name: 'Building', selector: 'building', omit: true },
 		{
 			name: 'Building',
-			selector: 'buildingObj[0].buildingName',
+			selector: 'building.buildingName',
 			sortable: true,
 		},
 		{ name: 'Room Name', selector: 'roomName', sortable: true },
