@@ -4,9 +4,11 @@ import { ItemTypes } from '../../util/ItemTypes';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import { IoMdClose } from 'react-icons/io';
+import swal from '@sweetalert/with-react';
 import axios from 'axios';
 
 import './roomCardEditable.css';
+import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
 
 const RoomCardEditable = (props) => {
 	const assignedTags = props.room.assignedTags;
@@ -19,6 +21,7 @@ const RoomCardEditable = (props) => {
 				assignedTags: [...tagIds],
 			})
 			.then((res) => {
+				swal.close();
 				store.addNotification(
 					buildToast('danger', 'Success', 'Tag Removed')
 				);
@@ -29,29 +32,17 @@ const RoomCardEditable = (props) => {
 			});
 	};
 
-	const assignRoom = (tag) => {
-		const tags = [...assignedTags];
-		const tagIds = [];
-
-		tags.forEach((t) => {
-			tagIds.push(t._id);
+	const onDeleteClick = (tag) => {
+		swal({
+			buttons: false,
+			content: (
+				<DeleteConfirmationDialogBox
+					deleteEventWithIdHandler={removeTag}
+					itemId={tag._id}
+					itemName={`${tag.tagname}`}
+				/>
+			),
 		});
-
-		tagIds.push(tag);
-
-		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				assignedTags: [...new Set(tagIds)],
-			})
-			.then((res) => {
-				store.addNotification(
-					buildToast('success', 'Success', 'Room Assigned')
-				);
-				props.refreshComponent();
-			})
-			.catch((err) => {
-				console.log(err.response);
-			});
 	};
 
 	return (
@@ -80,7 +71,7 @@ const RoomCardEditable = (props) => {
 							<button
 								className='rce-sm-ctrl-btn sm-ctrl-btn-dlt rce-sm-ctrl-btn-dlt'
 								onClick={() => {
-									removeTag(tag._id);
+									onDeleteClick(tag);
 								}}
 							>
 								<IoMdClose />
