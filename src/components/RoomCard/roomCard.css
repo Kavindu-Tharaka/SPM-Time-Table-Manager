@@ -1,5 +1,15 @@
 .room-card-container {
-    height: 50px;
-    margin: 15px;
-    background: rgb(225, 231, 141);
+    height: 100px;
+    width: 100%;
+    padding: 5px;
+    background: rgb(243, 243, 243);
+    border: solid 1px rgb(209, 209, 209);
+}
+
+.room-card-container p{
+    font-size: 12px;
+}
+
+.room-card-container strong {
+    color: gray;
 }
