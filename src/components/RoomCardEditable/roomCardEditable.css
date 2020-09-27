@@ -1,0 +1,20 @@
+.edit-tag-in-room {
+
+}
+
+.rce-sm-ctrl-btn-dlt {
+    
+}
+
+.rce-sm-ctrl-btn {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: none;
+    outline: none;
+    margin-left: 5px;
+}
+
+.rce-sm-ctrl-btn:focus {
+	outline: none;
+}
