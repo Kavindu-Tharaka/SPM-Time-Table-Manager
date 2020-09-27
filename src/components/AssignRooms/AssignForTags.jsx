@@ -8,6 +8,7 @@ import './assignRooms.css';
 import RoomCard from '../RoomCard/RoomCard';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import PreLoader from '../PreLoader/PreLoader';
+import RoomCardEditable from '../RoomCardEditable/RoomCardEditable';
 
 const AssignForTags = (props) => {
 	const [buildings, setBuildings] = useState([]);
@@ -169,13 +170,17 @@ const AssignForTags = (props) => {
 			<br />
 			<ContentHeader header='Allocated Rooms' />
 			<div className='row row-cols-4 pr-2 pl-2'>
-				{rooms.map((room) => (
-					<RoomCard
-						key={room._id}
-						room={room}
-						refreshComponent={refreshComponent}
-					/>
-				))}
+				{rooms.map((room) => {
+					if (room.assignedTags.length !== 0) {
+						return (
+							<RoomCardEditable
+								key={room._id}
+								room={room}
+								refreshComponent={refreshComponent}
+							/>
+						);
+					}
+				})}
 			</div>
 		</div>
 	);
