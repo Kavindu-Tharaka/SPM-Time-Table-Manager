@@ -12,8 +12,6 @@ const SubNavigationBar = (props) => {
 
     useEffect(() => {
         setSelectedMenu(url.substring(url.lastIndexOf('/') + 1));
-
-        console.log(url.substring(url.lastIndexOf('/') + 1));
     }, [url]);
 
     return (
@@ -27,14 +25,7 @@ const SubNavigationBar = (props) => {
                         return (
                             <Fragment key={link.name}>
                                 <Link to={link.url} key={link.name}>
-                                    <p
-                                        // className={
-                                        //     // selectedMenu === 'lecturers' || 'sessions' || 'groups' || 'sub-groups'
-                                        //     selectedMenu === 'lecturers' || 'sessions' || 'groups' || 'sub-groups'
-                                        //         ? 'snb-nav-content-link-active'
-                                        //         : null
-                                        // }
-                                    >
+                                    <p>
                                         {link.name}
                                     </p>
                                 </Link>
