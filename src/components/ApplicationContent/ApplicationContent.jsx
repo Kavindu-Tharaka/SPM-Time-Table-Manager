@@ -16,7 +16,6 @@ import Constraints from '../../containers/Constraints/Constraints';
 import Session from '../../containers/Sessions/Sessions';
 import GenerateTimeTable from '../../containers/GenerateTimeTable/GenerateTimeTable'
 
-import GenerateTimeTable from '../../containers/GenerateTimeTable/GenerateTimeTable'
 
 const ApplicationContent = (props) => {
     const [showSubMenu, setShowSubMenu] = useState(false);

@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import ContentHeader from "../../ContentHeader/ContentHeader";
-import EmptyDataPlaceholder from '../../EmptyDataPlacehoder/EmptyDataPlaceholder'
+import EmptyDataPlaceholder from "../../EmptyDataPlacehoder/EmptyDataPlaceholder";
+import { data_ } from "../../../containers/dummydata";
 
-import DataTable from 'react-data-table-component'
-function StudentTimeTbale({days}) {
+import DataTable from "react-data-table-component";
+function StudentTimeTbale({ days }) {
+  const [data,setData] = useState()
+  useEffect(() => {
+    setData(data_)
+  },[])
   return (
     <div>
       <ContentHeader header={"Student Time Table"} />
@@ -29,10 +34,12 @@ function StudentTimeTbale({days}) {
           </select>
         </div>
         <div className="col-md-2 mb-3">
-            <input type = 'radio' name ='semester'/>Semester 1 
+          <input type="radio" name="semester" />
+          Semester 1
         </div>
         <div className="col-md-2 mb-3">
-            <input type = 'radio' name ='semester'/>Semester 2 
+          <input type="radio" name="semester" />
+          Semester 2
         </div>
         <div className="col-md-2 mb-3">
           <button className="btn btn-primary" type="submit">
@@ -40,7 +47,11 @@ function StudentTimeTbale({days}) {
           </button>
         </div>
       </div>
-      <DataTable columns = {days} noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}/>
+      <DataTable
+        columns={days}
+        noDataComponent={<EmptyDataPlaceholder message={"No Data Found"} />}
+        data={data}
+      />
     </div>
   );
 }
