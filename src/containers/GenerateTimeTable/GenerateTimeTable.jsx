@@ -43,10 +43,15 @@ function GenerateTimeTable(props) {
       //selector: "monday",
       cell: (row) => (
         <div>
-        
-          <div className=""> {row.monday.lectureName}</div>
-          <div className=""> {row.monday.hall}</div>
-          <div className=""> {row.monday.session}</div>
+          {row.monday === undefined ? (
+            <div>*</div>
+          ) : (
+            <>
+              <div className=""> {row.monday.lecturers[0]}</div>
+              <div className=""> {row.monday.subject}</div>
+              <div className=""> {row.monday.tag}</div>
+            </>
+          )}
         </div>
       ),
     },
@@ -55,10 +60,15 @@ function GenerateTimeTable(props) {
       // selector: "tuesday",
       cell: (row) => (
         <div>
-          
-          <div className=""> {row.tuesday.lectureName}</div>
-          <div className=""> {row.tuesday.hall}</div>
-          <div className=""> {row.tuesday.session}</div>
+          {row.tuesday === undefined ? (
+            <div>*</div>
+          ) : (
+            <>
+              <div className=""> {row.tuesday.lecturers[0]}</div>
+              <div className=""> {row.tuesday.subject}</div>
+              <div className=""> {row.tuesday.tag}</div>
+            </>
+          )}
         </div>
       ),
     },
@@ -67,10 +77,15 @@ function GenerateTimeTable(props) {
       // selector: "wednesday",
       cell: (row) => (
         <div>
-         
-          <div className=""> {row.wednesday.lectureName}</div>
-          <div className=""> {row.wednesday.hall}</div>
-          <div className=""> {row.wednesday.session}</div>
+          {row.wednesday === undefined ? (
+            <div>*</div>
+          ) : (
+            <>
+              <div className=""> {row.wednesday.lecturers[0]}</div>
+              <div className=""> {row.wednesday.subject}</div>
+              <div className=""> {row.wednesday.tag}</div>
+            </>
+          )}
         </div>
       ),
     },
@@ -79,11 +94,16 @@ function GenerateTimeTable(props) {
       // selector: "thursday",
       cell: (row) => (
         <div>
-           
-          <div className=""> {row.thursday.lectureName}</div>
-          <div className=""> {row.thursday.hall}</div>
-          <div className=""> {row.thursday.session}</div>
-        </div>
+        {row.thursday === undefined ? (
+          <div>*</div>
+        ) : (
+          <>
+            <div className=""> {row.thursday.lecturers[0]}</div>
+            <div className=""> {row.thursday.subject}</div>
+            <div className=""> {row.thursday.tag}</div>
+          </>
+        )}
+      </div>
       ),
     },
     {
@@ -91,11 +111,16 @@ function GenerateTimeTable(props) {
       // selector: "friday",
       cell: (row) => (
         <div>
-          
-          <div className=""> {row.friday.lectureName}</div>
-          <div className=""> {row.friday.hall}</div>
-          <div className=""> {row.friday.session}</div>
-        </div>
+        {row.friday === undefined ? (
+          <div>*</div>
+        ) : (
+          <>
+            <div className=""> {row.friday.lecturers[0]}</div>
+            <div className=""> {row.friday.subject}</div>
+            <div className=""> {row.friday.tag}</div>
+          </>
+        )}
+      </div>
       ),
     },
     {
