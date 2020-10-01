@@ -1,3 +1,3 @@
 export const ItemTypes = {
-	RoomCard: 'roomCard',
+	RoomCardTags: 'roomCardTags',
 };

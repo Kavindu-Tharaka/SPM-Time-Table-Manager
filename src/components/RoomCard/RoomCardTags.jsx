@@ -12,6 +12,8 @@ const RoomCard = (props) => {
 	const assignedTags = props.room.assignedTags;
 
 	const assignRoom = (tag) => {
+		props.setAssigning(true);
+
 		const tags = [...assignedTags];
 		const tagIds = [];
 
@@ -29,15 +31,17 @@ const RoomCard = (props) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')
 				);
+				props.setAssigning(false);
 				props.refreshComponent();
 			})
 			.catch((err) => {
+				props.setAssigning(false);
 				console.log(err.response);
 			});
 	};
 
 	const [{ isDragging }, drag] = useDrag({
-		item: { name, type: ItemTypes.RoomCard },
+		item: { name, type: ItemTypes.RoomCardTags },
 		end: (item, monitor) => {
 			const dropResult = monitor.getDropResult();
 			if (item && dropResult) {
