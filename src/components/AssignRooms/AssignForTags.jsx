@@ -5,7 +5,7 @@ import { useDrop } from 'react-dnd';
 import axios from 'axios';
 
 import './assignRooms.css';
-import RoomCard from '../RoomCard/RoomCardTags';
+import RoomCardTags from '../RoomCard/RoomCardTags';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import PreLoader from '../PreLoader/PreLoader';
 import RoomCardEditable from '../RoomCardEditable/RoomCardEditable';
@@ -126,7 +126,7 @@ const AssignForTags = (props) => {
 						) : null}
 						<div className='row row-cols-2 pr-2 pl-2'>
 							{roomsOfSelectedBuilding.map((room) => (
-								<RoomCard
+								<RoomCardTags
 									key={room._id}
 									room={room}
 									refreshComponent={refreshComponent}

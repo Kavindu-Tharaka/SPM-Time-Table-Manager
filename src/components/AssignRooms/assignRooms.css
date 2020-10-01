@@ -14,28 +14,42 @@
 }
 
 .left-room-container {
-    height: 300px;
-    padding-right: 10px;
-    padding-left: 5px;
-    overflow-x: hidden;
+	height: 300px;
+	padding-right: 10px;
+	padding-left: 5px;
+	overflow-x: hidden;
 }
 
 .right-drag-container {
-    display: grid;
-    align-items: center;
-    text-align: center;
+	display: grid;
+	align-items: center;
+	text-align: center;
 	height: 300px;
 	background: rgb(231, 231, 231);
 }
 
 .right-drag-container-active {
-    display: grid;
-    align-items: center;
-    text-align: center;
+	display: grid;
+	align-items: center;
+	text-align: center;
 	height: 300px;
 	background: rgb(196, 196, 196);
 }
 
 .assigned-result-container {
 	width: 100%;
+}
+
+.afs-sm-ctrl-btn-dlt {
+	display: grid;
+	place-items: center;
+}
+
+.cell {
+	width: 100%;
+}
+
+.assign-table-name {
+	width: fit-content;
+	margin: 0;
 }

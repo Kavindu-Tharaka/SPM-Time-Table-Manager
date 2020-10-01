@@ -7,25 +7,25 @@ import axios from 'axios';
 
 import './roomCard.css';
 
-const RoomCardTags = (props) => {
+const RoomCardSubjects = (props) => {
 	const name = props.room.roomName;
-	const assignedTags = props.room.assignedTags;
+	const assignedSubjects = props.room.assignedSubjects;
 
-	const assignRoom = (tag) => {
+	const assignRoom = (subject) => {
 		props.setAssigning(true);
 
-		const tags = [...assignedTags];
-		const tagIds = [];
+		const subjects = [...assignedSubjects];
+		const subjectIds = [];
 
-		tags.forEach((t) => {
-			tagIds.push(t._id);
+		subjects.forEach((t) => {
+			subjectIds.push(t._id);
 		});
 
-		tagIds.push(tag);
+		subjectIds.push(subject);
 
 		axios
 			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				assignedTags: [...new Set(tagIds)],
+				assignedSubjects: [...new Set(subjectIds)],
 			})
 			.then((res) => {
 				store.addNotification(
@@ -41,7 +41,7 @@ const RoomCardTags = (props) => {
 	};
 
 	const [{ isDragging }, drag] = useDrag({
-		item: { name, type: ItemTypes.RoomCardTags },
+		item: { name, type: ItemTypes.RoomCardSubjects },
 		end: (item, monitor) => {
 			const dropResult = monitor.getDropResult();
 			if (item && dropResult) {
@@ -68,16 +68,16 @@ const RoomCardTags = (props) => {
 				</p>
 
 				<div className='d-inline'>
-					{props.room.assignedTags.length === 0 ? (
+					{props.room.assignedSubjects.length === 0 ? (
 						<p>Not Assigned</p>
 					) : null}
 
-					{props.room.assignedTags.map((tag) => (
+					{props.room.assignedSubjects.map((subject) => (
 						<p
 							className='badge badge-pill badge-info mb-0 mr-1'
-							key={tag._id}
+							key={subject._id}
 						>
-							{tag.tagname.charAt(0)}
+							{subject.subjectCode}
 						</p>
 					))}
 				</div>
@@ -86,4 +86,4 @@ const RoomCardTags = (props) => {
 	);
 };
 
-export default RoomCardTags;
+export default RoomCardSubjects;
