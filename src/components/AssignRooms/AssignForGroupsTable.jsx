@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { IoMdClose, IoMdCreate } from 'react-icons/io';
+import { IoMdClose } from 'react-icons/io';
 import swal from '@sweetalert/with-react';
 import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
-import UpdateRoomDialogBox from '../UpdateRoomDialogBox/UpdateRoomDialogBox';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 
-const AssignForSubjectsTable = (props) => {
-	const removeSubject = (roomIdAndSubjectId) => {
-		const roomId = roomIdAndSubjectId.split('_')[0];
-		const subjectId = roomIdAndSubjectId.split('_')[1];
-        const room = props.rooms.find((room) => room._id === roomId);
-        
-		const subjectIds = room.assignedSubjects.filter((subject) => subject._id !== subjectId);
+const AssignForGroupsTable = (props) => {
+	const removeGroup = (roomIdAndGroupId) => {
+		const roomId = roomIdAndGroupId.split('_')[0];
+		const groupId = roomIdAndGroupId.split('_')[1];
+		const room = props.rooms.find((room) => room._id === roomId);
+
+		const groupIds = room.assignedGroups.filter(
+			(group) => group._id !== groupId
+		);
 
 		axios
 			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignedSubjects: [...subjectIds],
+				assignedGroups: [...groupIds],
 			})
-			.then((res) => {
+			.then(() => {
 				swal.close();
 				store.addNotification(
-					buildToast('danger', 'Success', 'Subject Removed')
+					buildToast('danger', 'Success', 'Group Removed')
 				);
 				props.refreshComponent();
 			})
@@ -32,14 +33,14 @@ const AssignForSubjectsTable = (props) => {
 			});
 	};
 
-	const onDeleteClick = (room, subject) => {
+	const onDeleteClick = (room, group) => {
 		swal({
 			buttons: false,
 			content: (
 				<DeleteConfirmationDialogBox
-					deleteEventWithIdHandler={removeSubject}
-					itemId={`${room._id}_${subject._id}`}
-					itemName={`${subject.subjectCode} - ${subject.subjectName}`}
+					deleteEventWithIdHandler={removeGroup}
+					itemId={`${room._id}_${group._id}`}
+					itemName={`${room.roomName} - ${group.subgroupid}`}
 				/>
 			),
 		});
@@ -57,19 +58,19 @@ const AssignForSubjectsTable = (props) => {
 		{ name: 'Capacity', selector: 'capacity', sortable: true },
 		{ name: 'Room Type', selector: 'roomType', sortable: true },
 		{
-			name: 'Allocated Subjects',
+			name: 'Allocated Groups',
 			cell: (row) => (
 				<div className='cell'>
-					{row.assignedSubjects.map((subject) => (
-						<div key={subject._id} className='row'>
+					{row.assignedGroups.map((group) => (
+						<div key={group._id} className='row'>
 							<div className='col-8'>
-								<p>{subject.subjectCode}</p>
+								<p>{group.subgroupid}</p>
 							</div>
 							<div className='col-4'>
 								<button
 									className='sm-ctrl-btn sm-ctrl-btn-dlt afs-sm-ctrl-btn-dlt'
 									onClick={() => {
-										onDeleteClick(row, subject);
+										onDeleteClick(row, group);
 									}}
 								>
 									<IoMdClose />
@@ -93,4 +94,4 @@ const AssignForSubjectsTable = (props) => {
 	);
 };
 
-export default AssignForSubjectsTable;
+export default AssignForGroupsTable;

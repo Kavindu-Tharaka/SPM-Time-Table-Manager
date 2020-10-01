@@ -55,7 +55,6 @@ const AssignForLecturersTable = (props) => {
 			sortable: true,
 		},
 		{ name: 'Room Name', selector: 'roomName', sortable: true },
-		{ name: 'Floor', selector: 'floor', sortable: true },
 		{ name: 'Capacity', selector: 'capacity', sortable: true },
 		{ name: 'Room Type', selector: 'roomType', sortable: true },
 		{

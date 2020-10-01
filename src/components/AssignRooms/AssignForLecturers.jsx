@@ -16,7 +16,7 @@ const AssignForLecturers = () => {
 	const [lecturers, setLecturers] = useState([]);
 	const [rooms, setRooms] = useState([]);
 
-	const [, setSelectedBuilding] = useState('');
+	const [selectedBuilding, setSelectedBuilding] = useState('');
 	const [selectedLecturer, setSelectedLecturer] = useState('');
 
 	const [roomsOfSelectedBuilding, setRoomsOfSelectedBuilding] = useState([]);
