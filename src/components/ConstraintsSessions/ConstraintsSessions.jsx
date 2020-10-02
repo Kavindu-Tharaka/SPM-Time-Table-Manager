@@ -283,7 +283,9 @@ function ConstraintsSessions() {
 							Component='input'
 							maxOptions={10}
 							matchAny={true}
-							placeholder={'Enter a Session'}
+							placeholder={
+								'Ex:- Jagath Wickramarathne / Internet and Web Technologies / Lecture / Y1.S2.IT.02'
+							}
 							trigger=''
 							value={currentSession}
 							options={sessions.map(
