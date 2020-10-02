@@ -49,11 +49,6 @@ const Locations = (props) => {
 			'assign-for-sessions'
 		),
 		new SubNavLink(
-			'Assign for Consecutive',
-			'/locations/assign-for-consecutive',
-			'assign-for-consecutive'
-		),
-		new SubNavLink(
 			'Unavailable Times',
 			'/locations/unavailable-times',
 			'unavailable-times'
