@@ -9,8 +9,7 @@ import { buildToast } from '../../util/toast';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
 function ConstraintsParallelSessionsTable(props) {
-
-    const onDeleteClick = (itemId) => {
+	const onDeleteClick = (itemId) => {
 		swal({
 			buttons: false,
 			content: (
@@ -20,75 +19,80 @@ function ConstraintsParallelSessionsTable(props) {
 				/>
 			),
 		});
-    };
-    
-    const deleteConstraint = (itemId) => {
+	};
+
+	const deleteConstraint = (itemId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/constraintsparallelsessions/${itemId}`)
+			.delete(
+				`https://time-table-manager.herokuapp.com/api/v1/constraintsparallelsessions/${itemId}`
+			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
 				store.addNotification(
-                    buildToast(
-                        'danger',
-                        'Deleted',
-                        'Constraint Deleted Successfully'
-                    )
-                );
+					buildToast(
+						'danger',
+						'Deleted',
+						'Constraint Deleted Successfully'
+					)
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
 			});
-    };
+	};
 
-    
-    const columns = [
+	const columns = [
 		{ name: 'ID', selector: '_id', omit: true },
-		{ name: 'Year', selector: 'year', omit: true  },
-		{ name: 'Semester', selector: 'semester', omit: true  },
+		{ name: 'Year', selector: 'year', omit: true },
+		{ name: 'Semester', selector: 'semester', omit: true },
 		{
-            name: 'Sessions',
-            sortable: true,
-            grow: 10,
-            cell: (row) => (
-                <div style={{paddingTop: 10}}>
-                    {[...row.parallelsessions].map((session) => {
-                        return <div key={session._id}>{session.asString} <br/> <br/> </div>;
-                    })}
-                </div>
-            ),
-        }, 
-        {
-            name: '',
-            cell: (row) => (
-                <div>
-                    <button
-                        style={{ marginRight: '50%', marginTop: '50%', }}
-                        className="sm-ctrl-btn sm-ctrl-btn-dlt"
-                        onClick={() => {
-                            onDeleteClick(row._id);
-                        }}
-                    >
-                        <IoMdClose />
-                    </button>
-                </div>
-            ),
+			name: 'Sessions',
+			sortable: true,
+			grow: 10,
+			cell: (row) => (
+				<div style={{ paddingTop: 10 }}>
+					{[...row.parallelsessions].map((session) => {
+						return (
+							<div key={session._id}>
+								{session.asString} <br /> <br />{' '}
+							</div>
+						);
+					})}
+				</div>
+			),
+		},
+		{
+			name: '',
+			cell: (row) => (
+				<div>
+					<button
+						style={{ marginRight: '50%', marginTop: '50%' }}
+						className='sm-ctrl-btn sm-ctrl-btn-dlt'
+						onClick={() => {
+							onDeleteClick(row._id);
+						}}
+					>
+						<IoMdClose />
+					</button>
+				</div>
+			),
 
-            button: true,
-            grow: 1,
-        },
-    ];
+			button: true,
+			grow: 1,
+		},
+	];
 
-    return (
+	return (
 		<DataTable
-			title="Parallel Sessions"
+			title='Parallel Sessions'
 			data={props.parallelSessionsConstraintsList}
 			columns={columns}
-			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
+			noDataComponent={<EmptyDataPlaceholder message={'No Data Found'} />}
 			pagination
 			highlightOnHover
 		/>
-    )
+	);
 }
 
-export default ConstraintsParallelSessionsTable
+export default ConstraintsParallelSessionsTable;

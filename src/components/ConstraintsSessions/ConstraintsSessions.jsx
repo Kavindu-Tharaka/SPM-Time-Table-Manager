@@ -11,249 +11,247 @@ import ConstraintsSessionsTable from './ConstraintsSessionsTable';
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
 
-
 function ConstraintsSessions() {
-    let sessionIdTemp;
-    let asStringg;
-    const [sessions, setSessions] = useState([]);
+	let sessionIdTemp;
+	let asStringg;
+	const [sessions, setSessions] = useState([]);
 
-    const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
-    const [day, setDay] = useState('Monday');
-    const [currentSession, setCurrentSession] = useState('');
+	const [sessionIDbehalfOfName, setSessionIDBehalfOfName] = useState('');
+	const [day, setDay] = useState('Monday');
+	const [currentSession, setCurrentSession] = useState('');
 
-    const [from, setFrom] = useState('');
-    const [to, setTo] = useState('');
+	const [from, setFrom] = useState('');
+	const [to, setTo] = useState('');
 
-    const [year, setYear] = useState('1');
-    const [semester, setSemester] = useState('1');
+	const [year, setYear] = useState('1');
+	const [semester, setSemester] = useState('1');
 
-    const [updateComponent, setUpdateComponent] = useState(0);
+	const [updateComponent, setUpdateComponent] = useState(0);
 
-    const [isFromValid, setIsFromValid] = useState(true);
-    const [fromErrorMsg, setFromErrorMsg] = useState('');
+	const [isFromValid, setIsFromValid] = useState(true);
+	const [fromErrorMsg, setFromErrorMsg] = useState('');
 
-    const [isToValid, setIsToValid] = useState(true);
-    const [toErrorMsg, setToErrorMsg] = useState('');
+	const [isToValid, setIsToValid] = useState(true);
+	const [toErrorMsg, setToErrorMsg] = useState('');
 
-    const [loading, setLoading] = useState(true);
-    const [isAdding, setIsAdding] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [isAdding, setIsAdding] = useState(false);
 
-    const [errorMsg, setErrorMsg] = useState('');
+	const [errorMsg, setErrorMsg] = useState('');
 
-    const [constraintsSessionList, setConstraintsSessionList] = useState([]);
+	const [constraintsSessionList, setConstraintsSessionList] = useState([]);
 
-    const _isBefore = (from, to) => {
-        const fromTime = moment(from, 'HH:mm');
-        const toTime = moment(to, 'HH:mm');
-        return fromTime.isBefore(toTime);
-    };
+	const _isBefore = (from, to) => {
+		const fromTime = moment(from, 'HH:mm');
+		const toTime = moment(to, 'HH:mm');
+		return fromTime.isBefore(toTime);
+	};
 
-    const refreshComponent = () => {
-        setUpdateComponent(Math.random());
-    };
+	const refreshComponent = () => {
+		setUpdateComponent(Math.random());
+	};
 
-    const onSessionChange = (e) => {
+	const onSessionChange = (e) => {
+		setCurrentSession(document.querySelector('#autoCompleteInput').value);
 
-        setCurrentSession(document.querySelector('#autoCompleteInput').value);
+		setErrorMsg('');
 
-        setErrorMsg('');
+		const sessionName = document.querySelector('#autoCompleteInput').value;
 
-        const sessionName = document.querySelector('#autoCompleteInput').value;
+		const session = sessions.find(
+			(session) => session.asString === sessionName.trim()
+		);
 
-        const session = sessions.find(
-            (session) => session.asString === sessionName.trim()
-        );
+		setSessionIDBehalfOfName(session ? session._id : '');
 
-        setSessionIDBehalfOfName(session ? session._id : '');
+		setErrorMsg('');
+	};
 
+	const onDayChange = (e) => {
+		setDay(e.target.value);
+		setErrorMsg('');
+	};
 
-        setErrorMsg('');
-    };
+	const onFromChange = (e) => {
+		setFrom(e.target.value);
+		setIsToValid(true);
+		setIsFromValid(true);
+		setToErrorMsg('');
+		setFromErrorMsg('');
+		setErrorMsg('');
+	};
 
-    const onDayChange = (e) => {
-        setDay(e.target.value);
-        setErrorMsg('');
-    };
+	const onToChange = (e) => {
+		setTo(e.target.value);
+		setIsFromValid(true);
+		setIsToValid(true);
+		setFromErrorMsg('');
+		setToErrorMsg('');
+		setErrorMsg('');
+	};
 
-    const onFromChange = (e) => {
-        setFrom(e.target.value);
-        setIsToValid(true);
-        setIsFromValid(true);
-        setToErrorMsg('');
-        setFromErrorMsg('');
-        setErrorMsg('');
-    };
+	const onInputChangeYear = (e) => {
+		setYear(e.target.value);
+		setIsFromValid(true);
+		setIsToValid(true);
+		setFromErrorMsg('');
+		setToErrorMsg('');
+		setErrorMsg('');
+	};
+	const onInputChangeSemester = (e) => {
+		setSemester(e.target.value);
+		setIsFromValid(true);
+		setIsToValid(true);
+		setFromErrorMsg('');
+		setToErrorMsg('');
+		setErrorMsg('');
+	};
 
-    const onToChange = (e) => {
-        setTo(e.target.value);
-        setIsFromValid(true);
-        setIsToValid(true);
-        setFromErrorMsg('');
-        setToErrorMsg('');
-        setErrorMsg('');
-    };
+	const onAddClick = async (e) => {
+		if (from === '') {
+			setIsFromValid(false);
+			setFromErrorMsg('Please Enter a starting time!');
+		}
+		if (to === '') {
+			setIsToValid(false);
+			setToErrorMsg('Please Enter a ending time!');
+		} else if (!_isBefore(from, to)) {
+			setIsFromValid(false);
+			setFromErrorMsg('From-time should be before to To-time!');
+			setIsToValid(false);
+			setToErrorMsg('To-time should be after to From-time!');
+		} else {
+			setIsAdding(true);
 
-    const onInputChangeYear = (e) => {
-        setYear(e.target.value);
-        setIsFromValid(true);
-        setIsToValid(true);
-        setFromErrorMsg('');
-        setToErrorMsg('');
-        setErrorMsg('');
-    };
-    const onInputChangeSemester = (e) => {
-        setSemester(e.target.value);
-        setIsFromValid(true);
-        setIsToValid(true);
-        setFromErrorMsg('');
-        setToErrorMsg('');
-        setErrorMsg('');
-    };
+			let isExist = false;
 
-    const onAddClick = async (e) => {
-        if (from === '') {
-            setIsFromValid(false);
-            setFromErrorMsg('Please Enter a starting time!');
-        }
-        if (to === '') {
-            setIsToValid(false);
-            setToErrorMsg('Please Enter a ending time!');
-        } else if (!_isBefore(from, to)) {
-            setIsFromValid(false);
-            setFromErrorMsg('From-time should be before to To-time!');
-            setIsToValid(false);
-            setToErrorMsg('To-time should be after to From-time!');
-        }
+			constraintsSessionList.forEach((element) => {
+				if (
+					element.day === day &&
+					element.from === from &&
+					element.to === to &&
+					element.session._id === sessionIDbehalfOfName
+				) {
+					setErrorMsg(
+						'The Constraint You Entered is Already Exists!'
+					);
+					isExist = true;
+					// setTagName('');
+					setIsAdding(false);
+				}
+			});
 
-        else {
-            setIsAdding(true);
+			if (!isExist) {
+				await axios
+					.get(
+						`https://time-table-manager.herokuapp.com/api/v1/session/${sessionIDbehalfOfName}`
+					)
+					.then((res) => {
+						asStringg = res.data.data.session.asString;
+					})
+					.catch((err) => console.log(err));
 
-            let isExist = false;
+				axios
+					.post(
+						'https://time-table-manager.herokuapp.com/api/v1/constraintssessions',
+						{
+							year: year,
+							semester: semester,
+							session: sessionIDbehalfOfName,
+							day: day,
+							from: from,
+							to: to,
+							sessionasstring: asStringg,
+						}
+					)
+					.then(function (response) {
+						refreshComponent();
+						setIsAdding(false);
+						store.addNotification(
+							buildToast(
+								'success',
+								'Success',
+								'Constraint Added Successfully'
+							)
+						);
 
-            constraintsSessionList.forEach((element) => {
-                if (
-                    element.day === day &&
-                    element.from === from &&
-                    element.to === to &&
-                    element.session._id === sessionIDbehalfOfName
-                ) {
-                    setErrorMsg(
-                        'The Constraint You Entered is Already Exists!'
-                    );
-                    isExist = true;
-                    // setTagName('');
-                    setIsAdding(false);
-                }
-            });
+						setYear('1');
+						setSemester('1');
+						setCurrentSession('');
+						setDay('Monday');
+						setFrom('');
+						setTo('');
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+			}
+		}
+	};
 
-            if (!isExist) {
-                await axios
-                    .get(
-                        `http://localhost:8000/api/v1/session/${sessionIDbehalfOfName}`
-                    )
-                    .then((res) => {
-                        asStringg = res.data.data.session.asString;
-                    })
-                    .catch((err) => console.log(err));
+	useEffect(() => {
+		const CancelToken = axios.CancelToken;
+		const source = CancelToken.source();
 
+		const loadData = () => {
+			axios
+				.all(
+					[
+						axios.get(
+							'https://time-table-manager.herokuapp.com/api/v1/session'
+						),
+						axios.get(
+							'https://time-table-manager.herokuapp.com/api/v1/constraintssessions'
+						),
+					],
+					{
+						cancelToken: source.token,
+					}
+				)
+				.then((res) => {
+					setSessions(res[0].data.data.sessions);
 
-                axios
-                    .post('http://localhost:8000/api/v1/constraintssessions', {
-                        year: year,
-                        semester: semester,
-                        session: sessionIDbehalfOfName,
-                        day: day,
-                        from: from,
-                        to: to,
-                        sessionasstring: asStringg,
-                    })
-                    .then(function (response) {
-                        refreshComponent();
-                        setIsAdding(false);
-                        store.addNotification(
-                            buildToast(
-                                'success',
-                                'Success',
-                                'Constraint Added Successfully'
-                            )
-                        );
-                        
-                        setYear('1')
-                        setSemester('1')
-                        setCurrentSession('')
-                        setDay('Monday')
-                        setFrom('')
-                        setTo('')
-                        
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-        }
-    };
+					sessionIdTemp = res[0].data.data.sessions.find(
+						(item) =>
+							year === item.studentGroup.substring(1, 2) &&
+							semester === item.studentGroup.substring(4, 5)
+					);
 
-    useEffect(() => {
-        const CancelToken = axios.CancelToken;
-        const source = CancelToken.source();
+					setSessionIDBehalfOfName(sessionIdTemp._id);
 
-        const loadData = () => {
-            axios
-                .all(
-                    [
-                        axios.get('http://localhost:8000/api/v1/session'),
-                        axios.get(
-                            'http://localhost:8000/api/v1/constraintssessions'
-                        ),
-                    ],
-                    {
-                        cancelToken: source.token,
-                    }
-                )
-                .then((res) => {
-                    setSessions(res[0].data.data.sessions);
+					setConstraintsSessionList(
+						res[1].data.data.constraintsSessions
+					);
 
-                    sessionIdTemp = res[0].data.data.sessions.find(
-                        (item) =>
-                            year === item.studentGroup.substring(1, 2) &&
-                            semester === item.studentGroup.substring(4, 5)
-                    );
+					setLoading(false);
+				})
+				.catch((err) => {
+					console.log(err);
+					setLoading(false);
+				});
+		};
 
-                    setSessionIDBehalfOfName(sessionIdTemp._id);
+		loadData();
 
-                    setConstraintsSessionList(
-                        res[1].data.data.constraintsSessions
-                    );
+		return () => {
+			source.cancel();
+		};
+	}, [updateComponent, year, semester]);
 
-                    setLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setLoading(false);
-                });
-        };
+	return (
+		<div>
+			<PreLoader loading={loading} hasSideBar={true} />
+			<ContentHeader header='Sessions' />
 
-        loadData();
-
-        return () => {
-            source.cancel();
-        };
-    }, [updateComponent, year, semester]);
-
-    return (
-        <div>
-            <PreLoader loading={loading} hasSideBar={true} />
-            <ContentHeader header="Sessions" />
-
-            <div
-                style={{
-                    marginTop: '3%',
-                    paddingLeft: '3%',
-                    paddingRight: '3%',
-                }}
-            >
-                <div className="form-row">
-                    {/* <div className="form-group col-md-2">
+			<div
+				style={{
+					marginTop: '3%',
+					paddingLeft: '3%',
+					paddingRight: '3%',
+				}}
+			>
+				<div className='form-row'>
+					{/* <div className="form-group col-md-2">
                         <label>{'Year'}</label>
                         <select
                             className="custom-select"
@@ -278,120 +276,119 @@ function ConstraintsSessions() {
                         </select>
                     </div> */}
 
-                    <div className="form-group col-md-12">
+					<div className='form-group col-md-12'>
+						<label className='dialog-label'>Session</label>
+						<TextInput
+							id='autoCompleteInput'
+							Component='input'
+							maxOptions={10}
+							matchAny={true}
+							placeholder={'Enter a Session'}
+							trigger=''
+							value={currentSession}
+							options={sessions.map(
+								(session) => session.asString
+							)}
+							onChange={onSessionChange}
+							style={{
+								height: 35,
+								width: '100%',
+								paddingLeft: 10,
+							}}
+						/>
+					</div>
+				</div>
+				<div className='form-row'>
+					<div className='form-group col-md-4'>
+						<label>Day</label>
+						<select
+							className='custom-select'
+							onChange={onDayChange}
+							value={day}
+						>
+							<option value='Monday'>Monday</option>
+							<option value='Tuesday'>Tuesday</option>
+							<option value='Wednesday'>Wednesday</option>
+							<option value='Thursday'>Thursday</option>
+							<option value='Friday'>Friday</option>
+							<option value='Saturday'>Saturday</option>
+							<option value='Sunday'>Sunday</option>
+						</select>
+					</div>
+					<div className='form-group col-md-4'>
+						<label>From</label>
+						<input
+							type='time'
+							className={
+								isFromValid
+									? 'form-control'
+									: 'form-control is-invalid'
+							}
+							onChange={onFromChange}
+							value={from}
+						/>
+						<div className='invalid-feedback'>{fromErrorMsg}</div>
+					</div>
+					<div className='form-group col-md-4'>
+						<label>To</label>
+						<input
+							type='time'
+							className={
+								isToValid
+									? 'form-control'
+									: 'form-control is-invalid'
+							}
+							onChange={onToChange}
+							value={to}
+						/>
+						<div className='invalid-feedback'>{toErrorMsg}</div>
+					</div>
+				</div>
+				{errorMsg ? (
+					<div
+						className='form-row'
+						style={{
+							color: 'crimson',
+							fontSize: 13,
+							marginLeft: '3px',
+						}}
+					>
+						{errorMsg}
+					</div>
+				) : null}
+				<div className='form-row'>
+					<div className='form-group col-md-12'>
+						<span className='float-right'>
+							{' '}
+							<button
+								className='btn btn-primary'
+								onClick={onAddClick}
+							>
+								{isAdding ? (
+									<div>
+										Adding <FaSpinner className='spin' />
+									</div>
+								) : (
+									'Add'
+								)}
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<br />
 
-
-                        <label className="dialog-label">Session</label>
-                        <TextInput
-                            id="autoCompleteInput"
-                            Component="input"
-                            maxOptions={10}
-                            matchAny={true}
-                            placeholder={'Enter a Session'}
-                            trigger=""
-                            value={currentSession}
-                            options={sessions.map((session) => session.asString)}
-                            onChange={onSessionChange}
-                            style={{
-                                height: 35,
-                                width: '100%',
-                                paddingLeft: 10,
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="form-row">
-                    <div className="form-group col-md-4">
-                        <label>Day</label>
-                        <select
-                            className="custom-select"
-                            onChange={onDayChange}
-                            value={day}
-                        >
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-md-4">
-                        <label>From</label>
-                        <input
-                            type="time"
-                            className={
-                                isFromValid
-                                    ? 'form-control'
-                                    : 'form-control is-invalid'
-                            }
-                            onChange={onFromChange}
-                            value={from}
-                        />
-                        <div className="invalid-feedback">{fromErrorMsg}</div>
-                    </div>
-                    <div className="form-group col-md-4">
-                        <label>To</label>
-                        <input
-                            type="time"
-                            className={
-                                isToValid
-                                    ? 'form-control'
-                                    : 'form-control is-invalid'
-                            }
-                            onChange={onToChange}
-                            value={to}
-                        />
-                        <div className="invalid-feedback">{toErrorMsg}</div>
-                    </div>
-                </div>
-                {errorMsg ? (
-                    <div
-                        className="form-row"
-                        style={{
-                            color: 'crimson',
-                            fontSize: 13,
-                            marginLeft: '3px'
-                        }}
-                    >
-                        {errorMsg}
-                    </div>
-                ) : null}
-                <div className="form-row">
-                    <div className="form-group col-md-12">
-                        <span className="float-right">
-                            {' '}
-                            <button
-                                className="btn btn-primary"
-                                onClick={onAddClick}
-                            >
-                                {isAdding ? (
-                                    <div>
-                                        Adding <FaSpinner className="spin" />
-                                    </div>
-                                ) : (
-                                    'Add'
-                                )}
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <br />
-
-            {sessions.length === 0 ? (
-                <EmptyDataPlaceholder message="Constraint list is currently empty" />
-            ) : (
-                <ConstraintsSessionsTable
-                    constraintsSessionList={constraintsSessionList}
-                    refreshComponent={refreshComponent}
-                    sessions={sessions}
-                />
-            )}
-
-        </div>
-    );
+			{sessions.length === 0 ? (
+				<EmptyDataPlaceholder message='Constraint list is currently empty' />
+			) : (
+				<ConstraintsSessionsTable
+					constraintsSessionList={constraintsSessionList}
+					refreshComponent={refreshComponent}
+					sessions={sessions}
+				/>
+			)}
+		</div>
+	);
 }
 
 export default ConstraintsSessions;

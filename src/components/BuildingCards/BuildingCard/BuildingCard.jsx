@@ -13,12 +13,18 @@ const BuildingCard = (props) => {
 	const deleteBuilding = () => {
 		axios
 			.delete(
-				`http://localhost:8000/api/v1/buildings/${props.building._id}`
+				`https://time-table-manager.herokuapp.com/api/v1/buildings/${props.building._id}`
 			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
-				store.addNotification(buildToast('danger', 'Deleted', 'Building Deleted Successfully'));
+				store.addNotification(
+					buildToast(
+						'danger',
+						'Deleted',
+						'Building Deleted Successfully'
+					)
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);

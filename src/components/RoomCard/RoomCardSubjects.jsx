@@ -7,40 +7,44 @@ import axios from 'axios';
 
 import './roomCard.css';
 
-const RoomCard = (props) => {
+const RoomCardSubjects = (props) => {
 	const name = props.room.roomName;
-	const assignedTags = props.room.assignedTags;
+	const assignedSubjects = props.room.assignedSubjects;
 
-	const assignRoom = (tag) => {
-		const tags = [...assignedTags];
-		const tagIds = [];
+	const assignRoom = (subject) => {
+		props.setAssigning(true);
 
-		tags.forEach((t) => {
-			tagIds.push(t._id);
+		const subjects = [...assignedSubjects];
+		const subjectIds = [];
+
+		subjects.forEach((t) => {
+			subjectIds.push(t._id);
 		});
 
-		tagIds.push(tag);
+		subjectIds.push(subject);
 
 		axios
 			.patch(
 				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
 				{
-					assignedTags: [...new Set(tagIds)],
+					assignedSubjects: [...new Set(subjectIds)],
 				}
 			)
 			.then((res) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')
 				);
+				props.setAssigning(false);
 				props.refreshComponent();
 			})
 			.catch((err) => {
+				props.setAssigning(false);
 				console.log(err.response);
 			});
 	};
 
 	const [{ isDragging }, drag] = useDrag({
-		item: { name, type: ItemTypes.RoomCard },
+		item: { name, type: ItemTypes.RoomCardSubjects },
 		end: (item, monitor) => {
 			const dropResult = monitor.getDropResult();
 			if (item && dropResult) {
@@ -67,16 +71,16 @@ const RoomCard = (props) => {
 				</p>
 
 				<div className='d-inline'>
-					{props.room.assignedTags.length === 0 ? (
+					{props.room.assignedSubjects.length === 0 ? (
 						<p>Not Assigned</p>
 					) : null}
 
-					{props.room.assignedTags.map((tag) => (
+					{props.room.assignedSubjects.map((subject) => (
 						<p
 							className='badge badge-pill badge-info mb-0 mr-1'
-							key={tag._id}
+							key={subject._id}
 						>
-							{tag.tagname.charAt(0)}
+							{subject.subjectCode}
 						</p>
 					))}
 				</div>
@@ -85,4 +89,4 @@ const RoomCard = (props) => {
 	);
 };
 
-export default RoomCard;
+export default RoomCardSubjects;

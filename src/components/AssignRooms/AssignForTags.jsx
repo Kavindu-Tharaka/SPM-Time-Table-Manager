@@ -1,14 +1,15 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { ItemTypes } from '../../util/ItemTypes';
 import { useDrop } from 'react-dnd';
 import axios from 'axios';
 
 import './assignRooms.css';
-import RoomCard from '../RoomCard/RoomCard';
+import RoomCardTags from '../RoomCard/RoomCardTags';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 import PreLoader from '../PreLoader/PreLoader';
 import RoomCardEditable from '../RoomCardEditable/RoomCardEditable';
+import { FaSpinner } from 'react-icons/fa';
 
 const AssignForTags = (props) => {
 	const [buildings, setBuildings] = useState([]);
@@ -23,6 +24,8 @@ const AssignForTags = (props) => {
 	const [updateComponent, setUpdateComponent] = useState(0);
 
 	const [loading, setLoading] = useState(true);
+
+	const [assigning, setAssigning] = useState(false);
 
 	const refreshComponent = () => {
 		setUpdateComponent(Math.random());
@@ -45,7 +48,7 @@ const AssignForTags = (props) => {
 	};
 
 	const [{ canDrop, isOver }, drop] = useDrop({
-		accept: ItemTypes.RoomCard,
+		accept: ItemTypes.RoomCardTags,
 		drop: () => ({ name: selectedTag }),
 		collect: (monitor) => ({
 			isOver: monitor.isOver(),
@@ -58,9 +61,15 @@ const AssignForTags = (props) => {
 	useEffect(() => {
 		axios
 			.all([
-				axios.get('http://localhost:8000/api/v1/buildings'),
-				axios.get('http://localhost:8000/api/v1/rooms'),
-				axios.get('http://localhost:8000/api/v1/tags'),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/buildings'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/rooms'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/tags'
+				),
 			])
 			.then(
 				axios.spread((aBuildings, aRooms, aTags) => {
@@ -123,10 +132,11 @@ const AssignForTags = (props) => {
 						) : null}
 						<div className='row row-cols-2 pr-2 pl-2'>
 							{roomsOfSelectedBuilding.map((room) => (
-								<RoomCard
+								<RoomCardTags
 									key={room._id}
 									room={room}
 									refreshComponent={refreshComponent}
+									setAssigning={setAssigning}
 								/>
 							))}
 						</div>
@@ -152,7 +162,6 @@ const AssignForTags = (props) => {
 
 					<p className='mt-3 mb-1'>Tag</p>
 					<hr className='mt-0' />
-
 					<div
 						className={
 							isActive
@@ -161,9 +170,17 @@ const AssignForTags = (props) => {
 						}
 						ref={drop}
 					>
-						<p>
-							{isActive ? 'Release to drop' : 'Drag a room here'}
-						</p>
+						{assigning ? (
+							<p>
+								Assigning <FaSpinner className='spin' />
+							</p>
+						) : (
+							<p>
+								{isActive
+									? 'Release to drop'
+									: 'Drag a room here'}
+							</p>
+						)}
 					</div>
 				</div>
 			</div>

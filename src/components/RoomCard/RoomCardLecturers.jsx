@@ -7,40 +7,44 @@ import axios from 'axios';
 
 import './roomCard.css';
 
-const RoomCard = (props) => {
+const RoomCardLecturers = (props) => {
 	const name = props.room.roomName;
-	const assignedTags = props.room.assignedTags;
+	const assignedLecturers = props.room.assignedLecturers;
 
-	const assignRoom = (tag) => {
-		const tags = [...assignedTags];
-		const tagIds = [];
+	const assignRoom = (lecturer) => {
+		props.setAssigning(true);
 
-		tags.forEach((t) => {
-			tagIds.push(t._id);
+		const lecturers = [...assignedLecturers];
+		const lecturerIds = [];
+
+		lecturers.forEach((t) => {
+			lecturerIds.push(t._id);
 		});
 
-		tagIds.push(tag);
+		lecturerIds.push(lecturer);
 
 		axios
 			.patch(
 				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
 				{
-					assignedTags: [...new Set(tagIds)],
+					assignedLecturers: [...new Set(lecturerIds)],
 				}
 			)
 			.then((res) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')
 				);
+				props.setAssigning(false);
 				props.refreshComponent();
 			})
 			.catch((err) => {
+				props.setAssigning(false);
 				console.log(err.response);
 			});
 	};
 
 	const [{ isDragging }, drag] = useDrag({
-		item: { name, type: ItemTypes.RoomCard },
+		item: { name, type: ItemTypes.RoomCardLecturers },
 		end: (item, monitor) => {
 			const dropResult = monitor.getDropResult();
 			if (item && dropResult) {
@@ -67,16 +71,16 @@ const RoomCard = (props) => {
 				</p>
 
 				<div className='d-inline'>
-					{props.room.assignedTags.length === 0 ? (
+					{props.room.assignedLecturers.length === 0 ? (
 						<p>Not Assigned</p>
 					) : null}
 
-					{props.room.assignedTags.map((tag) => (
+					{props.room.assignedLecturers.map((lecturer) => (
 						<p
 							className='badge badge-pill badge-info mb-0 mr-1'
-							key={tag._id}
+							key={lecturer._id}
 						>
-							{tag.tagname.charAt(0)}
+							{lecturer.employeeId}
 						</p>
 					))}
 				</div>
@@ -85,4 +89,4 @@ const RoomCard = (props) => {
 	);
 };
 
-export default RoomCard;
+export default RoomCardLecturers;

@@ -7,40 +7,44 @@ import axios from 'axios';
 
 import './roomCard.css';
 
-const RoomCard = (props) => {
+const RoomCardSessions = (props) => {
 	const name = props.room.roomName;
-	const assignedTags = props.room.assignedTags;
+	const assignedSessions = props.room.assignForSessions;
 
-	const assignRoom = (tag) => {
-		const tags = [...assignedTags];
-		const tagIds = [];
+	const assignRoom = (session) => {
+		props.setAssigning(true);
 
-		tags.forEach((t) => {
-			tagIds.push(t._id);
+		const sessions = [...assignedSessions];
+		const sessionIds = [];
+
+		sessions.forEach((t) => {
+			sessionIds.push(t._id);
 		});
 
-		tagIds.push(tag);
+		sessionIds.push(session);
 
 		axios
 			.patch(
 				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
 				{
-					assignedTags: [...new Set(tagIds)],
+					assignForSessions: [...new Set(sessionIds)],
 				}
 			)
 			.then((res) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')
 				);
+				props.setAssigning(false);
 				props.refreshComponent();
 			})
 			.catch((err) => {
+				props.setAssigning(false);
 				console.log(err.response);
 			});
 	};
 
 	const [{ isDragging }, drag] = useDrag({
-		item: { name, type: ItemTypes.RoomCard },
+		item: { name, type: ItemTypes.RoomCardSessions },
 		end: (item, monitor) => {
 			const dropResult = monitor.getDropResult();
 			if (item && dropResult) {
@@ -67,22 +71,15 @@ const RoomCard = (props) => {
 				</p>
 
 				<div className='d-inline'>
-					{props.room.assignedTags.length === 0 ? (
+					{props.room.assignForSessions.length === 0 ? (
 						<p>Not Assigned</p>
-					) : null}
-
-					{props.room.assignedTags.map((tag) => (
-						<p
-							className='badge badge-pill badge-info mb-0 mr-1'
-							key={tag._id}
-						>
-							{tag.tagname.charAt(0)}
-						</p>
-					))}
+					) : (
+						<p>Assigned</p>
+					)}
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default RoomCard;
+export default RoomCardSessions;

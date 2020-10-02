@@ -3,55 +3,65 @@ import { useDrag } from 'react-dnd';
 import { ItemTypes } from '../../util/ItemTypes';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
-import { IoMdClose } from 'react-icons/io';
-import swal from '@sweetalert/with-react';
 import axios from 'axios';
 
-import './roomCardEditable.css';
-import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteConfirmationDialogBox';
+import './roomCard.css';
 
-const RoomCardEditable = (props) => {
+const RoomCardTags = (props) => {
+	const name = props.room.roomName;
 	const assignedTags = props.room.assignedTags;
 
-	const removeTag = (tagId) => {
-		const tagIds = assignedTags.filter((tag) => tag._id !== tagId);
+	const assignRoom = (tag) => {
+		props.setAssigning(true);
+
+		const tags = [...assignedTags];
+		const tagIds = [];
+
+		tags.forEach((t) => {
+			tagIds.push(t._id);
+		});
+
+		tagIds.push(tag);
 
 		axios
 			.patch(
 				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
 				{
-					assignedTags: [...tagIds],
+					assignedTags: [...new Set(tagIds)],
 				}
 			)
 			.then((res) => {
-				swal.close();
 				store.addNotification(
-					buildToast('danger', 'Success', 'Tag Removed')
+					buildToast('success', 'Success', 'Room Assigned')
 				);
+				props.setAssigning(false);
 				props.refreshComponent();
 			})
 			.catch((err) => {
+				props.setAssigning(false);
 				console.log(err.response);
 			});
 	};
 
-	const onDeleteClick = (tag) => {
-		swal({
-			buttons: false,
-			content: (
-				<DeleteConfirmationDialogBox
-					deleteEventWithIdHandler={removeTag}
-					itemId={tag._id}
-					itemName={`${tag.tagname}`}
-				/>
-			),
-		});
-	};
+	const [{ isDragging }, drag] = useDrag({
+		item: { name, type: ItemTypes.RoomCardTags },
+		end: (item, monitor) => {
+			const dropResult = monitor.getDropResult();
+			if (item && dropResult) {
+				assignRoom(dropResult.name);
+			}
+		},
+		collect: (monitor) => ({
+			isDragging: monitor.isDragging(),
+		}),
+	});
+
+	const opacity = isDragging ? 0 : 1;
 
 	return (
 		<div className='col p-1'>
-			<div className='room-card-container'>
-				<h5 className='m-0'>{props.room.roomName}</h5>
+			<div className='room-card-container' ref={drag} style={{ opacity }}>
+				<h5 className='m-0'>{name}</h5>
 				<p className='m-0'>
 					<strong>Capacity</strong> {props.room.capacity} |{' '}
 					<strong>Floor</strong> {props.room.floor}
@@ -66,20 +76,12 @@ const RoomCardEditable = (props) => {
 					) : null}
 
 					{props.room.assignedTags.map((tag) => (
-						<div
-							className='edit-tag-in-room badge badge-pill badge-info mb-0 mr-1'
+						<p
+							className='badge badge-pill badge-info mb-0 mr-1'
 							key={tag._id}
 						>
 							{tag.tagname.charAt(0)}
-							<button
-								className='rce-sm-ctrl-btn sm-ctrl-btn-dlt rce-sm-ctrl-btn-dlt'
-								onClick={() => {
-									onDeleteClick(tag);
-								}}
-							>
-								<IoMdClose />
-							</button>
-						</div>
+						</p>
 					))}
 				</div>
 			</div>
@@ -87,4 +89,4 @@ const RoomCardEditable = (props) => {
 	);
 };
 
-export default RoomCardEditable;
+export default RoomCardTags;

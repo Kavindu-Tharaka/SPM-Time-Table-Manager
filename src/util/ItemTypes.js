@@ -1,3 +1,7 @@
 export const ItemTypes = {
-	RoomCard: 'roomCard',
+	RoomCardTags: 'roomCardTags',
+	RoomCardSubjects: 'roomCardSubjects',
+	RoomCardLecturers: 'roomCardLecturers',
+	RoomCardGroups: 'roomCardGroups',
+	RoomCardSessions: 'roomCardSessions',
 };

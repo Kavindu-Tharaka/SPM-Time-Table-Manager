@@ -10,7 +10,6 @@ import { buildToast } from '../../util/toast';
 import EmptyDataPlaceholder from '../EmptyDataPlacehoder/EmptyDataPlaceholder';
 
 function ConstraintsSubGroupsTable(props) {
-
 	const onDeleteClick = (itemId, subgroupid, day, from, to) => {
 		swal({
 			buttons: false,
@@ -26,17 +25,19 @@ function ConstraintsSubGroupsTable(props) {
 
 	const deleteConstraint = (itemId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/constraintssubgroups/${itemId}`)
+			.delete(
+				`https://time-table-manager.herokuapp.com/api/v1/constraintssubgroups/${itemId}`
+			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
 				store.addNotification(
-                    buildToast(
-                        'danger',
-                        'Deleted',
-                        'Constraint Deleted Successfully'
-                    )
-                );
+					buildToast(
+						'danger',
+						'Deleted',
+						'Constraint Deleted Successfully'
+					)
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -51,11 +52,11 @@ function ConstraintsSubGroupsTable(props) {
 					subgroups={props.subgroups}
 					refreshComponent={props.refreshComponent}
 					constraintsSubGroupList={props.constraintsSubGroupList}
-					id = {id}
-					subgroupid = {subgroupid}
-					from = {from}
-					to = {to}
-					day = {day}
+					id={id}
+					subgroupid={subgroupid}
+					from={from}
+					to={to}
+					day={day}
 				/>
 			),
 		});
@@ -72,19 +73,31 @@ function ConstraintsSubGroupsTable(props) {
 			cell: (row) => (
 				<div>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.subgroup.subgroupid, row.day, row.from, row.to);
+							onUpdateClick(
+								row._id,
+								row.subgroup.subgroupid,
+								row.day,
+								row.from,
+								row.to
+							);
 						}}
 					>
 						<IoMdCreate />
 					</button>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.subgroup.subgroupid, row.day, row.from, row.to);
+							onDeleteClick(
+								row._id,
+								row.subgroup.subgroupid,
+								row.day,
+								row.from,
+								row.to
+							);
 						}}
 					>
 						<IoMdClose />
@@ -100,12 +113,12 @@ function ConstraintsSubGroupsTable(props) {
 			title="Sub-Groups' Not Available Times"
 			data={props.constraintsSubGroupList}
 			columns={columns}
-			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
+			noDataComponent={<EmptyDataPlaceholder message={'No Data Found'} />}
 			dense
 			pagination
 			highlightOnHover
 		/>
-	)
+	);
 }
 
-export default ConstraintsSubGroupsTable
+export default ConstraintsSubGroupsTable;

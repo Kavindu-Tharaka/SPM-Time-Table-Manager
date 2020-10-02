@@ -29,13 +29,16 @@ const UpdateRoomDialogBox = (props) => {
 
 	const onUpdateClick = (e) => {
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				building: buildingName,
-				roomName,
-				floor,
-				capacity,
-				roomType,
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
+				{
+					building: buildingName,
+					roomName,
+					floor,
+					capacity,
+					roomType,
+				}
+			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();

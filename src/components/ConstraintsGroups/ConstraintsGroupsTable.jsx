@@ -25,17 +25,19 @@ const ConstraintsGroupsTable = (props) => {
 
 	const deleteConstraint = (itemId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/constraintsgroups/${itemId}`)
+			.delete(
+				`https://time-table-manager.herokuapp.com/api/v1/constraintsgroups/${itemId}`
+			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
 				store.addNotification(
-                    buildToast(
-                        'danger',
-                        'Deleted',
-                        'Constraint Deleted Successfully'
-                    )
-                );
+					buildToast(
+						'danger',
+						'Deleted',
+						'Constraint Deleted Successfully'
+					)
+				);
 			})
 			.catch((err) => {
 				console.log(err.response);
@@ -50,11 +52,11 @@ const ConstraintsGroupsTable = (props) => {
 					groups={props.groups}
 					refreshComponent={props.refreshComponent}
 					constraintsGroupList={props.constraintsGroupList}
-					id = {id}
-					groupid = {groupid}
-					from = {from}
-					to = {to}
-					day = {day}
+					id={id}
+					groupid={groupid}
+					from={from}
+					to={to}
+					day={day}
 				/>
 			),
 		});
@@ -71,19 +73,31 @@ const ConstraintsGroupsTable = (props) => {
 			cell: (row) => (
 				<div>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
-							onUpdateClick(row._id, row.group.groupid, row.day, row.from, row.to);
+							onUpdateClick(
+								row._id,
+								row.group.groupid,
+								row.day,
+								row.from,
+								row.to
+							);
 						}}
 					>
 						<IoMdCreate />
 					</button>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
-							onDeleteClick(row._id, row.group.groupid, row.day, row.from, row.to);
+							onDeleteClick(
+								row._id,
+								row.group.groupid,
+								row.day,
+								row.from,
+								row.to
+							);
 						}}
 					>
 						<IoMdClose />
@@ -99,7 +113,7 @@ const ConstraintsGroupsTable = (props) => {
 			title="Groups' Not Available Times"
 			data={props.constraintsGroupList}
 			columns={columns}
-			noDataComponent = {<EmptyDataPlaceholder message={'No Data Found'} />}
+			noDataComponent={<EmptyDataPlaceholder message={'No Data Found'} />}
 			dense
 			pagination
 			highlightOnHover
