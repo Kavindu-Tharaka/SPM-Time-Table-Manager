@@ -8,12 +8,15 @@ import { buildToast } from '../../util/toast';
 import { FaSpinner } from 'react-icons/fa';
 import ConstraintsLecturersTable from './ConstraintsLecturersTable';
 import moment from 'moment';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 function ConstraintsLecturers() {
     const [lecturers, setLecturers] = useState([]);
 
     const [lecturerIDbehalfOfName, setLecturerIDBehalfOfName] = useState('');
     const [day, setDay] = useState('Monday');
+    const [currentLecturer, setCurrentLecturer] = useState('');
 
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
@@ -33,6 +36,8 @@ function ConstraintsLecturers() {
 
     const [constraintsLectureList, setConstraintsLectureList] = useState([]);
 
+    const [value, setValue] = useState('');
+
     const _isBefore = (from, to) => {
         const fromTime = moment(from, 'HH:mm');
         const toTime = moment(to, 'HH:mm');
@@ -44,8 +49,18 @@ function ConstraintsLecturers() {
     };
 
     const onLecturerChange = (e) => {
-        setLecturerIDBehalfOfName(e.target.value);
+
+        setCurrentLecturer(document.querySelector('#autoCompleteInput').value);
+
         setErrorMsg('');
+
+        const lecturerName = document.querySelector('#autoCompleteInput').value;
+
+        const lecturer = lecturers.find(
+            (lecturer) => lecturer.name === lecturerName.trim()
+        );
+
+        setLecturerIDBehalfOfName(lecturer ? lecturer._id : '');
     };
 
     const onDayChange = (e) => {
@@ -123,7 +138,12 @@ function ConstraintsLecturers() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsLectureList);
+                        setCurrentLecturer('')
+                        setTo('')
+                        setFrom('')
+                        setDay('Monday')
+
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -137,7 +157,6 @@ function ConstraintsLecturers() {
         const source = CancelToken.source();
 
         const loadData = () => {
-
             axios
                 .all(
                     [
@@ -184,32 +203,28 @@ function ConstraintsLecturers() {
             <div
                 style={{
                     marginTop: '3%',
-                    paddingLeft: '10%',
-                    paddingRight: '1%',
+                    paddingLeft: '3%',
+                    paddingRight: '3%',
                 }}
             >
                 <div className="form-row">
-                    <div className="form-group col-md-3">
-                        <label>Select Lecturer</label>
-                        <select
-                            className="custom-select"
+                    <div className="form-group col-md-4">
+                        <label className='dialog-label'>Lecturer</label>
+                        <TextInput
+                            id="autoCompleteInput"
+                            Component="input"
+                            maxOptions={10}
+                            matchAny={true}
+                            placeholder={'Enter Lecturer Name'}
+                            trigger=""
+                            value={currentLecturer}
+                            options={lecturers.map((lecturer) => lecturer.name)}
                             onChange={onLecturerChange}
-                            value={lecturerIDbehalfOfName}
-                        >
-                            {lecturers.map((lecturer) => {
-                                return (
-                                    <option
-                                        key={lecturer._id}
-                                        value={lecturer._id}
-                                    >
-                                        {lecturer.name}
-                                    </option>
-                                );
-                            })}
-                        </select>
+                            style={{height: 35, width: '100%', paddingLeft: 10}}
+                        />
                     </div>
                     <div className="form-group col-md-2">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
@@ -283,11 +298,13 @@ function ConstraintsLecturers() {
             {lecturers.length === 0 ? (
                 <EmptyDataPlaceholder message="Constraint list is currently empty" />
             ) : (
-                <ConstraintsLecturersTable
-                    constraintsLectureList={constraintsLectureList}
-                    refreshComponent={refreshComponent}
-                    lecturers={lecturers}
-                />
+                <div>
+                    <ConstraintsLecturersTable
+                        constraintsLectureList={constraintsLectureList}
+                        refreshComponent={refreshComponent}
+                        lecturers={lecturers}
+                    />
+                </div>
             )}
         </div>
     );

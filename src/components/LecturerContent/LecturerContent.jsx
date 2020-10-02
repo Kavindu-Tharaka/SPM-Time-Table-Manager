@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
-import './LecturerContent.css';
 import axios from "axios";
 // import Swal from 'sweetalert2';
 import PreLoader from '../PreLoader/PreLoader';
@@ -270,13 +269,13 @@ const LecturerContent = () => {
             name: 'Faculty',
             selector: 'faculty',
             sortable: true,
-            cell: row => <div>{row.faculty}</div>
+            cell: row => <div>{row.faculty}<br/></div>
         },
         {
             name: 'Department',
             selector: 'department',
             sortable: true,
-            cell: row => <div>{row.department}</div>
+            cell: row => <div className="">{row.department}</div>
         },
         {
             name: 'Center',
@@ -510,13 +509,7 @@ const LecturerContent = () => {
                         title="Lecturer Details"
                         columns={columns}
                         data={lecturerDetails}
-                        pagination={true}
-                        paginationTotalRows={7}
-                        paginationPerPage={7}
-                        highlightOnHover={true}
-                        responsive={true}
-                        fixedHeader={true}
-                        allowOverflow={true}
+                        pagination
                         dense
                     />
                 </div>
