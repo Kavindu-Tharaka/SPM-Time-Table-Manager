@@ -18,9 +18,12 @@ const AssignForLecturersTable = (props) => {
 		);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignedLecturers: [...lecturerIds],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${room._id}`,
+				{
+					assignedLecturers: [...lecturerIds],
+				}
+			)
 			.then(() => {
 				swal.close();
 				store.addNotification(

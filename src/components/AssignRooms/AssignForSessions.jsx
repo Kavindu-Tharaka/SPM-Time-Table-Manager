@@ -61,9 +61,15 @@ const AssignForSessions = () => {
 	useEffect(() => {
 		axios
 			.all([
-				axios.get('http://localhost:8000/api/v1/buildings'),
-				axios.get('http://localhost:8000/api/v1/rooms'),
-				axios.get('http://localhost:8000/api/v1/session'),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/buildings'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/rooms'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/session'
+				),
 			])
 			.then(
 				axios.spread((aBuildings, aRooms, aSessions) => {

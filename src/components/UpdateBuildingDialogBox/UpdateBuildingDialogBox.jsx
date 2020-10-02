@@ -14,7 +14,7 @@ const UpdateBuildingDialogBox = (props) => {
 	const onUpdateClick = () => {
 		axios
 			.patch(
-				`http://localhost:8000/api/v1/buildings/${props.building._id}`,
+				`https://time-table-manager.herokuapp.com/api/v1/buildings/${props.building._id}`,
 				{ buildingName }
 			)
 			.then((res) => {

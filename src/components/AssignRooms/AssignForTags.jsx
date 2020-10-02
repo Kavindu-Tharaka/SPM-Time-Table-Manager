@@ -61,9 +61,15 @@ const AssignForTags = (props) => {
 	useEffect(() => {
 		axios
 			.all([
-				axios.get('http://localhost:8000/api/v1/buildings'),
-				axios.get('http://localhost:8000/api/v1/rooms'),
-				axios.get('http://localhost:8000/api/v1/tags'),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/buildings'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/rooms'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/tags'
+				),
 			])
 			.then(
 				axios.spread((aBuildings, aRooms, aTags) => {

@@ -79,7 +79,7 @@ const Rooms = (props) => {
 		setIsAddingRoom(true);
 
 		axios
-			.post('http://localhost:8000/api/v1/rooms', {
+			.post('https://time-table-manager.herokuapp.com/api/v1/rooms', {
 				building: buildingName,
 				roomName,
 				floor,
@@ -97,7 +97,11 @@ const Rooms = (props) => {
 				setIsAddingRoom(false);
 
 				store.addNotification(
-					buildToast('success', 'Success', 'Working Time Added Successfully')
+					buildToast(
+						'success',
+						'Success',
+						'Working Time Added Successfully'
+					)
 				);
 			})
 			.catch((err) => {
@@ -107,7 +111,7 @@ const Rooms = (props) => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/v1/buildings')
+			.get('https://time-table-manager.herokuapp.com/api/v1/buildings')
 			.then((res) => {
 				setBuildings(res.data.data.buildings);
 				if (res.data.data.buildings.length !== 0) {
@@ -119,7 +123,7 @@ const Rooms = (props) => {
 			});
 
 		axios
-			.get('http://localhost:8000/api/v1/rooms')
+			.get('https://time-table-manager.herokuapp.com/api/v1/rooms')
 			.then((res) => {
 				setRooms(res.data.data.rooms);
 			})

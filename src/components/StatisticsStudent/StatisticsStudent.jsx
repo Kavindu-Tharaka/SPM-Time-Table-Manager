@@ -27,9 +27,12 @@ const StatisticsStudent = (props) => {
 
 		const loadData = () => {
 			axios
-				.get('http://localhost:8000/api/v1/yearsemesters', {
-					cancelToken: source.token,
-				})
+				.get(
+					'https://time-table-manager.herokuapp.com/api/v1/yearsemesters',
+					{
+						cancelToken: source.token,
+					}
+				)
 				.then(function (response) {
 					// console.log(response.data.data.yearsemesters);
 					setYearSemesterList(response.data.data.yearsemesters);
@@ -42,9 +45,12 @@ const StatisticsStudent = (props) => {
 				});
 
 			axios
-				.get('http://localhost:8000/api/v1/groupnumbers', {
-					cancelToken: source.token,
-				})
+				.get(
+					'https://time-table-manager.herokuapp.com/api/v1/groupnumbers',
+					{
+						cancelToken: source.token,
+					}
+				)
 				.then(function (response) {
 					// console.log(response.data.data.groupnumbers);
 					setGroupNumberList(response.data.data.groupnumbers);
@@ -57,9 +63,12 @@ const StatisticsStudent = (props) => {
 				});
 
 			axios
-				.get('http://localhost:8000/api/v1/specializations', {
-					cancelToken: source.token,
-				})
+				.get(
+					'https://time-table-manager.herokuapp.com/api/v1/specializations',
+					{
+						cancelToken: source.token,
+					}
+				)
 				.then(function (response) {
 					// console.log(response.data.data.specializations);
 					setSpecializationList(response.data.data.specializations);
@@ -72,9 +81,12 @@ const StatisticsStudent = (props) => {
 				});
 
 			axios
-				.get('http://localhost:8000/api/v1/groupids', {
-					cancelToken: source.token,
-				})
+				.get(
+					'https://time-table-manager.herokuapp.com/api/v1/groupids',
+					{
+						cancelToken: source.token,
+					}
+				)
 				.then(function async(response) {
 					console.log(response.data.data.groupids);
 					setGroupIDList(response.data.data.groupids);
@@ -127,11 +139,14 @@ const StatisticsStudent = (props) => {
 
 		if (!isExist) {
 			axios
-				.post('http://localhost:8000/api/v1/groupids', {
-					yearsemestername: yearSemester,
-					specializationname: specialization,
-					groupnumber: groupNumber,
-				})
+				.post(
+					'https://time-table-manager.herokuapp.com/api/v1/groupids',
+					{
+						yearsemestername: yearSemester,
+						specializationname: specialization,
+						groupnumber: groupNumber,
+					}
+				)
 				.then(function (response) {
 					console.log(response.data.data.groupid);
 					setGroupIDList([
@@ -147,7 +162,9 @@ const StatisticsStudent = (props) => {
 
 	const deleteGroupID = (id) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/groupids/${id}`)
+			.delete(
+				`https://time-table-manager.herokuapp.com/api/v1/groupids/${id}`
+			)
 			.then(function (response) {
 				swal.close();
 				setGroupIDList(

@@ -24,9 +24,12 @@ const RoomCardSessions = (props) => {
 		sessionIds.push(session);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				assignForSessions: [...new Set(sessionIds)],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
+				{
+					assignForSessions: [...new Set(sessionIds)],
+				}
+			)
 			.then((res) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')
@@ -70,7 +73,9 @@ const RoomCardSessions = (props) => {
 				<div className='d-inline'>
 					{props.room.assignForSessions.length === 0 ? (
 						<p>Not Assigned</p>
-					) : <p>Assigned</p>}
+					) : (
+						<p>Assigned</p>
+					)}
 				</div>
 			</div>
 		</div>

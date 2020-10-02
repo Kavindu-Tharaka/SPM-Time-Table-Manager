@@ -61,9 +61,15 @@ const AssignForGroups = () => {
 	useEffect(() => {
 		axios
 			.all([
-				axios.get('http://localhost:8000/api/v1/buildings'),
-				axios.get('http://localhost:8000/api/v1/rooms'),
-				axios.get('http://localhost:8000/api/v1/subgroupids'),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/buildings'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/rooms'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/subgroupids'
+				),
 			])
 			.then(
 				axios.spread((aBuildings, aRooms, aGroups) => {
@@ -146,10 +152,7 @@ const AssignForGroups = () => {
 						>
 							{groups.map((group) => {
 								return (
-									<option
-										key={group._id}
-										value={group._id}
-									>
+									<option key={group._id} value={group._id}>
 										{group.subgroupid}
 									</option>
 								);

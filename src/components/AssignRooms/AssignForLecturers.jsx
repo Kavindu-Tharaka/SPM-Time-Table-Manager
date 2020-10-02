@@ -61,9 +61,15 @@ const AssignForLecturers = () => {
 	useEffect(() => {
 		axios
 			.all([
-				axios.get('http://localhost:8000/api/v1/buildings'),
-				axios.get('http://localhost:8000/api/v1/rooms'),
-				axios.get('http://localhost:8000/api/v1/lecturers'),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/buildings'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/rooms'
+				),
+				axios.get(
+					'https://time-table-manager.herokuapp.com/api/v1/lecturers'
+				),
 			])
 			.then(
 				axios.spread((aBuildings, aRooms, aLecturers) => {

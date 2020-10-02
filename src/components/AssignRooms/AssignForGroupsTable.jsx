@@ -18,9 +18,12 @@ const AssignForGroupsTable = (props) => {
 		);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignedGroups: [...groupIds],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${room._id}`,
+				{
+					assignedGroups: [...groupIds],
+				}
+			)
 			.then(() => {
 				swal.close();
 				store.addNotification(

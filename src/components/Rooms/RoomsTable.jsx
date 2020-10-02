@@ -22,7 +22,9 @@ const RoomsTable = (props) => {
 
 	const deleteRoom = (roomId) => {
 		axios
-			.delete(`http://localhost:8000/api/v1/rooms/${roomId}`)
+			.delete(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${roomId}`
+			)
 			.then((res) => {
 				swal.close();
 				props.refreshComponent();
@@ -62,7 +64,7 @@ const RoomsTable = (props) => {
 			cell: (row) => (
 				<div>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-upt bc-sm-ctrl-btn-upt'
 						onClick={() => {
 							onUpdateClick({
@@ -78,7 +80,7 @@ const RoomsTable = (props) => {
 						<IoMdCreate />
 					</button>
 					<button
-						style={{marginRight:15}}
+						style={{ marginRight: 15 }}
 						className='sm-ctrl-btn sm-ctrl-btn-dlt bc-sm-ctrl-btn-dlt'
 						onClick={() => {
 							onDeleteClick(row._id, row.roomName);

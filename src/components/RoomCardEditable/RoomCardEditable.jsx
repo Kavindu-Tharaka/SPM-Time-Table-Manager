@@ -17,9 +17,12 @@ const RoomCardEditable = (props) => {
 		const tagIds = assignedTags.filter((tag) => tag._id !== tagId);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				assignedTags: [...tagIds],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
+				{
+					assignedTags: [...tagIds],
+				}
+			)
 			.then((res) => {
 				swal.close();
 				store.addNotification(

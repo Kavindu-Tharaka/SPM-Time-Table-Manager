@@ -18,9 +18,12 @@ const AssignForSessionsTable = (props) => {
 		);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignForSessions: [...sessionIds],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${room._id}`,
+				{
+					assignForSessions: [...sessionIds],
+				}
+			)
 			.then(() => {
 				swal.close();
 				store.addNotification(

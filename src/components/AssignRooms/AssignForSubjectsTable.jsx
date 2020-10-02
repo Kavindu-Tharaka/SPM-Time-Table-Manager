@@ -11,14 +11,19 @@ const AssignForSubjectsTable = (props) => {
 	const removeSubject = (roomIdAndSubjectId) => {
 		const roomId = roomIdAndSubjectId.split('_')[0];
 		const subjectId = roomIdAndSubjectId.split('_')[1];
-        const room = props.rooms.find((room) => room._id === roomId);
-        
-		const subjectIds = room.assignedSubjects.filter((subject) => subject._id !== subjectId);
+		const room = props.rooms.find((room) => room._id === roomId);
+
+		const subjectIds = room.assignedSubjects.filter(
+			(subject) => subject._id !== subjectId
+		);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignedSubjects: [...subjectIds],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${room._id}`,
+				{
+					assignedSubjects: [...subjectIds],
+				}
+			)
 			.then((res) => {
 				swal.close();
 				store.addNotification(

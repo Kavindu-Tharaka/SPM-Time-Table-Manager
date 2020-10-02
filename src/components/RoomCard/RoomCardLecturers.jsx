@@ -24,9 +24,12 @@ const RoomCardLecturers = (props) => {
 		lecturerIds.push(lecturer);
 
 		axios
-			.patch(`http://localhost:8000/api/v1/rooms/${props.room._id}`, {
-				assignedLecturers: [...new Set(lecturerIds)],
-			})
+			.patch(
+				`https://time-table-manager.herokuapp.com/api/v1/rooms/${props.room._id}`,
+				{
+					assignedLecturers: [...new Set(lecturerIds)],
+				}
+			)
 			.then((res) => {
 				store.addNotification(
 					buildToast('success', 'Success', 'Room Assigned')

@@ -44,7 +44,9 @@ const LocationContent = (props) => {
 		setIsAddingBuilding(true);
 
 		axios
-			.post('http://localhost:8000/api/v1/buildings', { buildingName })
+			.post('https://time-table-manager.herokuapp.com/api/v1/buildings', {
+				buildingName,
+			})
 			.then((res) => {
 				setBuildings([...buildings, res.data.data.building]);
 				setIsAddingBuilding(false);
@@ -65,7 +67,7 @@ const LocationContent = (props) => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/v1/buildings')
+			.get('https://time-table-manager.herokuapp.com/api/v1/buildings')
 			.then((res) => {
 				setBuildings(res.data.data.buildings);
 				setLoading(false);

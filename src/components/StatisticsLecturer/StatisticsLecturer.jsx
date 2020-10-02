@@ -11,7 +11,7 @@ const StatisticsLecturer = (props) => {
 
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/v1/lecturers')
+			.get('https://time-table-manager.herokuapp.com/api/v1/lecturers')
 			.then((res) => {
 				setLecturers(res.data.data.lecturers);
 				setLoading(false);
