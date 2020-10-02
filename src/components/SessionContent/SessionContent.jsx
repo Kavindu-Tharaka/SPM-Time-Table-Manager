@@ -315,7 +315,7 @@ const SessionContent = () => {
 			selector: 'lecturers',
 			grow: 4,
 			sortable: true,
-			cell: (row) => row.lecturers.map((name) => <div>{`${name},`}</div>),
+			cell: (row) => row.lecturers.map((name, index) => <div key={index}>{`${name},`}</div>),
 		},
 		{
 			name: 'Tag',

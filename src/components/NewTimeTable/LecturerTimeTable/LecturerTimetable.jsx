@@ -20,7 +20,7 @@ function LecturerTimetable({ days }) {
   const getLecturers = async () => {
     setLoading(true)
     try {
-      const result = await axios.get("http://localhost:8000/api/v1/lecturers");
+      const result = await axios.get("https://time-table-manager.herokuapp.com/api/v1/lecturers");
       console.log(result.data.data.lecturers);
       setLecturers(result.data.data.lecturers);
       setLoading(false)
@@ -33,7 +33,7 @@ function LecturerTimetable({ days }) {
     setLoading(true)
     try {
       const result = await axios.post(
-        "http://localhost:8000/api/v1/timetable/lecturer",
+        "https://time-table-manager.herokuapp.com/api/v1/timetable/lecturer",
         {
           lecturer: selectedLecturer,
         }
@@ -76,8 +76,8 @@ function LecturerTimetable({ days }) {
         </div>
         <div className="col-md-2 mb-3">
           <select onChange={(e) => onLecturerChange(e)}>
-            {lecturers.map((lecturer) => {
-              return <option value={lecturer.name}>{lecturer.name}</option>;
+            {lecturers.map((lecturer, index) => {
+              return <option key={index} value={lecturer.name}>{lecturer.name}</option>;
             })}
           </select>
         </div>

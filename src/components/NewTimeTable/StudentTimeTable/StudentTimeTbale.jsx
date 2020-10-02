@@ -29,7 +29,7 @@ const[loading,setLoading] = useState(false)
     setLoading(true)
     try {
       const result = await axios.post(
-        "http://localhost:8000/api/v1/timetable",
+        "https://time-table-manager.herokuapp.com/api/v1/timetable",
         {
           year: year,
           department: department,
