@@ -3,4 +3,5 @@ export const ItemTypes = {
 	RoomCardSubjects: 'roomCardSubjects',
 	RoomCardLecturers: 'roomCardLecturers',
 	RoomCardGroups: 'roomCardGroups',
+	RoomCardSessions: 'roomCardSessions',
 };

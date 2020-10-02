@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentHeader from '../ContentHeader/ContentHeader';
 import { ItemTypes } from '../../util/ItemTypes';
 import { useDrop } from 'react-dnd';

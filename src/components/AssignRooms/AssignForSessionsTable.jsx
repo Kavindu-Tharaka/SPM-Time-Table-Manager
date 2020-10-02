@@ -7,22 +7,24 @@ import DeleteConfirmationDialogBox from '../DeleteConfirmationDialogBox/DeleteCo
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 
-const AssignForSubjectsTable = (props) => {
-	const removeSubject = (roomIdAndSubjectId) => {
-		const roomId = roomIdAndSubjectId.split('_')[0];
-		const subjectId = roomIdAndSubjectId.split('_')[1];
-        const room = props.rooms.find((room) => room._id === roomId);
-        
-		const subjectIds = room.assignedSubjects.filter((subject) => subject._id !== subjectId);
+const AssignForSessionsTable = (props) => {
+	const removeSession = (roomIdAndSessionId) => {
+		const roomId = roomIdAndSessionId.split('_')[0];
+		const sessionId = roomIdAndSessionId.split('_')[1];
+		const room = props.rooms.find((room) => room._id === roomId);
+
+		const sessionIds = room.assignForSessions.filter(
+			(session) => session._id !== sessionId
+		);
 
 		axios
 			.patch(`http://localhost:8000/api/v1/rooms/${room._id}`, {
-				assignedSubjects: [...subjectIds],
+				assignForSessions: [...sessionIds],
 			})
-			.then((res) => {
+			.then(() => {
 				swal.close();
 				store.addNotification(
-					buildToast('danger', 'Success', 'Subject Removed')
+					buildToast('danger', 'Success', 'Session Removed')
 				);
 				props.refreshComponent();
 			})
@@ -31,14 +33,14 @@ const AssignForSubjectsTable = (props) => {
 			});
 	};
 
-	const onDeleteClick = (room, subject) => {
+	const onDeleteClick = (room, session) => {
 		swal({
 			buttons: false,
 			content: (
 				<DeleteConfirmationDialogBox
-					deleteEventWithIdHandler={removeSubject}
-					itemId={`${room._id}_${subject._id}`}
-					itemName={`${subject.subjectCode} - ${subject.subjectName}`}
+					deleteEventWithIdHandler={removeSession}
+					itemId={`${room._id}_${session._id}`}
+					itemName={`${room.roomName} - ${session.asString}`}
 				/>
 			),
 		});
@@ -56,19 +58,19 @@ const AssignForSubjectsTable = (props) => {
 		{ name: 'Capacity', selector: 'capacity', sortable: true },
 		{ name: 'Room Type', selector: 'roomType', sortable: true },
 		{
-			name: 'Allocated Subjects',
+			name: 'Allocated Sessions',
 			cell: (row) => (
 				<div className='cell'>
-					{row.assignedSubjects.map((subject) => (
-						<div key={subject._id} className='row'>
+					{row.assignForSessions.map((session) => (
+						<div key={session._id} className='row'>
 							<div className='col-8'>
-								<p>{subject.subjectCode}</p>
+								<p>{session.asString}</p>
 							</div>
 							<div className='col-4'>
 								<button
 									className='sm-ctrl-btn sm-ctrl-btn-dlt afs-sm-ctrl-btn-dlt'
 									onClick={() => {
-										onDeleteClick(row, subject);
+										onDeleteClick(row, session);
 									}}
 								>
 									<IoMdClose />
@@ -92,4 +94,4 @@ const AssignForSubjectsTable = (props) => {
 	);
 };
 
-export default AssignForSubjectsTable;
+export default AssignForSessionsTable;
