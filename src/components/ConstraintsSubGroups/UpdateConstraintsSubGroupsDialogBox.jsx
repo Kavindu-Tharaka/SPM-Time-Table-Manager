@@ -44,7 +44,6 @@ function UpdateConstraintsSubGroupsDialogBox(props) {
             props.subgroups.find((element) => element.subgroupid === e.target.value)._id
         );
 
-        // console.log(subgroupIDbehalfOfName);
     };
 
     const onDayChange = (e) => {

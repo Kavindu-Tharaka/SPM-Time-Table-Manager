@@ -6,12 +6,16 @@ import { FaSpinner } from 'react-icons/fa';
 import { store } from 'react-notifications-component';
 import { buildToast } from '../../util/toast';
 import moment from 'moment';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 const UpdateConstraintsLecturersDialogBox = (props) => {
     const [lecturers, setLecturers] = useState(props.lecturers);
 
     const [currentLecturerName, setCurrentLecturerName] = useState(props.name);
-    const [lecturerIDbehalfOfName, setLecturerIDBehalfOfName] = useState((lecturers.find(element => element.name === props.name))._id);
+    const [lecturerIDbehalfOfName, setLecturerIDBehalfOfName] = useState(
+        lecturers.find((element) => element.name === props.name)._id
+    );
     const [day, setDay] = useState(props.day);
 
     const [from, setFrom] = useState(props.from);
@@ -34,13 +38,18 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
     };
 
     const onLecturerChange = (e) => {
-        setCurrentLecturerName(e.target.value);
+        // setCurrentLecturerName(e.target.value);
         setIsConstraintValid(true);
-        
-        setLecturerIDBehalfOfName((lecturers.find(element => element.name === e.target.value))._id);
 
-        console.log(lecturerIDbehalfOfName)
+        const lecturerName = document.querySelector(
+            '#autoCompleteInputLecturer'
+        ).value;
 
+        const lecturer = lecturers.find(
+            (lecturer) => lecturer.name === lecturerName.trim()
+        );
+
+        setLecturerIDBehalfOfName(lecturer ? lecturer._id : '');
     };
 
     const onDayChange = (e) => {
@@ -67,15 +76,14 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
     };
 
     const editConstraint = () => {
-        if(from === ''){
+        if (from === '') {
             setIsFromValid(false);
             setFromErrorMsg('Please Enter a starting time!');
         }
-        if(to === ''){
+        if (to === '') {
             setIsToValid(false);
             setToErrorMsg('Please Enter a ending time!');
-        }
-        else if(!_isBefore(from,to)){
+        } else if (!_isBefore(from, to)) {
             setIsFromValid(false);
             setFromErrorMsg('From-time should be before to To-time!');
             setIsToValid(false);
@@ -86,7 +94,12 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
             let isExist = false;
 
             props.constraintsLectureList.forEach((element) => {
-                if (element.day === day && element.from === from && element.to === to && element.lecturer._id === lecturerIDbehalfOfName) {
+                if (
+                    element.day === day &&
+                    element.from === from &&
+                    element.to === to &&
+                    element.lecturer._id === lecturerIDbehalfOfName
+                ) {
                     setIsConstraintValid(false);
                     isExist = true;
                     setIsUpdating(false);
@@ -95,28 +108,30 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
 
             if (!isExist) {
                 axios
-                .patch(`http://localhost:8000/api/v1/constraintslecturers/${props.id}`, {                       
-                        lecturer: lecturerIDbehalfOfName,
-                        day: day,
-                        from: from,
-                        to: to                       
-                })
-                .then(function (response) {
-
-                    props.refreshComponent();
-                    setIsUpdating(false);
-                    store.addNotification(
-                        buildToast(
-                            'info',
-                            'Updated',
-                            'Constraint Updated Successfully'
-                        )
-                    );
-                    swal.close();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                    .patch(
+                        `http://localhost:8000/api/v1/constraintslecturers/${props.id}`,
+                        {
+                            lecturer: lecturerIDbehalfOfName,
+                            day: day,
+                            from: from,
+                            to: to,
+                        }
+                    )
+                    .then(function (response) {
+                        props.refreshComponent();
+                        setIsUpdating(false);
+                        store.addNotification(
+                            buildToast(
+                                'info',
+                                'Updated',
+                                'Constraint Updated Successfully'
+                            )
+                        );
+                        swal.close();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         }
     };
@@ -142,18 +157,19 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
 
             <div className="form-row">
                 <div className="form-group col-md-12">
-                    <label className="dialog-label">Select Lecturer</label>
-                    <select
-                        className="custom-select"
+                    <label className="dialog-label">Lecturer</label>
+
+                    <TextInput
+                        id="autoCompleteInputLecturer"
+                        Component="input"
+                        maxOptions={10}
+                        matchAny={true}
+                        defaultValue={currentLecturerName}
+                        trigger=""
+                        options={lecturers.map((lecturer) => lecturer.name)}
                         onChange={onLecturerChange}
-                        value={currentLecturerName}
-                    >
-                        {lecturers.map((lecturer) => (
-                            <option key={lecturer._id} value={lecturer.name}>
-                                {lecturer.name}
-                            </option>
-                        ))}
-                    </select>
+                        style={{ height: 35, width: '100%', paddingLeft: 10 }}
+                    />
                 </div>
             </div>
 
@@ -179,7 +195,9 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
                     <input
                         type="time"
                         className={
-                            isFromValid ? 'form-control' : 'form-control is-invalid'
+                            isFromValid
+                                ? 'form-control'
+                                : 'form-control is-invalid'
                         }
                         onChange={onFromChange}
                         value={from}
@@ -191,7 +209,9 @@ const UpdateConstraintsLecturersDialogBox = (props) => {
                     <input
                         type="time"
                         className={
-                            isToValid ? 'form-control' : 'form-control is-invalid'
+                            isToValid
+                                ? 'form-control'
+                                : 'form-control is-invalid'
                         }
                         onChange={onToChange}
                         value={to}

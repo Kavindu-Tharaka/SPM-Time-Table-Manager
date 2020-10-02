@@ -121,7 +121,6 @@ function ConstraintsSubSubGroups() {
                         'The Constraint You Entered is Already Exists!'
                     );
                     isExist = true;
-                    // setTagName('');
                     setIsAdding(false);
                 }
             });
@@ -144,7 +143,12 @@ function ConstraintsSubSubGroups() {
                                 'Constraint Added Successfully'
                             )
                         );
-                        console.log(constraintsSubGroupList);
+                        setYear('1')
+                        setSemester('1')
+                        setDay('Monday')
+                        setFrom('')
+                        setTo('')
+                        
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -172,7 +176,6 @@ function ConstraintsSubSubGroups() {
                 )
                 .then((res) => {
                     setSubGroups(res[0].data.data.subgroupids);
-                    console.log(res[0].data.data.subgroupids);
 
 
                     subGroupIdTemp = res[0].data.data.subgroupids.find(
@@ -237,7 +240,7 @@ function ConstraintsSubSubGroups() {
                         </select>
                     </div>
                     <div className="form-subgroup col-md-2">
-                        <label>Select SubGroup</label>
+                        <label>Sub-Group</label>
                         <select
                             className="custom-select"
                             onChange={onSubGroupChange}
@@ -259,7 +262,7 @@ function ConstraintsSubSubGroups() {
                         </select>
                     </div>
                     <div className="form-subgroup col-md-2">
-                        <label>Day of Week</label>
+                        <label>Day</label>
                         <select
                             className="custom-select"
                             onChange={onDayChange}
