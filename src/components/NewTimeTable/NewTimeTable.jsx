@@ -21,7 +21,7 @@ function NewTimeTable() {
   const getSemester = async () => {
     setLoading(true);
     try {
-      const result = await axios.get("http://localhost:8000/api/v1/session");
+      const result = await axios.get("https://time-table-manager.herokuapp.com/api/v1/session");
       console.log(result.data.data);
       setSessions(result.data.data.sessions);
       setLoading(false);
@@ -35,7 +35,7 @@ function NewTimeTable() {
 
     try {
       const result = await axios.get(
-        "http://localhost:8000/api/v1/yearsemesters"
+        "https://time-table-manager.herokuapp.com/api/v1/yearsemesters"
       );
       console.log(result.data.data.yearsemesters);
       setYearSemester(result.data.data.yearsemesters);
@@ -49,7 +49,7 @@ function NewTimeTable() {
     setLoading(true);
 
     try {
-      const result = await axios.get("http://localhost:8000/api/v1/lecturers");
+      const result = await axios.get("https://time-table-manager.herokuapp.com/api/v1/lecturers");
       console.log(result.data.data.lecturers);
       setLecturers(result.data.data.lecturers);
       setLoading(false);
@@ -62,7 +62,7 @@ function NewTimeTable() {
     setLoading(true);
 
     try {
-      const result = await axios.get("http://localhost:8000/api/v1/rooms");
+      const result = await axios.get("https://time-table-manager.herokuapp.com/api/v1/rooms");
       console.log(result.data.data.rooms);
       setHalls(result.data.data.rooms);
       setLoading(false);
@@ -75,7 +75,7 @@ function NewTimeTable() {
   const onGenerate = async () => {
     setLoading(true);
     try {
-      const result = await axios.post('http://localhost:8000/api/v1/timetable/lecturer',{
+      const result = await axios.post('https://time-table-manager.herokuapp.com/api/v1/timetable/lecturer',{
         year : ['Y1','Y2','Y3','Y4'],
         semester :['S1','S2'],
         department :['SE','IT','DS','CS','ISE']
